@@ -1,0 +1,373 @@
+/* ─── Page ──────────────────────────────────────────────────── */
+.home-page {
+  background: linear-gradient(
+    180deg,
+    #f6f8fc 0%,
+    var(--color-background) 28%,
+    #f4f4f2 100%
+  ); /* 180deg makes the fade run top-to-bottom with soft color stops */
+  color: var(--color-text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  padding-bottom: 3rem;
+}
+
+/* ─── Hero Banner ───────────────────────────────────────────── */
+
+/* Outer container that holds the background image, overlay, and text */
+.hero-banner {
+  min-height: 65vh;
+  overflow: hidden; /* clips absolute children so overlays stay inside the banner */
+  position: relative; /* establishes positioning context for absolutely positioned layers */
+}
+
+/* Background image — fills the banner without stretching */
+.hero-image {
+  height: 100%;
+  inset: 0; /* shorthand for top/right/bottom/left: 0 to pin all edges */
+  object-fit: cover; /* fills the box without distortion, cropping excess edges */
+  position: absolute; /* stacks the image as a background-like layer */
+  width: 100%;
+}
+
+/* Dark gradient layered over the image so text stays readable */
+.hero-overlay {
+  background: linear-gradient(
+    105deg,
+    rgba(21, 34, 56, 0.82) 22%,
+    rgba(56, 75, 112, 0.48) 58%,
+    rgba(184, 0, 31, 0.27) 100%
+  ); /* angled gradient plus rgba alpha values improve text contrast over the image */
+  inset: 0; /* stretches overlay across the full banner */
+  position: absolute; /* layered above image and below content */
+}
+
+/* Tilted polaroid on the right side of the banner */
+.hero-polaroid {
+  pointer-events: none; /* prevents decorative element from blocking clicks/taps */
+  position: absolute; /* allows free placement on the right side */
+  right: 6%;
+  top: 14%;
+  transform: rotate(7deg); /* creates a casual tilted polaroid look */
+  width: clamp(
+    180px,
+    24vw,
+    320px
+  ); /* scales with viewport but stays within min/max bounds */
+  z-index: 2; /* keeps frame above overlay but under main text content */
+}
+
+.hero-polaroid-frame {
+  background: #fff;
+  border-radius: 0.2rem;
+  box-shadow:
+    0 16px 35px rgba(14, 20, 32, 0.36),
+    0 4px 10px rgba(14, 20, 32, 0.24); /* layered shadows create realistic lift/depth */
+  padding: 0.65rem 0.65rem 2.65rem;
+}
+
+.hero-polaroid-photo {
+  aspect-ratio: 4 / 5; /* locks image proportions so the frame shape stays consistent */
+  display: block; /* removes inline-image baseline gap */
+  filter: contrast(1.08) saturate(1.08) brightness(1.08); /* function chain subtly boosts image clarity */
+  object-fit: cover; /* crops image cleanly to frame bounds */
+  object-position: center; /* keeps the crop centered on the subject */
+  width: 100%;
+}
+
+/* Centers and constrains the text content inside the banner */
+.hero-content {
+  box-sizing: border-box; /* includes border/padding in computed box size */
+  margin-left: 5rem;
+  max-width: 550px;
+  padding: 5.5rem 2rem 4.2rem;
+  position: relative; /* keeps text in normal flow while allowing z-index layering */
+  width: min(100%, 550px); /* chooses the smaller value to prevent overflow */
+  z-index: 3; /* ensures content stays above decorative hero layers */
+}
+
+/* Small decorative label above the main headline */
+.hero-kicker {
+  color: var(--color-background);
+  font-family: var(--font-accent);
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+/* Main headline */
+.hero-content h1 {
+  color: white;
+  font-size: clamp(
+    2rem,
+    3vw,
+    3.6rem
+  ); /* fluid type: min, preferred vw scale, max */
+  letter-spacing: -0.03em; /* tightens headlines for a more editorial feel */
+  line-height: 1.03; /* compact line box keeps multi-line titles punchy */
+  margin: 0.2rem 0 0.9rem;
+  max-width: 650px;
+}
+
+/* Supporting description text below the headline */
+.hero-subtitle {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1rem;
+  line-height: 1.6; /* increases readability for paragraph-length copy */
+  margin: 0;
+  max-width: 700px;
+}
+
+/* ─── Hero Search ───────────────────────────────────────────── */
+
+/* Search bar layout — input on the left, button on the right */
+.hero-search-form {
+  align-items: stretch; /* makes both controls share equal vertical fill */
+  display: grid;
+  gap: 0.8rem; /* consistent spacing between input and button */
+  grid-template-columns: 3.5fr 0.5fr; /* fractional columns split space by proportion */
+  margin-top: 1.2rem;
+  max-width: 550px;
+}
+
+.hero-search-input {
+  background: var(--color-background);
+  border: 1px solid rgba(56, 75, 112, 0.15);
+  border-radius: 0.35rem;
+  box-sizing: border-box; /* keeps dimensions predictable with borders */
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  font-size: 1.03rem;
+  font-weight: 500;
+  outline: none; /* removes default outline so custom focus ring is used */
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+
+.hero-search-input::placeholder {
+  color: rgba(56, 75, 112, 0.72);
+  font-size: 0.9rem;
+}
+
+.hero-search-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(196, 69, 69, 0.18); /* accessible custom focus ring */
+}
+
+.hero-search-button {
+  align-items: center; /* vertically centers icon and label */
+  background: var(--color-accent);
+  border: 0;
+  border-radius: 0.35rem;
+  box-sizing: border-box; /* prevents sizing drift from borders */
+  color: var(--color-background);
+  cursor: pointer;
+  display: inline-flex; /* allows flex alignment while sizing like inline element */
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  gap: 0.58rem; /* keeps icon/text spacing consistent */
+  letter-spacing: 0.04em; /* improves readability of uppercase label */
+  padding: 0.6rem 0.7rem;
+  text-transform: uppercase; /* gives CTA stronger visual hierarchy */
+}
+
+.hero-search-button:hover {
+  background: #ad3d3d;
+}
+
+.hero-search-button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(252, 250, 238, 0.55); /* keyboard-only focus treatment */
+  outline: none;
+}
+
+/* ─── Hero Pills ────────────────────────────────────────────── */
+
+/* Row of style tags shown inside the banner (e.g. Hip Hop, Heels) */
+.hero-pills {
+  display: flex;
+  flex-wrap: wrap; /* prevents overflow by wrapping pills to new lines */
+  gap: 0.5rem; /* creates even spacing between pills */
+  margin-top: 1.8rem;
+  max-width: 760px;
+}
+
+.hero-pill {
+  background: transparent;
+  border: 1px solid rgba(252, 250, 238, 0.55);
+  border-radius: 999px; /* large radius forces a pill/capsule shape */
+  color: var(--color-background);
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.02em; /* tiny spacing improves compact label legibility */
+  padding: 0.35rem 0.7rem;
+}
+
+/* ─── Featured Studios Section ──────────────────────────────── */
+
+.featured-section {
+  margin: 3rem auto 0;
+  max-width: 1100px;
+  padding: 0 1rem;
+}
+
+/* Section heading block — kicker, title, and subtitle stacked */
+.section-heading {
+  text-align: center;
+}
+
+/* Small decorative label above the section title */
+.section-kicker {
+  color: var(--color-accent);
+  font-family: var(--font-accent);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.section-heading h2 {
+  color: var(--color-primary);
+  font-size: clamp(
+    1.8rem,
+    3vw,
+    2.3rem
+  ); /* responsive heading scale with min/max guardrails */
+  margin: 0.2rem 0 0.45rem;
+}
+
+.section-heading p {
+  color: var(--color-secondary);
+  margin: 0;
+}
+
+/* 3-column grid of studio cards */
+.featured-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(
+    3,
+    minmax(0, 1fr)
+  ); /* equal columns that can shrink safely without overflow */
+  margin-top: 1.4rem;
+}
+
+/* ─── Featured Studio Cards ─────────────────────────────────── */
+
+.featured-card {
+  border-radius: 0.4rem;
+  color: white;
+  display: block;
+  min-height: 260px;
+  overflow: hidden; /* clips image and overlay to rounded corners */
+  position: relative; /* anchor for absolute overlay/content layers */
+  text-decoration: none; /* removes default anchor underline */
+}
+
+.featured-card img {
+  height: 100%;
+  object-fit: cover; /* fills card area while preserving image aspect ratio */
+  width: 100%;
+}
+
+/* Gradient over the card image so the text at the bottom stays readable */
+.featured-card-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(20, 27, 41, 0.08) 38%,
+    rgba(20, 27, 41, 0.86) 100%
+  ); /* darkens lower area so white text remains readable */
+  inset: 0; /* full-card overlay coverage */
+  position: absolute; /* sits above image, below text */
+}
+
+/* Text pinned to the bottom of the card */
+.featured-card-content {
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  position: absolute; /* pins text block to bottom-left of card */
+}
+
+.featured-card-content h3 {
+  font-size: 1.75rem;
+  line-height: 1.08; /* tight title rhythm for compact card headers */
+  margin: 0;
+}
+
+.featured-card-content p {
+  color: rgba(252, 250, 238, 0.92);
+  margin-top: 0.4rem;
+}
+
+/* ─── Status Messages ───────────────────────────────────────── */
+
+.status-message {
+  color: var(--color-secondary);
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.status-message.error {
+  color: var(--color-accent);
+}
+
+/* ─── Placeholder Pages ─────────────────────────────────────── */
+
+/* Temporary layout for pages not yet built */
+.placeholder-page {
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  margin: 0 auto;
+  max-width: 1100px;
+  padding: 2.5rem 1rem;
+}
+
+/* ─── Responsive ────────────────────────────────────────────── */
+
+/* Tablet */
+@media (max-width: 980px) {
+  .hero-polaroid {
+    right: 1rem;
+    top: 20%;
+    width: clamp(
+      150px,
+      26vw,
+      220px
+    ); /* keeps decorative frame proportional on tablets */
+  }
+  .featured-grid {
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    ); /* switches cards to 2-up layout */
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .hero-banner {
+    min-height: 59vh;
+  }
+  .hero-polaroid {
+    display: none;
+  }
+  .hero-content {
+    margin: 0 1rem;
+    max-width: none;
+    padding: 3.5rem 1rem 2.8rem;
+    width: calc(
+      100% - 2rem
+    ); /* maintains equal side gutters on narrow viewports */
+  }
+  .hero-pills {
+    max-width: 100%;
+  }
+  .hero-search-form {
+    grid-template-columns: 1fr; /* stacks input and button into one column */
+    max-width: 100%;
+  }
+  .hero-search-button {
+    justify-content: center; /* centers button label/icon when full-width */
+  }
+  .featured-grid {
+    grid-template-columns: 1fr; /* single-column cards for readability on small screens */
+  }
+}

@@ -1,0 +1,461 @@
+/* Studios page styling: themed to match homepage with sidebar filters and horizontal cards. */
+
+/* ─── Page Container ────────────────────────────────────────── */
+
+.studios-page {
+  background: linear-gradient(
+    180deg,
+    #e2e7f0 0%,
+    #eef1f6 24%,
+    #f6f4ea 54%,
+    var(--color-background) 100%
+  ); /* dusty blue into cream */
+  color: var(--color-text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+/* ─── Main Content Container ────────────────────────────────── */
+
+.studios-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.studios-header {
+  margin-bottom: 2rem;
+}
+
+.studios-header h1 {
+  color: var(--color-primary);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  letter-spacing: -0.02em; /* slight tightening for editorial feel */
+  line-height: 1.1;
+  margin: 0 0 0.5rem;
+}
+
+.search-hint {
+  color: var(--color-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* ─── Two-Column Layout ─────────────────────────────────────── */
+
+.studios-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 2rem;
+}
+
+/* ─── Sidebar Filters ───────────────────────────────────────── */
+
+.studios-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: sticky;
+  top: 1rem;
+  height: fit-content;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.filter-group h3 {
+  color: var(--color-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.filter-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-pill {
+  background: transparent;
+  border: 1px solid rgba(56, 75, 112, 0.2);
+  border-radius: 0.35rem;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.filter-pill:hover {
+  background: rgba(196, 69, 69, 0.08);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.filter-pill.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+.clear-filters-btn {
+  background: transparent;
+  border: 1px solid rgba(196, 69, 69, 0.4);
+  border-radius: 0.35rem;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.6rem 0.8rem;
+  text-transform: uppercase;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.clear-filters-btn:hover {
+  background: rgba(196, 69, 69, 0.1);
+  border-color: var(--color-accent);
+}
+
+/* ─── Main Content Area ────────────────────────────────────── */
+
+.studios-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.results-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.results-header h2 {
+  color: var(--color-primary);
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.result-count {
+  color: var(--color-secondary);
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.status-block {
+  background: rgba(252, 250, 238, 0.5);
+  border: 1px solid rgba(80, 118, 135, 0.15);
+  border-radius: 0.4rem;
+  color: var(--color-primary);
+  padding: 2rem;
+  text-align: center;
+}
+
+.status-block.error {
+  background: rgba(196, 69, 69, 0.08);
+  border-color: rgba(196, 69, 69, 0.2);
+  color: var(--color-accent);
+}
+
+/* ─── Studios Grid ──────────────────────────────────────────── */
+
+.studios-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* ─── Horizontal Studio Card ────────────────────────────────── */
+
+.studio-card-horizontal {
+  background: white;
+  border: 1px solid rgba(80, 118, 135, 0.12);
+  border-radius: 0.6rem;
+  box-shadow: 0 2px 8px rgba(31, 44, 70, 0.06); /* subtle shadow */
+  display: grid;
+  gap: 0;
+  grid-template-columns: 200px 1fr;
+  overflow: hidden;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.studio-card-horizontal:hover {
+  box-shadow: 0 8px 24px rgba(31, 44, 70, 0.12); /* lift on hover */
+  transform: translateY(-2px);
+}
+
+.card-image {
+  height: 100%;
+  min-height: 140px;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-image img {
+  display: block;
+  height: 100%;
+  object-fit: cover; /* fills frame without distortion */
+  width: 100%;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1.2rem;
+  position: relative;
+}
+
+.card-header {
+  display: flex;
+  align-items: start;
+  gap: 0.8rem;
+  justify-content: space-between;
+}
+
+.card-header h3 {
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.badge {
+  background: rgba(196, 69, 69, 0.1);
+  border: 1px solid rgba(196, 69, 69, 0.3);
+  border-radius: 0.25rem;
+  color: var(--color-accent);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 0.3rem 0.6rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.work-study-badge {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+}
+
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.meta-item {
+  align-items: center;
+  color: var(--color-secondary);
+  display: flex;
+  gap: 0.4rem;
+}
+
+.meta-item i {
+  color: var(--color-accent);
+  font-size: 0.9rem;
+}
+
+.card-styles {
+  color: var(--color-primary);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  font-weight: 500;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+.style-pill {
+  background: rgba(80, 118, 135, 0.08);
+  border: 1px solid rgba(80, 118, 135, 0.2);
+  border-radius: 0.3rem;
+  color: var(--color-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.3rem 0.7rem;
+}
+
+.view-studio-btn {
+  align-items: center;
+  align-self: start;
+  background: var(--color-accent);
+  border: 0;
+  border-radius: 0.35rem;
+  color: var(--color-background);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  gap: 0.5rem;
+  letter-spacing: 0.02em;
+  margin-top: 0.6rem;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.view-studio-btn:hover {
+  background: #ad3d3d;
+  transform: translateX(2px);
+}
+
+.view-studio-btn i {
+  font-size: 0.75rem;
+}
+
+/* ─── Responsive Design ─────────────────────────────────────── */
+
+/* Tablet: Sidebar moves to top, becomes horizontal filter row. */
+@media (max-width: 980px) {
+  .studios-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    grid-template-columns: none;
+  }
+
+  .studios-sidebar {
+    position: static;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .filter-group {
+    padding: 1rem;
+    background: rgba(252, 250, 238, 0.5);
+    border: 1px solid rgba(80, 118, 135, 0.1);
+    border-radius: 0.4rem;
+  }
+
+  .filter-pills {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .filter-pill {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  .card-image {
+    min-height: 120px;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 960px) {
+  .filter-group {
+    background: #fff;
+    border: 1px solid rgba(80, 118, 135, 0.12);
+    box-shadow: 0 2px 8px rgba(31, 44, 70, 0.06);
+  }
+}
+
+/* Mobile: Card layout stacks vertically, image on top. */
+@media (max-width: 640px) {
+  .studios-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .studios-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .studios-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filter-group {
+    padding: 0.8rem;
+    background: #fff;
+    border: 1px solid rgba(80, 118, 135, 0.12);
+    border-radius: 0.4rem;
+    box-shadow: 0 2px 8px rgba(31, 44, 70, 0.06);
+  }
+
+  .filter-group h3 {
+    font-size: 0.9rem;
+  }
+
+  .filter-pills {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .filter-pill {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem;
+    flex: 0 0 auto;
+    min-width: max-content;
+    white-space: nowrap;
+  }
+
+  .studio-card-horizontal {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .card-image {
+    min-height: 160px;
+  }
+
+  .card-content {
+    padding: 1rem;
+    gap: 0.6rem;
+  }
+
+  .card-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .card-header h3 {
+    font-size: 1rem;
+  }
+
+  .badge {
+    align-self: start;
+  }
+
+  .card-meta {
+    gap: 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .view-studio-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

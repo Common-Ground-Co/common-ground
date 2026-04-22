@@ -1,3 +1,4 @@
+// Seed data for the studios table used by config/reset.js.
 const studios = [
   {
     name: "Visceral Dance Center",

@@ -1,3 +1,4 @@
+// Seed data for the community_radar table used by config/reset.js.
 const communityRadar = [
   {
     name: "Movement of Desis (MOD)",

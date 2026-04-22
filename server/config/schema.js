@@ -1,3 +1,4 @@
+// SQL schema used by the reset script to recreate all core tables.
 export const schema = `
   DROP TABLE IF EXISTS reviews;
   DROP TABLE IF EXISTS classes;

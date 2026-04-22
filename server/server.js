@@ -1,3 +1,4 @@
+// Express app entrypoint: loads middleware, mounts API routes, and starts the server.
 import express from "express";
 import dotenv from "dotenv";
 import studiosRouter from "./routes/studios.js";
@@ -7,7 +8,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use("/studios", studiosRouter);
+// All studio-related API endpoints are namespaced under /api/studios.
+app.use("/api/studios", studiosRouter);
 
 app.get("/", (req, res) => {
   res.send("Common Ground API is running");

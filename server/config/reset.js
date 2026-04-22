@@ -1,3 +1,4 @@
+// Reset script: rebuilds tables from schema and seeds initial dataset.
 import pool from "./database.js";
 import { schema } from "./schema.js";
 import studios from "../data/studios.js";
@@ -5,6 +6,7 @@ import communityRadar from "../data/communityRadar.js";
 
 const seedStudios = async () => {
   for (const studio of studios) {
+    // Parameterized INSERT keeps values safely escaped and mapped in a fixed order.
     await pool.query(
       `INSERT INTO studios 
         (name, neighborhood, address, website, schedule_url, instagram, style, price_range, classpass, photo_url, photo_url_studio_space, curator_review, best_for, work_study, work_study_url, approved)
@@ -34,6 +36,7 @@ const seedStudios = async () => {
 
 const seedCommunityRadar = async () => {
   for (const entry of communityRadar) {
+    // Each source object becomes one row in community_radar.
     await pool.query(
       `INSERT INTO community_radar 
         (name, instagram, description, type, photo_url)
@@ -52,6 +55,7 @@ const seedCommunityRadar = async () => {
 
 const reset = async () => {
   try {
+    // Runs DROP/CREATE statements before loading fresh seed data.
     await pool.query(schema);
     console.log("🎉 tables created successfully");
     await seedStudios();
