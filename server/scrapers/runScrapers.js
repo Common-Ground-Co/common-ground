@@ -1,17 +1,30 @@
-// server/scrapers/runScrapers.js
-
-// Database connection and all the helper functions from the Puzzle Box scraper file
 import pool from "../config/database.js";
 import {
   scrapePuzzleBox,
-  parseSkillLevel,
-  parseDate,
-  parseTime,
-  STUDIO_ID,
+  parseSkillLevel as parsePuzzleLevel,
+  parseDate as parsePuzzleDate,
+  parseTime as parsePuzzleTime,
+  STUDIO_ID as PUZZLE_ID,
 } from "./puzzlebox.js";
+import {
+  scrapeVisceral,
+  parseSkillLevel as parseVisceralLevel,
+  parseDate as parseVisceralDate,
+  parseTime as parseVisceralTime,
+  shouldIncludeClass,
+  STUDIO_ID as VISCERAL_ID,
+} from "./visceral.js";
 
+// Set DRY_RUN=1 to test scraping without writing to the database.
 const DRY_RUN = process.env.DRY_RUN === "1";
 
+// Keep classes from today through the next 7 days.
+const today = new Date();
+const cutoff = new Date(today);
+cutoff.setDate(today.getDate() + 8);
+const CUTOFF_DATE = cutoff.toISOString().split("T")[0];
+
+// Turn "YYYY-MM-DD" into a weekday name like "Monday".
 function getDayOfWeekFromIsoDate(isoDate) {
   const [year, month, day] = String(isoDate).split("-").map(Number);
   const utcDate = new Date(Date.UTC(year, month - 1, day));
@@ -21,91 +34,120 @@ function getDayOfWeekFromIsoDate(isoDate) {
   });
 }
 
-const run = async () => {
-  console.log(`🕷️ Starting Puzzle Box scrape${DRY_RUN ? " (dry run)" : ""}...`);
-
-  // Launch the browser, visit the Puzzle Box schedule page, and pull all the raw class data
+// Scrape, clean, and save Puzzle Box classes.
+const runPuzzleBox = async () => {
+  console.log("🕷️ Scraping Puzzle Box...");
   const { classes } = await scrapePuzzleBox();
-
   console.log(`📦 Scraped ${classes.length} raw classes`);
 
-  // Wipe out all existing Puzzle Box classes in the database so we're not
-  // doubling up on classes from a previous scrape run
   if (!DRY_RUN) {
-    await pool.query("DELETE FROM classes WHERE studio_id = $1", [STUDIO_ID]);
+    // Remove old Puzzle Box classes so we replace with fresh results.
+    await pool.query("DELETE FROM classes WHERE studio_id = $1", [PUZZLE_ID]);
   }
 
-  // Keep count of what gets saved and what gets skipped
   let inserted = 0;
   let skipped = 0;
-  const previewRows = [];
 
-  // Loop through every class the scraper found
   for (const c of classes) {
-    // Convert the raw text values into the formats the database expects
-    // e.g. "April 22" → "2026-04-22", "7:15 pm" → "19:15:00", "Beg/Int" → "Beginner/Intermediate"
-    const classDate = parseDate(c.dateText);
-    const startTime = parseTime(c.timeRaw);
-    const skillLevel = parseSkillLevel(c.className);
+    const classDate = parsePuzzleDate(c.dateText);
+    const startTime = parsePuzzleTime(c.timeRaw);
+    const skillLevel = parsePuzzleLevel(c.className);
 
-    // If any essential data is missing, skip this class instead of crashing
     if (!classDate || !startTime || !c.className) {
+      // Skip if key values are missing.
+      skipped++;
+      continue;
+    }
+    if (classDate >= CUTOFF_DATE) {
+      // Skip classes outside our date window.
       skipped++;
       continue;
     }
 
-    // Compute weekday from the date string itself so timezone offsets cannot shift the day.
     const dayOfWeek = getDayOfWeekFromIsoDate(classDate);
 
-    const rowToSave = {
-      studio_id: STUDIO_ID,
-      name: c.className,
-      skill_level: skillLevel,
-      day_of_week: dayOfWeek,
-      class_date: classDate,
-      start_time: startTime,
-    };
-
-    if (DRY_RUN) {
-      if (previewRows.length < 10) {
-        previewRows.push(rowToSave);
-      }
-    } else {
-      // Save the class to the database
+    if (!DRY_RUN) {
+      // Save one class row.
       await pool.query(
         `INSERT INTO classes (studio_id, name, skill_level, day_of_week, class_date, start_time)
          VALUES ($1, $2, $3, $4, $5, $6)`,
-        [
-          rowToSave.studio_id,
-          rowToSave.name,
-          rowToSave.skill_level,
-          rowToSave.day_of_week,
-          rowToSave.class_date,
-          rowToSave.start_time,
-        ],
+        [PUZZLE_ID, c.className, skillLevel, dayOfWeek, classDate, startTime],
       );
     }
-
     inserted++;
   }
 
-  if (DRY_RUN) {
-    console.log(
-      `🧪 Dry run complete: ${inserted} classes valid, ${skipped} skipped`,
-    );
-    if (previewRows.length > 0) {
-      console.log("Preview of parsed rows (up to 10):");
-      console.table(previewRows);
-    }
-  } else {
-    console.log(
-      `✅ Puzzle Box: ${inserted} classes inserted, ${skipped} skipped`,
-    );
-  }
-
-  // Close the database connection now that we're done
-  await pool.end();
+  console.log(`✅ Puzzle Box: ${inserted} inserted, ${skipped} skipped`);
 };
 
-// Kick everything off
+// Scrape, clean, and save Visceral classes.
+const runVisceral = async () => {
+  console.log("🕷️ Scraping Visceral...");
+  const { classes } = await scrapeVisceral();
+  console.log(`📦 Scraped ${classes.length} raw classes`);
+
+  if (!DRY_RUN) {
+    // Remove old Visceral classes so we replace with fresh results.
+    await pool.query("DELETE FROM classes WHERE studio_id = $1", [VISCERAL_ID]);
+  }
+
+  let inserted = 0;
+  let skipped = 0;
+
+  for (const c of classes) {
+    if (!shouldIncludeClass(c.className)) {
+      // Skip non-target classes (kids, virtual, etc.).
+      skipped++;
+      continue;
+    }
+
+    const classDate = parseVisceralDate(c.startDatetime);
+    const startTime = parseVisceralTime(c.startDatetime);
+    const skillLevel = parseVisceralLevel(c.className);
+
+    if (!classDate || !startTime || !c.className) {
+      // Skip if key values are missing.
+      skipped++;
+      continue;
+    }
+    if (classDate >= CUTOFF_DATE) {
+      // Skip classes outside our date window.
+      skipped++;
+      continue;
+    }
+
+    const dayOfWeek = getDayOfWeekFromIsoDate(classDate);
+
+    if (!DRY_RUN) {
+      // Save one class row.
+      await pool.query(
+        `INSERT INTO classes (studio_id, name, skill_level, day_of_week, class_date, start_time)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [VISCERAL_ID, c.className, skillLevel, dayOfWeek, classDate, startTime],
+      );
+    }
+    inserted++;
+  }
+
+  console.log(`✅ Visceral: ${inserted} inserted, ${skipped} skipped`);
+};
+
+// Main runner: executes both scrapers and closes DB connection.
+const run = async () => {
+  console.log(
+    `🗓️ Scraping window: today through ${CUTOFF_DATE}${DRY_RUN ? " (dry run)" : ""}`,
+  );
+  try {
+    await runPuzzleBox();
+    await runVisceral();
+  } catch (err) {
+    console.error("⚠️ Scrape failed:", err);
+    process.exit(1);
+  } finally {
+    // Always close database connection at the end.
+    await pool.end();
+    console.log("🌱 Scrape complete");
+  }
+};
+
 run();

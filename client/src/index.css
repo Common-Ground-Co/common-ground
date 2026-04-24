@@ -1,15 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&family=Pacifico&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&family=Pacifico&family=Rubik+80s+Fade&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&family=Pacifico&family=Rubik+80s+Fade&family=Poppins:wght@200;300;400;500;600;700&display=swap");
 /* Global design tokens: semantic color palette + typography defaults. */
 :root {
   --color-primary: #384b70;
   --color-secondary: #507687;
-  --color-background: #fcfaee;
+  /* --color-background: #fcfaee; */
+  --color-background: rgba(252, 250, 238, 0.93);
   --color-accent: #c44545;
   --color-text: #152238;
 
   --font-body: "Josefin Sans", sans-serif;
-  --font-heading: "Josefin Sans", sans-serif;
+  /* --font-body: "Poppins", sans-serif; */
+  /* --font-heading: "Josefin Sans", sans-serif; */
+  --font-heading: "Rubik 80s Fade", sans-serif;
   --font-accent: "Pacifico", cursive;
 
   /* Legacy aliases kept for backwards compatibility with existing component CSS. */
@@ -32,15 +36,29 @@ body,
   margin: 0;
   min-height: 100%;
   padding: 0;
+  /* font-weight: 300; */
 }
 
-html {
+/* html {
   background: #e2e7f0;
 }
 
 /* App-wide background and default font family. */
-body {
+/* body {
   background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+} */
+
+html {
+  background-color: #1a1410;
+}
+
+body {
+  background-image: url("https://i.imgur.com/ZhH65Rv.png");
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
   color: var(--color-text);
   font-family: var(--font-body);
 }
@@ -48,9 +66,12 @@ body {
 /* Global heading typography to keep title styling consistent across pages. */
 h1,
 h2,
-h3,
+h3 {
+  font-family: var(--font-heading);
+}
+
 h4,
 h5,
 h6 {
-  font-family: var(--font-heading);
+  font-family: var(--font-body);
 }

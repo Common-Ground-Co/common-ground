@@ -1,11 +1,6 @@
 /* ─── Page ──────────────────────────────────────────────────── */
 .home-page {
-  background: linear-gradient(
-    180deg,
-    #f6f8fc 0%,
-    var(--color-background) 28%,
-    #f4f4f2 100%
-  ); /* 180deg makes the fade run top-to-bottom with soft color stops */
+  background: transparent;
   color: var(--color-text);
   font-family: var(--font-body);
   min-height: 100vh;
@@ -13,48 +8,42 @@
 }
 
 /* ─── Hero Banner ───────────────────────────────────────────── */
-
-/* Outer container that holds the background image, overlay, and text */
 .hero-banner {
   min-height: 65vh;
-  overflow: hidden; /* clips absolute children so overlays stay inside the banner */
-  position: relative; /* establishes positioning context for absolutely positioned layers */
+  overflow: visible;
+  position: relative;
+  -webkit-mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
 }
 
-/* Background image — fills the banner without stretching */
 .hero-image {
   height: 100%;
-  inset: 0; /* shorthand for top/right/bottom/left: 0 to pin all edges */
-  object-fit: cover; /* fills the box without distortion, cropping excess edges */
-  position: absolute; /* stacks the image as a background-like layer */
+  inset: 0;
+  object-fit: cover;
+  position: absolute;
   width: 100%;
 }
 
-/* Dark gradient layered over the image so text stays readable */
 .hero-overlay {
   background: linear-gradient(
     105deg,
     rgba(21, 34, 56, 0.82) 22%,
     rgba(56, 75, 112, 0.48) 58%,
     rgba(184, 0, 31, 0.27) 100%
-  ); /* angled gradient plus rgba alpha values improve text contrast over the image */
-  inset: 0; /* stretches overlay across the full banner */
-  position: absolute; /* layered above image and below content */
+  );
+  inset: 0;
+  position: absolute;
 }
 
-/* Tilted polaroid on the right side of the banner */
+/* ─── Hero Polaroid ─────────────────────────────────────────── */
 .hero-polaroid {
-  pointer-events: none; /* prevents decorative element from blocking clicks/taps */
-  position: absolute; /* allows free placement on the right side */
+  pointer-events: none;
+  position: absolute;
   right: 6%;
   top: 14%;
-  transform: rotate(7deg); /* creates a casual tilted polaroid look */
-  width: clamp(
-    180px,
-    24vw,
-    320px
-  ); /* scales with viewport but stays within min/max bounds */
-  z-index: 2; /* keeps frame above overlay but under main text content */
+  transform: rotate(7deg);
+  width: clamp(180px, 24vw, 320px);
+  z-index: 2;
 }
 
 .hero-polaroid-frame {
@@ -62,31 +51,30 @@
   border-radius: 0.2rem;
   box-shadow:
     0 16px 35px rgba(14, 20, 32, 0.36),
-    0 4px 10px rgba(14, 20, 32, 0.24); /* layered shadows create realistic lift/depth */
+    0 4px 10px rgba(14, 20, 32, 0.24);
   padding: 0.65rem 0.65rem 2.65rem;
 }
 
 .hero-polaroid-photo {
-  aspect-ratio: 4 / 5; /* locks image proportions so the frame shape stays consistent */
-  display: block; /* removes inline-image baseline gap */
-  filter: contrast(1.08) saturate(1.08) brightness(1.08); /* function chain subtly boosts image clarity */
-  object-fit: cover; /* crops image cleanly to frame bounds */
-  object-position: center; /* keeps the crop centered on the subject */
+  aspect-ratio: 4 / 5;
+  display: block;
+  filter: contrast(1.08) saturate(1.08) brightness(1.08);
+  object-fit: cover;
+  object-position: center;
   width: 100%;
 }
 
-/* Centers and constrains the text content inside the banner */
+/* ─── Hero Content ──────────────────────────────────────────── */
 .hero-content {
-  box-sizing: border-box; /* includes border/padding in computed box size */
+  box-sizing: border-box;
   margin-left: 5rem;
   max-width: 550px;
   padding: 5.5rem 2rem 4.2rem;
-  position: relative; /* keeps text in normal flow while allowing z-index layering */
-  width: min(100%, 550px); /* chooses the smaller value to prevent overflow */
-  z-index: 3; /* ensures content stays above decorative hero layers */
+  position: relative;
+  width: min(100%, 550px);
+  z-index: 3;
 }
 
-/* Small decorative label above the main headline */
 .hero-kicker {
   color: var(--color-background);
   font-family: var(--font-accent);
@@ -94,37 +82,29 @@
   margin: 0;
 }
 
-/* Main headline */
 .hero-content h1 {
   color: white;
-  font-size: clamp(
-    2rem,
-    3vw,
-    3.6rem
-  ); /* fluid type: min, preferred vw scale, max */
-  letter-spacing: -0.03em; /* tightens headlines for a more editorial feel */
-  line-height: 1.03; /* compact line box keeps multi-line titles punchy */
+  font-size: clamp(2rem, 3vw, 3.6rem);
+  letter-spacing: -0.03em;
+  line-height: 1.03;
   margin: 0.2rem 0 0.9rem;
   max-width: 650px;
 }
 
-/* Supporting description text below the headline */
 .hero-subtitle {
   color: rgba(255, 255, 255, 0.92);
   font-size: 1rem;
-  line-height: 1.6; /* increases readability for paragraph-length copy */
+  line-height: 1.6;
   margin: 0;
   max-width: 700px;
 }
 
 /* ─── Hero Search ───────────────────────────────────────────── */
-
-/* Search bar layout — input on the left, button on the right */
 .hero-search-form {
-  align-items: stretch; /* makes both controls share equal vertical fill */
+  align-items: stretch;
   display: grid;
-  gap: 0.8rem; /* consistent spacing between input and button */
-  grid-template-columns: 3.5fr 0.5fr; /* fractional columns split space by proportion */
+  gap: 0.8rem;
+  grid-template-columns: 3.5fr 0.5fr;
   margin-top: 1.2rem;
   max-width: 550px;
 }
@@ -133,12 +113,12 @@
   background: var(--color-background);
   border: 1px solid rgba(56, 75, 112, 0.15);
   border-radius: 0.35rem;
-  box-sizing: border-box; /* keeps dimensions predictable with borders */
+  box-sizing: border-box;
   color: var(--color-primary);
   font-family: var(--font-body);
   font-size: 1.03rem;
   font-weight: 500;
-  outline: none; /* removes default outline so custom focus ring is used */
+  outline: none;
   padding: 0.5rem 1rem;
   width: 100%;
 }
@@ -150,25 +130,25 @@
 
 .hero-search-input:focus {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(196, 69, 69, 0.18); /* accessible custom focus ring */
+  box-shadow: 0 0 0 3px rgba(196, 69, 69, 0.18);
 }
 
 .hero-search-button {
-  align-items: center; /* vertically centers icon and label */
+  align-items: center;
   background: var(--color-accent);
   border: 0;
   border-radius: 0.35rem;
-  box-sizing: border-box; /* prevents sizing drift from borders */
+  box-sizing: border-box;
   color: var(--color-background);
   cursor: pointer;
-  display: inline-flex; /* allows flex alignment while sizing like inline element */
+  display: inline-flex;
   font-family: var(--font-body);
   font-size: 0.8rem;
   font-weight: 500;
-  gap: 0.58rem; /* keeps icon/text spacing consistent */
-  letter-spacing: 0.04em; /* improves readability of uppercase label */
+  gap: 0.58rem;
+  letter-spacing: 0.04em;
   padding: 0.6rem 0.7rem;
-  text-transform: uppercase; /* gives CTA stronger visual hierarchy */
+  text-transform: uppercase;
 }
 
 .hero-search-button:hover {
@@ -176,17 +156,15 @@
 }
 
 .hero-search-button:focus-visible {
-  box-shadow: 0 0 0 3px rgba(252, 250, 238, 0.55); /* keyboard-only focus treatment */
+  box-shadow: 0 0 0 3px rgba(252, 250, 238, 0.55);
   outline: none;
 }
 
 /* ─── Hero Pills ────────────────────────────────────────────── */
-
-/* Row of style tags shown inside the banner (e.g. Hip Hop, Heels) */
 .hero-pills {
   display: flex;
-  flex-wrap: wrap; /* prevents overflow by wrapping pills to new lines */
-  gap: 0.5rem; /* creates even spacing between pills */
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin-top: 1.8rem;
   max-width: 760px;
 }
@@ -194,28 +172,69 @@
 .hero-pill {
   background: transparent;
   border: 1px solid rgba(252, 250, 238, 0.55);
-  border-radius: 999px; /* large radius forces a pill/capsule shape */
+  border-radius: 999px;
   color: var(--color-background);
   font-size: 0.84rem;
   font-weight: 600;
-  letter-spacing: 0.02em; /* tiny spacing improves compact label legibility */
+  letter-spacing: 0.02em;
   padding: 0.35rem 0.7rem;
 }
 
 /* ─── Featured Studios Section ──────────────────────────────── */
-
+/* Outer section: invisible layout box only — no background, no border,
+   no shadow. Nothing here that can create a hard visible edge. */
 .featured-section {
   margin: 3rem auto 0;
   max-width: 1100px;
-  padding: 0 1rem;
+  padding: 0;
 }
 
-/* Section heading block — kicker, title, and subtitle stacked */
+/* Inner div: this is what gets the background color and the fade mask.
+   Keeping it free of border/border-radius/box-shadow means the mask
+   gradient is the only thing defining the edges — no hard lines. */
+.featured-inner {
+  /* background-color: rgba(252, 250, 238, 0.93); */
+  background-color: var(--color-background);
+  padding: 3rem 2.5rem 3.5rem;
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 3%,
+      black 97%,
+      transparent 100%
+    );
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 3%,
+      black 97%,
+      transparent 100%
+    );
+  mask-composite: intersect;
+}
+
+/* ─── Section Heading ───────────────────────────────────────── */
 .section-heading {
   text-align: center;
 }
 
-/* Small decorative label above the section title */
 .section-kicker {
   color: var(--color-accent);
   font-family: var(--font-accent);
@@ -225,11 +244,7 @@
 
 .section-heading h2 {
   color: var(--color-primary);
-  font-size: clamp(
-    1.8rem,
-    3vw,
-    2.3rem
-  ); /* responsive heading scale with min/max guardrails */
+  font-size: clamp(1.8rem, 3vw, 2.3rem);
   margin: 0.2rem 0 0.45rem;
 }
 
@@ -238,57 +253,83 @@
   margin: 0;
 }
 
-/* 3-column grid of studio cards */
+/* ─── Featured Grid ─────────────────────────────────────────── */
 .featured-grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(
-    3,
-    minmax(0, 1fr)
-  ); /* equal columns that can shrink safely without overflow */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 1.4rem;
 }
 
 /* ─── Featured Studio Cards ─────────────────────────────────── */
-
 .featured-card {
   border-radius: 0.4rem;
   color: white;
   display: block;
   min-height: 260px;
-  overflow: hidden; /* clips image and overlay to rounded corners */
-  position: relative; /* anchor for absolute overlay/content layers */
-  text-decoration: none; /* removes default anchor underline */
+  overflow: hidden;
+  position: relative;
+  text-decoration: none;
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 3%,
+      black 97%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 3%,
+      black 97%,
+      transparent 100%
+    );
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 3%,
+      black 97%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 3%,
+      black 97%,
+      transparent 100%
+    );
+  mask-composite: intersect;
 }
 
 .featured-card img {
   height: 100%;
-  object-fit: cover; /* fills card area while preserving image aspect ratio */
+  object-fit: cover;
   width: 100%;
 }
 
-/* Gradient over the card image so the text at the bottom stays readable */
 .featured-card-overlay {
   background: linear-gradient(
     180deg,
     rgba(20, 27, 41, 0.08) 38%,
     rgba(20, 27, 41, 0.86) 100%
-  ); /* darkens lower area so white text remains readable */
-  inset: 0; /* full-card overlay coverage */
-  position: absolute; /* sits above image, below text */
+  );
+  inset: 0;
+  position: absolute;
 }
 
-/* Text pinned to the bottom of the card */
 .featured-card-content {
   bottom: 0;
   left: 0;
   padding: 1rem;
-  position: absolute; /* pins text block to bottom-left of card */
+  position: absolute;
 }
 
 .featured-card-content h3 {
   font-size: 1.75rem;
-  line-height: 1.08; /* tight title rhythm for compact card headers */
+  line-height: 1.08;
   margin: 0;
 }
 
@@ -298,7 +339,6 @@
 }
 
 /* ─── Status Messages ───────────────────────────────────────── */
-
 .status-message {
   color: var(--color-secondary);
   margin-top: 1rem;
@@ -310,38 +350,29 @@
 }
 
 /* ─── Placeholder Pages ─────────────────────────────────────── */
-
-/* Temporary layout for pages not yet built */
 .placeholder-page {
+  background: rgba(252, 250, 238, 0.93);
+  border-radius: 0.8rem;
+  box-shadow: 0 8px 32px rgba(14, 20, 32, 0.28);
   color: var(--color-primary);
   font-family: var(--font-body);
-  margin: 0 auto;
+  margin: 2rem auto;
   max-width: 1100px;
   padding: 2.5rem 1rem;
 }
 
 /* ─── Responsive ────────────────────────────────────────────── */
-
-/* Tablet */
 @media (max-width: 980px) {
   .hero-polaroid {
     right: 1rem;
     top: 20%;
-    width: clamp(
-      150px,
-      26vw,
-      220px
-    ); /* keeps decorative frame proportional on tablets */
+    width: clamp(150px, 26vw, 220px);
   }
   .featured-grid {
-    grid-template-columns: repeat(
-      2,
-      minmax(0, 1fr)
-    ); /* switches cards to 2-up layout */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* Mobile */
 @media (max-width: 640px) {
   .hero-banner {
     min-height: 59vh;
@@ -353,21 +384,25 @@
     margin: 0 1rem;
     max-width: none;
     padding: 3.5rem 1rem 2.8rem;
-    width: calc(
-      100% - 2rem
-    ); /* maintains equal side gutters on narrow viewports */
+    width: calc(100% - 2rem);
   }
   .hero-pills {
     max-width: 100%;
   }
   .hero-search-form {
-    grid-template-columns: 1fr; /* stacks input and button into one column */
+    grid-template-columns: 1fr;
     max-width: 100%;
   }
   .hero-search-button {
-    justify-content: center; /* centers button label/icon when full-width */
+    justify-content: center;
   }
   .featured-grid {
-    grid-template-columns: 1fr; /* single-column cards for readability on small screens */
+    grid-template-columns: 1fr;
+  }
+  .featured-section {
+    margin: 1.5rem 1rem 0;
+  }
+  .featured-inner {
+    padding: 1.5rem 1rem 2rem;
   }
 }

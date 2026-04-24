@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 function StudioCard({ studio }) {
   return (
+    // Basic reusable card for studio summaries.
     <article>
       <img
         src={studio.photo_url}

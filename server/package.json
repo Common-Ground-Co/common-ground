@@ -4,8 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "npm run reset && nodemon server.js",
-    "reset": "node config/reset.js"
+    "start": "nodemon server.js",
+    "reset": "node config/reset.js",
+    "scrape": "node scrapers/runScrapers.js"
   },
   "keywords": [],
   "author": "",

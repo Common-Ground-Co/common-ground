@@ -1,28 +1,58 @@
-/* Studios page styling: themed to match homepage with sidebar filters and horizontal cards. */
-
 /* ─── Page Container ────────────────────────────────────────── */
-
 .studios-page {
-  background: linear-gradient(
-    180deg,
-    #e2e7f0 0%,
-    #eef1f6 24%,
-    #f6f4ea 54%,
-    var(--color-background) 100%
-  ); /* dusty blue into cream */
+  background: transparent;
   color: var(--color-text);
   font-family: var(--font-body);
   min-height: 100vh;
 }
 
-/* ─── Main Content Container ────────────────────────────────── */
-
+/* ─── Outer container: invisible layout box only ────────────── */
 .studios-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  max-width: 1300px;
+  margin: 1.8rem auto;
+  padding: 0;
 }
 
+/* ─── Inner div: cream background + fade mask ───────────────── */
+/* No border, border-radius, or box-shadow  */
+.studios-inner {
+  background-color: rgba(252, 250, 238, 0.93);
+  padding: 4rem 3.5rem;
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 4%,
+      black 96%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 2%,
+      black 98%,
+      transparent 100%
+    );
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 4%,
+      black 96%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 2%,
+      black 98%,
+      transparent 100%
+    );
+  mask-composite: intersect;
+}
+
+/* ─── Studios Header ────────────────────────────────────────── */
 .studios-header {
   margin-bottom: 2rem;
 }
@@ -30,7 +60,7 @@
 .studios-header h1 {
   color: var(--color-primary);
   font-size: clamp(2rem, 5vw, 2.8rem);
-  letter-spacing: -0.02em; /* slight tightening for editorial feel */
+  letter-spacing: -0.02em;
   line-height: 1.1;
   margin: 0 0 0.5rem;
 }
@@ -42,7 +72,6 @@
 }
 
 /* ─── Two-Column Layout ─────────────────────────────────────── */
-
 .studios-layout {
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -50,7 +79,6 @@
 }
 
 /* ─── Sidebar Filters ───────────────────────────────────────── */
-
 .studios-sidebar {
   display: flex;
   flex-direction: column;
@@ -131,8 +159,7 @@
   border-color: var(--color-accent);
 }
 
-/* ─── Main Content Area ────────────────────────────────────── */
-
+/* ─── Main Content Area ─────────────────────────────────────── */
 .studios-content {
   display: flex;
   flex-direction: column;
@@ -173,7 +200,6 @@
 }
 
 /* ─── Studios Grid ──────────────────────────────────────────── */
-
 .studios-grid {
   display: flex;
   flex-direction: column;
@@ -181,12 +207,11 @@
 }
 
 /* ─── Horizontal Studio Card ────────────────────────────────── */
-
 .studio-card-horizontal {
   background: white;
   border: 1px solid rgba(80, 118, 135, 0.12);
   border-radius: 0.6rem;
-  box-shadow: 0 2px 8px rgba(31, 44, 70, 0.06); /* subtle shadow */
+  box-shadow: 0 2px 8px rgba(31, 44, 70, 0.06);
   display: grid;
   gap: 0;
   grid-template-columns: 200px 1fr;
@@ -194,10 +219,42 @@
   transition:
     box-shadow 0.3s ease,
     transform 0.3s ease;
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 3%,
+      black 97%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 2%,
+      black 98%,
+      transparent 100%
+    );
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 3%,
+      black 97%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 2%,
+      black 98%,
+      transparent 100%
+    );
+  mask-composite: intersect;
 }
 
 .studio-card-horizontal:hover {
-  box-shadow: 0 8px 24px rgba(31, 44, 70, 0.12); /* lift on hover */
+  box-shadow: 0 8px 24px rgba(31, 44, 70, 0.12);
   transform: translateY(-2px);
 }
 
@@ -211,7 +268,7 @@
 .card-image img {
   display: block;
   height: 100%;
-  object-fit: cover; /* fills frame without distortion */
+  object-fit: cover;
   width: 100%;
 }
 
@@ -327,9 +384,7 @@
   font-size: 0.75rem;
 }
 
-/* ─── Responsive Design ─────────────────────────────────────── */
-
-/* Tablet: Sidebar moves to top, becomes horizontal filter row. */
+/* ─── Responsive ────────────────────────────────────────────── */
 @media (max-width: 980px) {
   .studios-layout {
     display: flex;
@@ -371,15 +426,6 @@
   }
 }
 
-@media (max-width: 960px) {
-  .filter-group {
-    background: #fff;
-    border: 1px solid rgba(80, 118, 135, 0.12);
-    box-shadow: 0 2px 8px rgba(31, 44, 70, 0.06);
-  }
-}
-
-/* Mobile: Card layout stacks vertically, image on top. */
 @media (max-width: 640px) {
   .studios-header h1 {
     font-size: 1.6rem;
@@ -398,10 +444,9 @@
 
   .filter-group {
     padding: 0.8rem;
-    background: #fff;
+    background: rgba(252, 250, 238, 0.5);
     border: 1px solid rgba(80, 118, 135, 0.12);
     border-radius: 0.4rem;
-    box-shadow: 0 2px 8px rgba(31, 44, 70, 0.06);
   }
 
   .filter-group h3 {

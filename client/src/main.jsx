@@ -7,6 +7,7 @@ import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    {/* BrowserRouter enables client-side page navigation with React Router. */}
     <BrowserRouter>
       <App />
     </BrowserRouter>

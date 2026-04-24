@@ -16,7 +16,6 @@ const stylePills = [
 
 const heroImageSrc =
   "https://images.stockcake.com/public/5/9/d/59d8fa0a-12fe-49a6-a7be-0bca48292ebf/dynamic-urban-dance-stockcake.jpg";
-
 const polaroidImageSrc =
   "https://wallpapers.com/images/high/ballet-dance-on-the-street-bk0miq8gb70xlu7h.webp";
 
@@ -39,7 +38,6 @@ function HomePage() {
         setLoading(false);
       }
     };
-
     loadStudios();
   }, []);
 
@@ -48,12 +46,10 @@ function HomePage() {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     const query = studioSearch.trim();
-
     if (!query) {
       navigate("/studios");
       return;
     }
-
     navigate(`/studios?search=${encodeURIComponent(query)}`);
   };
 
@@ -110,38 +106,45 @@ function HomePage() {
 
       <Navigation variant="category-strip--floating" />
 
+      {/* featured-section: invisible layout box only, no background */}
       <section className="featured-section">
-        <header className="section-heading">
-          <p className="section-kicker">Curated</p>
-          <h2>Featured Studios</h2>
-          <p>
-            Adult-friendly spaces focused on hip-hop, open style, and community.
-          </p>
-        </header>
-
-        {loading ? (
-          <p className="status-message">Loading featured studios...</p>
-        ) : null}
-        {error ? <p className="status-message error">{error}</p> : null}
-
-        {!loading && !error ? (
-          <div className="featured-grid">
-            {featuredStudios.map((studio) => (
-              <Link
-                className="featured-card"
-                to={`/studios/${studio.id}`}
-                key={studio.id}
-              >
-                <img src={studio.photo_url} alt={studio.name} loading="lazy" />
-                <div className="featured-card-overlay" />
-                <div className="featured-card-content">
-                  <h3>{studio.name}</h3>
-                  <p>{studio.neighborhood || "Chicago"}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : null}
+        {/* featured-inner: holds background + fade mask, no border/shadow */}
+        <div className="featured-inner">
+          <header className="section-heading">
+            <p className="section-kicker">Curated</p>
+            <h2>Featured Studios</h2>
+            <p>
+              Adult-friendly spaces focused on hip-hop, open style, and
+              community.
+            </p>
+          </header>
+          {loading ? (
+            <p className="status-message">Loading featured studios...</p>
+          ) : null}
+          {error ? <p className="status-message error">{error}</p> : null}
+          {!loading && !error ? (
+            <div className="featured-grid">
+              {featuredStudios.map((studio) => (
+                <Link
+                  className="featured-card"
+                  to={`/studios/${studio.id}`}
+                  key={studio.id}
+                >
+                  <img
+                    src={studio.photo_url}
+                    alt={studio.name}
+                    loading="lazy"
+                  />
+                  <div className="featured-card-overlay" />
+                  <div className="featured-card-content">
+                    <h3>{studio.name}</h3>
+                    <p>{studio.neighborhood || "Chicago"}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : null}
+        </div>
       </section>
     </main>
   );

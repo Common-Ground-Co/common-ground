@@ -1,0 +1,289 @@
+/* Class schedule page follows the same visual language as Studios page (no banner). */
+
+.class-schedule-page {
+  background: transparent;
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+.class-schedule-container {
+  margin: 0 auto;
+  max-width: 1150px;
+  padding: 1.25rem 1rem 2.25rem;
+}
+
+.day-filter-row {
+  background: var(--color-background);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 2.5rem 2.5rem;
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 2%,
+      black 90%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 2%,
+      black 98%,
+      transparent 100%
+    );
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 25%,
+      black 80%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 2%,
+      black 98%,
+      transparent 100%
+    );
+  mask-composite: intersect;
+}
+
+.day-filter-btn {
+  background: transparent;
+  border: 1px solid rgba(56, 75, 112, 0.2);
+  border-radius: 999px;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.44rem 0.75rem;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.day-filter-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.day-filter-btn.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+.schedule-message {
+  color: var(--color-secondary);
+  margin: 1rem 0;
+}
+
+.schedule-message.error {
+  color: var(--color-accent);
+}
+
+.schedule-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.day-section {
+  background: var(--color-background);
+  overflow: hidden;
+  padding: 1.5rem 2rem;
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 4%,
+      black 96%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 2%,
+      black 98%,
+      transparent 100%
+    );
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 5%,
+      black 95%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 2%,
+      black 98%,
+      transparent 100%
+    );
+  mask-composite: intersect;
+}
+
+.day-section-header {
+  align-items: baseline;
+  border-bottom: 1px solid rgba(80, 118, 135, 0.18);
+  display: flex;
+  gap: 0.65rem;
+  justify-content: space-between;
+  padding: 0.75rem 0.9rem;
+}
+
+.day-section-header h2 {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.day-section-header p {
+  color: var(--color-secondary);
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.day-class-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.class-card {
+  align-items: center;
+  border-top: 1px solid rgba(80, 118, 135, 0.12);
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: 1fr auto auto;
+  padding: 0.78rem 0.9rem;
+}
+
+.class-card:first-of-type {
+  border-top: 0;
+}
+
+.class-main h3 {
+  color: var(--color-text);
+  font-size: 1rem;
+  margin: 0 0 0.35rem;
+}
+
+.studio-row {
+  align-items: center;
+  color: var(--color-primary);
+  display: flex;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.studio-row img {
+  border: 2px solid rgba(56, 75, 112, 0.18);
+  border-radius: 999px;
+  height: 38px;
+  object-fit: cover;
+  width: 38px;
+}
+
+.class-meta {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.class-time {
+  color: var(--color-primary);
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.skill-pill {
+  background: rgba(80, 118, 135, 0.12);
+  border: 1px solid rgba(80, 118, 135, 0.26);
+  border-radius: 999px;
+  color: var(--color-secondary);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.22rem 0.58rem;
+}
+
+.skill-pill--beg {
+  background: rgba(80, 118, 135, 0.12);
+  border-color: rgba(80, 118, 135, 0.3);
+}
+
+.skill-pill--int {
+  background: rgba(56, 75, 112, 0.12);
+  border-color: rgba(56, 75, 112, 0.3);
+  color: var(--color-primary);
+}
+
+.skill-pill--adv {
+  background: rgba(196, 69, 69, 0.12);
+  border-color: rgba(196, 69, 69, 0.3);
+  color: var(--color-accent);
+}
+
+.book-class-btn {
+  background: var(--color-accent);
+  border-radius: 0.35rem;
+  color: var(--color-background);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.5rem 0.8rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.2s ease;
+}
+
+.book-class-btn:hover {
+  background: #ad3d3d;
+}
+
+.no-link {
+  color: var(--color-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+@media (max-width: 980px) {
+  .class-card {
+    align-items: start;
+    grid-template-columns: 1fr;
+  }
+
+  .class-actions {
+    margin-top: 0.2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .day-filter-btn {
+    flex: 1 1 calc(50% - 0.45rem);
+    text-align: center;
+  }
+
+  .day-section-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .day-section-header {
+    align-items: start;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+}

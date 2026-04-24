@@ -19,11 +19,13 @@ const navItems = [
 ];
 
 function Navigation({ variant = "", className = "" }) {
+  // Build final CSS class list so pages can pass style variants.
   const navClassName = ["category-strip", variant, className]
     .filter(Boolean)
     .join(" ");
 
   return (
+    // Shared top navigation used across the app.
     <nav className={navClassName} aria-label="Primary navigation">
       {navItems.map((item) => (
         <Link key={item.label} className="category-item" to={item.to}>
