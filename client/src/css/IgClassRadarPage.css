@@ -38,52 +38,35 @@
 
 /* ─── Container ─────────────────────────────────────────────── */
 .radar-container {
-  margin: 2rem auto 0;
-  max-width: 1200px;
-  padding: 0 1rem;
+  margin: 2rem 0 0;
+  max-width: none;
+  padding: 0;
+  width: 100%;
 }
 
 /* ─── Page Header ───────────────────────────────────────────── */
 .radar-header {
-  background-color: var(--color-background);
+  background-color: rgba(15, 22, 33, 0.873);
   margin-bottom: 2.5rem;
   padding: 4.5rem 4.5rem;
-  -webkit-mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 20%,
-      black 80%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 2%,
-      black 98%,
-      transparent 100%
-    );
-  -webkit-mask-composite: destination-in;
-  mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 20%,
-      black 80%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 4%,
-      black 96%,
-      transparent 100%
-    );
-  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20%,
+    black 80%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20%,
+    black 80%,
+    transparent 100%
+  );
 }
 
 .radar-header h1 {
-  color: var(--color-primary);
+  color: rgba(233, 236, 242, 0.95);
   font-size: clamp(2rem, 4vw, 3rem);
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -91,7 +74,7 @@
 }
 
 .radar-header div {
-  color: var(--color-secondary);
+  color: rgba(177, 189, 204, 0.88);
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.6;
@@ -101,7 +84,7 @@
 
 /* ─── Status Messages ───────────────────────────────────────── */
 .radar-message {
-  color: var(--color-secondary);
+  color: rgba(177, 189, 204, 0.88);
   margin: 1rem 0;
 }
 
@@ -119,44 +102,26 @@
 /* ─── Individual Card ───────────────────────────────────────── */
 /* Height is driven entirely by the content column — image stretches to match */
 .radar-card {
-  background: var(--color-background);
+  background: rgba(15, 22, 33, 0.873);
   display: grid;
   grid-template-columns: 20rem 1fr;
   gap: 0;
   align-items: stretch;
   overflow: hidden;
-  -webkit-mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 5%,
-      black 95%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 5%,
-      black 95%,
-      transparent 100%
-    );
-  -webkit-mask-composite: destination-in;
-  mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 5%,
-      black 95%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 5%,
-      black 95%,
-      transparent 100%
-    );
-  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
 }
 
 /* ─── Card Left: Photo ──────────────────────────────────────── */
@@ -212,17 +177,17 @@
 }
 
 .radar-card-title-row h2 {
-  color: var(--color-primary);
+  color: rgba(233, 236, 242, 0.95);
   font-size: 1.3rem;
   line-height: 1.2;
   margin: 0;
 }
 
 .radar-type-badge {
-  background: rgba(80, 118, 135, 0.1);
-  border: 1px solid rgba(80, 118, 135, 0.25);
+  background: rgba(177, 189, 204, 0.12);
+  border: 1px solid rgba(177, 189, 204, 0.3);
   border-radius: 999px;
-  color: var(--color-secondary);
+  color: rgba(177, 189, 204, 0.88);
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -246,7 +211,7 @@
 }
 
 .radar-section-label {
-  color: var(--color-primary);
+  color: rgba(210, 218, 228, 0.92);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -255,14 +220,14 @@
 }
 
 .radar-description {
-  color: var(--color-text);
+  color: rgba(210, 218, 228, 0.92);
   font-size: 0.9rem;
   line-height: 1.65;
   margin: 0;
 }
 
 .radar-stay-updated {
-  color: var(--color-secondary);
+  color: rgba(177, 189, 204, 0.88);
   font-size: 0.88rem;
   line-height: 1.55;
   margin: 0;
@@ -271,7 +236,7 @@
 /* ─── Row 2: Links Bar ──────────────────────────────────────── */
 .radar-card-links {
   align-items: center;
-  border-top: 1px solid rgba(80, 118, 135, 0.15);
+  border-top: 1px solid rgba(177, 189, 204, 0.2);
   display: flex;
   gap: 0.75rem;
   margin-top: auto;
@@ -298,13 +263,13 @@
 }
 
 .radar-link-divider {
-  color: rgba(80, 118, 135, 0.35);
+  color: rgba(177, 189, 204, 0.45);
   font-size: 0.8rem;
   user-select: none;
 }
 
 .radar-link-type {
-  color: var(--color-secondary);
+  color: rgba(177, 189, 204, 0.88);
   font-size: 0.8rem;
   font-weight: 500;
 }

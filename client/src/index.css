@@ -4,6 +4,7 @@
 /* Global design tokens: semantic color palette + typography defaults. */
 :root {
   --color-primary: #384b70;
+
   --color-secondary: #507687;
   /* --color-background: #fcfaee; */
   --color-background: rgba(252, 250, 238, 0.93);
@@ -50,15 +51,15 @@ body,
   font-family: var(--font-body);
 } */
 
-html {
-  background-color: #1a1410;
-}
-
+html,
 body {
   background-image: url("https://i.imgur.com/ZhH65Rv.png");
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
+}
+
+body {
   color: var(--color-text);
   font-family: var(--font-body);
 }

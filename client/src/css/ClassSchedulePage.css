@@ -7,57 +7,40 @@
 }
 
 .class-schedule-container {
-  margin: 0 auto;
-  max-width: 1150px;
-  padding: 1.25rem 1rem 2.25rem;
+  margin: 0;
+  max-width: none;
+  padding: 1.25rem 0 2.25rem;
+  width: 100%;
 }
 
 .day-filter-row {
-  background: var(--color-background);
+  background: rgba(15, 22, 33, 0.873);
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
   margin-top: 1rem;
   padding: 2.5rem 2.5rem;
-  -webkit-mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 2%,
-      black 90%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 2%,
-      black 98%,
-      transparent 100%
-    );
-  -webkit-mask-composite: destination-in;
-  mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 25%,
-      black 80%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 2%,
-      black 98%,
-      transparent 100%
-    );
-  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 2%,
+    black 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 25%,
+    black 80%,
+    transparent 100%
+  );
 }
 
 .day-filter-btn {
   background: transparent;
-  border: 1px solid rgba(56, 75, 112, 0.2);
+  border: 1px solid rgba(177, 189, 204, 0.35);
   border-radius: 999px;
-  color: var(--color-primary);
+  color: rgba(210, 218, 228, 0.92);
   cursor: pointer;
   font-family: var(--font-body);
   font-size: 0.82rem;
@@ -72,7 +55,7 @@
 
 .day-filter-btn:hover {
   border-color: var(--color-accent);
-  color: var(--color-accent);
+  color: rgba(245, 247, 250, 0.95);
 }
 
 .day-filter-btn.active {
@@ -82,7 +65,7 @@
 }
 
 .schedule-message {
-  color: var(--color-secondary);
+  color: rgba(177, 189, 204, 0.88);
   margin: 1rem 0;
 }
 
@@ -98,41 +81,23 @@
 }
 
 .day-section {
-  background: var(--color-background);
+  background: rgba(15, 22, 33, 0.873);
   overflow: hidden;
   padding: 1.5rem 2rem;
-  -webkit-mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 4%,
-      black 96%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 2%,
-      black 98%,
-      transparent 100%
-    );
-  -webkit-mask-composite: destination-in;
-  mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 5%,
-      black 95%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 2%,
-      black 98%,
-      transparent 100%
-    );
-  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 4%,
+    black 96%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
 }
 
 .day-section-header {
@@ -145,13 +110,13 @@
 }
 
 .day-section-header h2 {
-  color: var(--color-primary);
+  color: rgba(233, 236, 242, 0.95);
   font-size: 1.5rem;
   margin: 0;
 }
 
 .day-section-header p {
-  color: var(--color-secondary);
+  color: rgba(177, 189, 204, 0.88);
   font-size: 0.86rem;
   font-weight: 600;
   margin: 0;
@@ -164,7 +129,7 @@
 
 .class-card {
   align-items: center;
-  border-top: 1px solid rgba(80, 118, 135, 0.12);
+  border-top: 1px solid rgba(177, 189, 204, 0.22);
   display: grid;
   gap: 0.8rem;
   grid-template-columns: 1fr auto auto;
@@ -176,14 +141,14 @@
 }
 
 .class-main h3 {
-  color: var(--color-text);
+  color: rgba(233, 236, 242, 0.95);
   font-size: 1rem;
   margin: 0 0 0.35rem;
 }
 
 .studio-row {
   align-items: center;
-  color: var(--color-primary);
+  color: rgba(210, 218, 228, 0.92);
   display: flex;
   gap: 0.45rem;
   font-size: 0.88rem;
@@ -205,37 +170,38 @@
 }
 
 .class-time {
-  color: var(--color-primary);
+  color: rgba(210, 218, 228, 0.92);
   font-size: 0.88rem;
   font-weight: 700;
   margin: 0;
 }
 
 .skill-pill {
-  background: rgba(80, 118, 135, 0.12);
-  border: 1px solid rgba(80, 118, 135, 0.26);
+  background: rgba(112, 138, 162, 0.16);
+  border: 1px solid rgba(164, 186, 208, 0.4);
   border-radius: 999px;
-  color: var(--color-secondary);
+  color: rgba(205, 220, 236, 0.95);
   font-size: 0.74rem;
   font-weight: 700;
   padding: 0.22rem 0.58rem;
 }
 
 .skill-pill--beg {
-  background: rgba(80, 118, 135, 0.12);
-  border-color: rgba(80, 118, 135, 0.3);
+  background: rgba(130, 160, 140, 0.16);
+  border-color: rgba(158, 191, 168, 0.4);
+  color: rgba(187, 213, 194, 0.96);
 }
 
 .skill-pill--int {
-  background: rgba(56, 75, 112, 0.12);
-  border-color: rgba(56, 75, 112, 0.3);
-  color: var(--color-primary);
+  background: rgba(97, 126, 160, 0.16);
+  border-color: rgba(154, 178, 204, 0.4);
+  color: rgba(206, 220, 236, 0.96);
 }
 
 .skill-pill--adv {
-  background: rgba(196, 69, 69, 0.12);
-  border-color: rgba(196, 69, 69, 0.3);
-  color: var(--color-accent);
+  background: rgba(196, 69, 69, 0.16);
+  border-color: rgba(219, 121, 121, 0.42);
+  color: rgba(244, 192, 192, 0.97);
 }
 
 .book-class-btn {
@@ -255,7 +221,7 @@
 }
 
 .no-link {
-  color: var(--color-secondary);
+  color: rgba(177, 189, 204, 0.88);
   font-size: 0.82rem;
   font-weight: 600;
 }

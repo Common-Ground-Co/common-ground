@@ -8,48 +8,31 @@
 
 /* ─── Outer container: invisible layout box only ────────────── */
 .studios-container {
-  max-width: 1300px;
-  margin: 1.8rem auto;
+  max-width: none;
+  margin: 1.8rem 0;
   padding: 0;
+  width: 100%;
 }
 
 /* ─── Inner div: cream background + fade mask ───────────────── */
 /* No border, border-radius, or box-shadow  */
 .studios-inner {
-  background-color: rgba(252, 250, 238, 0.93);
+  background-color: rgba(15, 22, 33, 0.873);
   padding: 4rem 3.5rem;
-  -webkit-mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 4%,
-      black 96%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 2%,
-      black 98%,
-      transparent 100%
-    );
-  -webkit-mask-composite: destination-in;
-  mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 4%,
-      black 96%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 2%,
-      black 98%,
-      transparent 100%
-    );
-  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 4%,
+    black 96%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 4%,
+    black 96%,
+    transparent 100%
+  );
 }
 
 /* ─── Studios Header ────────────────────────────────────────── */
@@ -58,7 +41,7 @@
 }
 
 .studios-header h1 {
-  color: var(--color-primary);
+  color: rgba(233, 236, 242, 0.95);
   font-size: clamp(2rem, 5vw, 2.8rem);
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -66,7 +49,7 @@
 }
 
 .search-hint {
-  color: var(--color-secondary);
+  color: rgba(177, 189, 204, 0.88);
   font-size: 0.95rem;
   margin: 0;
 }
@@ -95,7 +78,7 @@
 }
 
 .filter-group h3 {
-  color: var(--color-primary);
+  color: rgba(225, 233, 244, 0.92);
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -111,9 +94,9 @@
 
 .filter-pill {
   background: transparent;
-  border: 1px solid rgba(56, 75, 112, 0.2);
+  border: 1px solid rgba(177, 189, 204, 0.35);
   border-radius: 0.35rem;
-  color: var(--color-primary);
+  color: rgba(210, 218, 228, 0.92);
   cursor: pointer;
   font-family: var(--font-body);
   font-size: 0.85rem;
@@ -127,9 +110,9 @@
 }
 
 .filter-pill:hover {
-  background: rgba(196, 69, 69, 0.08);
+  background: rgba(196, 69, 69, 0.14);
   border-color: var(--color-accent);
-  color: var(--color-accent);
+  color: rgba(245, 247, 250, 0.95);
 }
 
 .filter-pill.active {
@@ -173,22 +156,22 @@
 }
 
 .results-header h2 {
-  color: var(--color-primary);
+  color: rgba(233, 236, 242, 0.95);
   font-size: 1.6rem;
   margin: 0;
 }
 
 .result-count {
-  color: var(--color-secondary);
+  color: rgba(177, 189, 204, 0.88);
   font-size: 0.95rem;
   font-weight: 400;
 }
 
 .status-block {
-  background: rgba(252, 250, 238, 0.5);
-  border: 1px solid rgba(80, 118, 135, 0.15);
+  background: rgba(26, 37, 54, 0.8);
+  border: 1px solid rgba(177, 189, 204, 0.2);
   border-radius: 0.4rem;
-  color: var(--color-primary);
+  color: rgba(210, 218, 228, 0.92);
   padding: 2rem;
   text-align: center;
 }
@@ -208,8 +191,8 @@
 
 /* ─── Horizontal Studio Card ────────────────────────────────── */
 .studio-card-horizontal {
-  background: white;
-  border: 1px solid rgba(80, 118, 135, 0.12);
+  background: rgba(23, 32, 46, 0.613);
+  border: 1px solid rgba(177, 189, 204, 0.2);
   border-radius: 0.6rem;
   box-shadow: 0 2px 8px rgba(31, 44, 70, 0.06);
   display: grid;
@@ -288,7 +271,7 @@
 }
 
 .card-header h3 {
-  color: var(--color-primary);
+  color: rgba(233, 236, 242, 0.95);
   font-size: 1.2rem;
   line-height: 1.2;
   margin: 0;
@@ -322,7 +305,7 @@
 
 .meta-item {
   align-items: center;
-  color: var(--color-secondary);
+  color: rgba(177, 189, 204, 0.88);
   display: flex;
   gap: 0.4rem;
 }
@@ -333,7 +316,7 @@
 }
 
 .card-styles {
-  color: var(--color-primary);
+  color: rgba(210, 218, 228, 0.92);
   display: flex;
   flex-wrap: wrap;
   font-size: 0.9rem;
@@ -343,10 +326,10 @@
 }
 
 .style-pill {
-  background: rgba(80, 118, 135, 0.08);
-  border: 1px solid rgba(80, 118, 135, 0.2);
+  background: rgba(177, 189, 204, 0.1);
+  border: 1px solid rgba(177, 189, 204, 0.22);
   border-radius: 0.3rem;
-  color: var(--color-secondary);
+  color: rgba(210, 218, 228, 0.92);
   font-size: 0.8rem;
   font-weight: 500;
   padding: 0.3rem 0.7rem;
@@ -402,8 +385,8 @@
 
   .filter-group {
     padding: 1rem;
-    background: rgba(252, 250, 238, 0.5);
-    border: 1px solid rgba(80, 118, 135, 0.1);
+    background: rgba(26, 37, 54, 0.8);
+    border: 1px solid rgba(177, 189, 204, 0.16);
     border-radius: 0.4rem;
   }
 
@@ -444,8 +427,8 @@
 
   .filter-group {
     padding: 0.8rem;
-    background: rgba(252, 250, 238, 0.5);
-    border: 1px solid rgba(80, 118, 135, 0.12);
+    background: rgba(26, 37, 54, 0.8);
+    border: 1px solid rgba(177, 189, 204, 0.16);
     border-radius: 0.4rem;
   }
 
