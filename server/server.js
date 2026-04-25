@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: clientOrigin,
+    origin: process.env.CLIENT_ORIGIN,
   }),
 );
 // All API endpoints are namespaced under /api.
