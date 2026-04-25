@@ -4,7 +4,7 @@ export const schema = `
   DROP TABLE IF EXISTS classes;
   DROP TABLE IF EXISTS studios;
   DROP TABLE IF EXISTS studio_submissions;
-  DROP TABLE IF EXISTS community_radar;
+  DROP TABLE IF EXISTS ig_accounts;
 
   CREATE TABLE studios (
     id             SERIAL PRIMARY KEY,
@@ -69,7 +69,7 @@ export const schema = `
     created_at    TIMESTAMP DEFAULT NOW()
   );
 
-  CREATE TABLE community_radar (
+  CREATE TABLE ig_accounts (
     id          SERIAL PRIMARY KEY,
     name        TEXT NOT NULL,
     instagram   TEXT,

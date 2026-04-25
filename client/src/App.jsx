@@ -5,7 +5,7 @@ import StudioDetailPage from "./pages/StudioDetailPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import ClassSchedulePage from "./pages/ClassSchedulePage.jsx";
 import PlaceholderPage from "./pages/PlaceholderPage.jsx";
-
+import IgClassRadarPage from "./pages/IgClassRadarPage.jsx";
 function App() {
   return (
     <>
@@ -15,15 +15,7 @@ function App() {
         <Route path="/studios" element={<StudiosPage />} />
         <Route path="/studios/:id" element={<StudioDetailPage />} />
         <Route path="/class-schedule" element={<ClassSchedulePage />} />
-        <Route
-          path="/ig-class-radar"
-          element={
-            <PlaceholderPage
-              title="IG Class Radar"
-              description="Instagram class discovery is coming soon."
-            />
-          }
-        />
+        <Route path="/ig-class-radar" element={<IgClassRadarPage />} />
         <Route
           path="/add-studio"
           element={

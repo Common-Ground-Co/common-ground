@@ -1,0 +1,360 @@
+/* ─── Page ──────────────────────────────────────────────────── */
+.radar-page {
+  background: transparent;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  padding-bottom: 4rem;
+}
+
+/* ─── Hero Banner ───────────────────────────────────────────── */
+.radar-hero {
+  min-height: 50vh;
+  overflow: visible;
+  position: relative;
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}
+
+.radar-hero-image {
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  object-position: center 40%;
+  position: absolute;
+  width: 100%;
+}
+
+.radar-hero-overlay {
+  background: linear-gradient(
+    105deg,
+    rgba(21, 34, 56, 0.52) 22%,
+    rgba(56, 75, 112, 0.24) 58%,
+    rgba(184, 0, 31, 0.12) 100%
+  );
+  inset: 0;
+  position: absolute;
+}
+
+/* ─── Container ─────────────────────────────────────────────── */
+.radar-container {
+  margin: 2rem auto 0;
+  max-width: 1200px;
+  padding: 0 1rem;
+}
+
+/* ─── Page Header ───────────────────────────────────────────── */
+.radar-header {
+  background-color: var(--color-background);
+  margin-bottom: 2.5rem;
+  padding: 4.5rem 4.5rem;
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 20%,
+      black 80%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 2%,
+      black 98%,
+      transparent 100%
+    );
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 20%,
+      black 80%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 4%,
+      black 96%,
+      transparent 100%
+    );
+  mask-composite: intersect;
+}
+
+.radar-header h1 {
+  color: var(--color-primary);
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 0.6rem;
+}
+
+.radar-header div {
+  color: var(--color-secondary);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 1rem 0;
+  max-width: 680px;
+}
+
+/* ─── Status Messages ───────────────────────────────────────── */
+.radar-message {
+  color: var(--color-secondary);
+  margin: 1rem 0;
+}
+
+.radar-message.error {
+  color: var(--color-accent);
+}
+
+/* ─── Cards List ────────────────────────────────────────────── */
+.radar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* ─── Individual Card ───────────────────────────────────────── */
+/* Height is driven entirely by the content column — image stretches to match */
+.radar-card {
+  background: var(--color-background);
+  display: grid;
+  grid-template-columns: 20rem 1fr;
+  gap: 0;
+  align-items: stretch;
+  overflow: hidden;
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 5%,
+      black 95%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 5%,
+      black 95%,
+      transparent 100%
+    );
+  -webkit-mask-composite: destination-in;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 5%,
+      black 95%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      black 5%,
+      black 95%,
+      transparent 100%
+    );
+  mask-composite: intersect;
+}
+
+/* ─── Card Left: Photo ──────────────────────────────────────── */
+/* Position relative so the img can be absolute and always fill the column */
+.radar-card-image {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Absolutely fills the column height — no harsh bottom edge regardless of
+   image dimensions or screen size */
+.radar-card-image img {
+  display: block;
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  object-position: center top;
+  position: absolute;
+  width: 100%;
+}
+
+.radar-card-image-placeholder {
+  align-items: center;
+  background: rgba(56, 75, 112, 0.08);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.radar-card-image-placeholder i {
+  color: rgba(56, 75, 112, 0.3);
+  font-size: 3rem;
+}
+
+/* ─── Card Right: Body ──────────────────────────────────────── */
+.radar-card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Row 1: Info ───────────────────────────────────────────── */
+.radar-card-info {
+  flex: 1;
+  padding: 1.5rem 1.5rem;
+}
+
+.radar-card-title-row {
+  align-items: center;
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.radar-card-title-row h2 {
+  color: var(--color-primary);
+  font-size: 1.3rem;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.radar-type-badge {
+  background: rgba(80, 118, 135, 0.1);
+  border: 1px solid rgba(80, 118, 135, 0.25);
+  border-radius: 999px;
+  color: var(--color-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.radar-insta-handle {
+  align-items: center;
+  color: var(--color-accent);
+  display: flex;
+  font-size: 0.88rem;
+  font-weight: 600;
+  gap: 0.35rem;
+  margin: 0 0 1rem;
+}
+
+.radar-insta-handle i {
+  font-size: 0.9rem;
+}
+
+.radar-section-label {
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin: 0.8rem 0 0.3rem;
+  text-transform: uppercase;
+}
+
+.radar-description {
+  color: var(--color-text);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.radar-stay-updated {
+  color: var(--color-secondary);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ─── Row 2: Links Bar ──────────────────────────────────────── */
+.radar-card-links {
+  align-items: center;
+  border-top: 1px solid rgba(80, 118, 135, 0.15);
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding: 0.65rem 1.1rem 2rem;
+}
+
+.radar-link {
+  align-items: center;
+  color: var(--color-accent);
+  display: inline-flex;
+  font-size: 0.82rem;
+  font-weight: 600;
+  gap: 0.35rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.radar-link:hover {
+  opacity: 0.75;
+}
+
+.radar-link i {
+  font-size: 0.88rem;
+}
+
+.radar-link-divider {
+  color: rgba(80, 118, 135, 0.35);
+  font-size: 0.8rem;
+  user-select: none;
+}
+
+.radar-link-type {
+  color: var(--color-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* ─── Responsive ────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .radar-card {
+    grid-template-columns: 14rem 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .radar-hero {
+    min-height: 35vh;
+  }
+
+  .radar-header {
+    padding: 3rem 2rem;
+  }
+
+  .radar-card {
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+
+  /* Image is now a normal block — not absolute — so it shows fully */
+  .radar-card-image {
+    height: 260px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .radar-card-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .radar-card-title-row {
+    flex-wrap: wrap;
+  }
+
+  .radar-card-info {
+    padding: 1rem;
+  }
+
+  .radar-card-links {
+    padding: 0.65rem 1rem 1rem;
+  }
+}

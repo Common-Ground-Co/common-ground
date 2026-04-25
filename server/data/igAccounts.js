@@ -1,5 +1,5 @@
-// Seed data for the community_radar table used by config/reset.js.
-const communityRadar = [
+// Seed data for the ig_accounts table used by config/reset.js.
+const igAccounts = [
   {
     name: "Movement of Desis (MOD)",
     instagram: "@movement.of.desis",
@@ -20,4 +20,4 @@ const communityRadar = [
   },
 ];
 
-export default communityRadar;
+export default igAccounts;

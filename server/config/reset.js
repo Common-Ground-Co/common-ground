@@ -2,7 +2,7 @@
 import pool from "./database.js";
 import { schema } from "./schema.js";
 import studios from "../data/studios.js";
-import communityRadar from "../data/communityRadar.js";
+import igAccounts from "../data/igAccounts.js";
 
 const seedStudios = async () => {
   for (const studio of studios) {
@@ -34,11 +34,11 @@ const seedStudios = async () => {
   }
 };
 
-const seedCommunityRadar = async () => {
-  for (const entry of communityRadar) {
-    // Each source object becomes one row in community_radar.
+const seedIgAccounts = async () => {
+  for (const entry of igAccounts) {
+    // Each source object becomes one row in ig_accounts.
     await pool.query(
-      `INSERT INTO community_radar 
+      `INSERT INTO ig_accounts 
         (name, instagram, description, type, photo_url)
        VALUES ($1, $2, $3, $4, $5)`,
       [
@@ -59,7 +59,7 @@ const reset = async () => {
     await pool.query(schema);
     console.log("🎉 tables created successfully");
     await seedStudios();
-    await seedCommunityRadar();
+    await seedIgAccounts();
     console.log("🌱 seed complete");
   } catch (err) {
     console.error("⚠️ error during reset", err);

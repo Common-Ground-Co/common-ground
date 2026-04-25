@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Navigation from "../components/Navigation.jsx";
+import { fetchClasses } from "../services/classesService.js";
 import "../css/ClassSchedulePage.css";
 
 const DAYS = [
@@ -21,15 +22,12 @@ function formatStartTime(value) {
   if (!value) {
     return "TBD";
   }
-
   const [hoursText, minutesText = "00"] = String(value).split(":");
   const hours = Number(hoursText);
   const minutes = Number(minutesText);
-
   if (!Number.isFinite(hours) || !Number.isFinite(minutes)) {
     return String(value);
   }
-
   const suffix = hours >= 12 ? "PM" : "AM";
   const normalizedHours = hours % 12 || 12;
   return `${normalizedHours}:${String(minutes).padStart(2, "0")} ${suffix}`;
@@ -55,11 +53,7 @@ function ClassSchedulePage() {
     const loadClasses = async () => {
       try {
         setLoading(true);
-        const response = await fetch("/api/classes");
-        if (!response.ok) {
-          throw new Error(`Failed to fetch classes: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await fetchClasses();
         setClasses(data);
       } catch (err) {
         setError(err.message || "Unable to load class schedule");
@@ -67,7 +61,6 @@ function ClassSchedulePage() {
         setLoading(false);
       }
     };
-
     loadClasses();
   }, []);
 
@@ -76,7 +69,6 @@ function ClassSchedulePage() {
     if (selectedDay === "All") {
       return classes;
     }
-
     return classes.filter((item) => item.day_of_week === selectedDay);
   }, [classes, selectedDay]);
 
@@ -105,7 +97,6 @@ function ClassSchedulePage() {
   return (
     <div className="class-schedule-page">
       <Navigation />
-
       <main className="class-schedule-container">
         {/* Day buttons let the user quickly filter schedule rows. */}
         <section
@@ -128,7 +119,6 @@ function ClassSchedulePage() {
           <p className="schedule-message">Loading classes...</p>
         ) : null}
         {error ? <p className="schedule-message error">{error}</p> : null}
-
         {!loading && !error && classes.length === 0 ? (
           <p className="schedule-message">
             No classes available right now. Check back soon.
@@ -144,7 +134,6 @@ function ClassSchedulePage() {
                   <h2>{group.dayOfWeek}</h2>
                   <p>{group.classDate}</p>
                 </header>
-
                 <div className="day-class-list">
                   {group.items.map((classItem) => (
                     <article key={classItem.id} className="class-card">
@@ -159,7 +148,6 @@ function ClassSchedulePage() {
                           <span>{classItem.studio_name}</span>
                         </div>
                       </div>
-
                       <div className="class-meta">
                         <p className="class-time">
                           {formatStartTime(classItem.start_time)}
@@ -170,7 +158,6 @@ function ClassSchedulePage() {
                           {classItem.skill_level || "Open"}
                         </span>
                       </div>
-
                       <div className="class-actions">
                         {classItem.studio_schedule_url ? (
                           <a
