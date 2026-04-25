@@ -5,14 +5,22 @@ import studiosRouter from "./routes/studios.js";
 import classesRouter from "./routes/classes.js";
 import igAccountsRouter from "./routes/igAccounts.js";
 import reviewsRouter from "./routes/reviews.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const clientOrigin =
+  process.env.CLIENT_ORIGIN || "https://common-ground-ms0x.onrender.com";
 
 app.use(express.json());
 
+app.use(
+  cors({
+    origin: clientOrigin,
+  }),
+);
 // All API endpoints are namespaced under /api.
 app.use("/api/studios", studiosRouter);
 app.use("/api/classes", classesRouter);

@@ -1,6 +1,8 @@
 // Studios API service: centralizes fetch calls for studio data.
+import { apiPath } from "./api.js";
+
 export async function fetchStudios() {
-  const response = await fetch("/api/studios");
+  const response = await fetch(apiPath("/api/studios"));
 
   // Throwing here lets pages handle loading/error UI in one place.
   if (!response.ok) {
@@ -11,7 +13,7 @@ export async function fetchStudios() {
 }
 
 export async function fetchStudioById(id) {
-  const response = await fetch(`/api/studios/${id}`);
+  const response = await fetch(apiPath(`/api/studios/${id}`));
 
   // Throwing here lets pages handle loading/error UI in one place.
   if (!response.ok) {
