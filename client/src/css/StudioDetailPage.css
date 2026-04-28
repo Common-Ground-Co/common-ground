@@ -570,15 +570,13 @@
 }
 
 .reviews-inner {
-  background: rgba(22, 32, 46, 0.92);
+  background: transparent;
   border-top: 1px solid rgba(177, 189, 204, 0.24);
   border-bottom: 1px solid rgba(177, 189, 204, 0.24);
-  border-radius: 0.6rem;
-  box-shadow: 0 8px 20px rgba(8, 12, 20, 0.22);
   margin: 0 auto;
   max-width: none;
   width: 100%;
-  padding: 1.5rem 1.25rem;
+  padding: 1.5rem 1.5rem;
 }
 
 .hero-polaroid-photo {
@@ -640,6 +638,206 @@
   color: rgba(205, 218, 232, 0.95);
   font-size: 0.95rem;
   margin: 0;
+}
+
+.review-form {
+  display: grid;
+  gap: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+.review-form-row {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.review-label {
+  color: rgba(177, 189, 204, 0.9);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.review-input,
+.review-textarea {
+  background: rgba(9, 14, 22, 0.72);
+  border: 1px solid rgba(177, 189, 204, 0.35);
+  border-radius: 0.45rem;
+  color: rgba(233, 236, 242, 0.95);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.review-input:focus,
+.review-textarea:focus {
+  border-color: rgba(196, 69, 69, 0.8);
+  outline: none;
+}
+
+.review-textarea {
+  resize: vertical;
+}
+
+.review-submit-btn {
+  background: var(--color-accent);
+  border: 0;
+  border-radius: 0.45rem;
+  color: var(--color-background);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 1rem;
+  text-transform: uppercase;
+  transition: background 0.2s ease;
+  width: fit-content;
+}
+
+.review-submit-btn:hover:not(:disabled) {
+  background: #ad3d3d;
+}
+
+.review-submit-btn:disabled {
+  cursor: default;
+  opacity: 0.72;
+}
+
+.reviews-error {
+  color: rgba(244, 192, 192, 0.97);
+  font-size: 0.88rem;
+  margin: 0 0 1rem;
+}
+
+.reviews-notice {
+  color: rgba(177, 224, 194, 0.96);
+  font-size: 0.88rem;
+  margin: 0 0 1rem;
+}
+
+.review-list {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.review-card {
+  border-top: 1px solid rgba(177, 189, 204, 0.26);
+  padding: 0.9rem 0;
+}
+
+.review-card-head {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.review-author {
+  color: rgba(233, 236, 242, 0.95);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.review-rating {
+  color: var(--color-accent);
+  font-size: 0.86rem;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.review-description {
+  color: rgba(205, 218, 232, 0.94);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0.45rem 0 0;
+}
+
+.review-edited {
+  color: rgba(177, 189, 204, 0.84);
+  font-size: 0.76rem;
+  font-style: italic;
+  margin: 0.45rem 0 0;
+}
+
+.review-delete-btn {
+  background: transparent;
+  border: 1px solid rgba(196, 69, 69, 0.55);
+  border-radius: 999px;
+  color: rgba(244, 192, 192, 0.97);
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-top: 0.7rem;
+  padding: 0.3rem 0.65rem;
+  text-transform: uppercase;
+}
+
+.review-delete-btn:hover {
+  background: rgba(196, 69, 69, 0.16);
+}
+
+.review-edit-form {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.65rem;
+}
+
+.review-action-btn {
+  background: transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.32rem 0.7rem;
+  text-transform: uppercase;
+}
+
+.review-action-btn--edit {
+  border: 1px solid rgba(177, 189, 204, 0.5);
+  color: rgba(210, 218, 228, 0.95);
+}
+
+.review-action-btn--edit:hover {
+  background: rgba(177, 189, 204, 0.15);
+}
+
+.review-action-btn--delete {
+  border: 1px solid rgba(196, 69, 69, 0.55);
+  color: rgba(244, 192, 192, 0.97);
+}
+
+.review-action-btn--delete:hover {
+  background: rgba(196, 69, 69, 0.16);
+}
+
+.review-action-btn--save {
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  color: var(--color-background);
+}
+
+.review-action-btn--save:hover {
+  background: #ad3d3d;
+}
+
+.review-action-btn--cancel {
+  border: 1px solid rgba(177, 189, 204, 0.5);
+  color: rgba(210, 218, 228, 0.95);
+}
+
+.review-action-btn--cancel:hover {
+  background: rgba(177, 189, 204, 0.15);
 }
 
 /* ─── Back Link ─────────────────────────────────────────────── */

@@ -212,7 +212,8 @@
 
 .radar-section-label {
   color: rgba(210, 218, 228, 0.92);
-  font-size: 0.75rem;
+  font-family: var(--font-body);
+  font-size: .8rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   margin: 0.8rem 0 0.3rem;

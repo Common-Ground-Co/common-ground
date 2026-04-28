@@ -311,7 +311,9 @@
 }
 
 .featured-card-content h3 {
+  font-family: var(--font-body);
   font-size: 1.75rem;
+  font-weight: 700;
   line-height: 1.08;
   margin: 0;
 }

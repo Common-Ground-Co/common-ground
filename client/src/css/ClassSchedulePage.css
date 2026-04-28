@@ -142,7 +142,9 @@
 
 .class-main h3 {
   color: rgba(233, 236, 242, 0.95);
+  font-family: var(--font-body);
   font-size: 1rem;
+  font-weight: 700;
   margin: 0 0 0.35rem;
 }
 

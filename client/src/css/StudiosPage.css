@@ -272,7 +272,9 @@
 
 .card-header h3 {
   color: rgba(233, 236, 242, 0.95);
+  font-family: var(--font-body);
   font-size: 1.2rem;
+  font-weight:700;
   line-height: 1.2;
   margin: 0;
 }
