@@ -83,12 +83,14 @@
 }
 
 .hero-content h1 {
-  color: white;
+  color: rgba(235, 237, 243, 0.95);
   font-size: clamp(2rem, 3vw, 3.6rem);
   letter-spacing: -0.03em;
   line-height: 1.03;
   margin: 0.2rem 0 0.9rem;
   max-width: 650px;
+  text-shadow: 10px 0 20px rgba(2, 2, 2, 0.8);
+
 }
 
 .hero-subtitle {
@@ -226,7 +228,7 @@
 }
 
 .section-heading h2 {
-  color: rgba(233, 236, 242, 0.95);
+  color: rgba(235, 237, 243, 0.95);
   font-size: clamp(1.8rem, 3vw, 2.3rem);
   margin: 0.2rem 0 0.45rem;
 }

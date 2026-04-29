@@ -32,6 +32,7 @@ function StudioDetailPage() {
     rating: 5,
     description: "",
   });
+  const [showWorkStudyPopup, setShowWorkStudyPopup] = useState(false);
 
   useEffect(() => {
     const loadStudio = async () => {
@@ -206,6 +207,12 @@ function StudioDetailPage() {
         .map((s) => s.trim())
         .filter(Boolean)
     : [];
+  const hasWorkStudyLink =
+    typeof studio.work_study_url === "string" &&
+    /^https?:\/\//i.test(studio.work_study_url.trim());
+  const workStudyEmail = hasWorkStudyLink ? "" : (studio.work_study_url || "").trim();
+  const heroObjectPosition =
+    studio.name === "Visceral Dance Center" ? "center center" : "center 30%";
 
   return (
     <div className="studio-detail-page">
@@ -213,7 +220,9 @@ function StudioDetailPage() {
       <section className="detail-hero">
         <img
           className="detail-hero-image"
+          style={{ objectPosition: heroObjectPosition }}
           src={
+            studio.banner_photo_url ||
             photos[0] ||
             "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1400&q=80"
           }
@@ -239,11 +248,11 @@ function StudioDetailPage() {
             </div>
           )}
         </div>
-        {/* Decorative polaroid — second photo if available */}
-        {photos[1] && (
+        {/* Decorative polaroid */}
+        {studio.polaroid_photo_url && (
           <div className="hero-polaroid" aria-hidden="true">
             <div className="hero-polaroid-frame">
-              <img className="hero-polaroid-photo" src={photos[1]} alt="" />
+              <img className="hero-polaroid-photo" src={studio.polaroid_photo_url} alt="" />
             </div>
           </div>
         )}
@@ -341,14 +350,13 @@ function StudioDetailPage() {
                   <i className="fa-solid fa-hands-helping" /> Work Study
                 </span>
                 {studio.work_study_url ? (
-                  <a
-                    className="info-link"
-                    href={studio.work_study_url}
-                    target="_blank"
-                    rel="noreferrer"
+                  <button
+                    type="button"
+                    className="info-link info-link-button"
+                    onClick={() => setShowWorkStudyPopup(true)}
                   >
                     Available
-                  </a>
+                  </button>
                 ) : (
                   <span className="info-value info-badge">Available</span>
                 )}
@@ -384,13 +392,13 @@ function StudioDetailPage() {
           )}
 
           {/* About section */}
-          {studio.curator_review && (
+          {studio.about_studio && (
             <section className="detail-section">
               <div className="section-label">
                 <span className="section-accent-line" />
                 <h3>About the Studio</h3>
               </div>
-              <p className="detail-description">{studio.curator_review}</p>
+              <p className="detail-description">{studio.about_studio}</p>
             </section>
           )}
 
@@ -664,6 +672,46 @@ function StudioDetailPage() {
           <i className="fa-solid fa-arrow-left" /> Back to Studios
         </Link>
       </div>
+      {showWorkStudyPopup && (
+        <div
+          className="work-study-popup-overlay"
+          role="presentation"
+          onClick={() => setShowWorkStudyPopup(false)}
+        >
+          <div
+            className="work-study-popup"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Work Study details"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="work-study-popup-close"
+              onClick={() => setShowWorkStudyPopup(false)}
+              aria-label="Close Work Study popup"
+            >
+              <i className="fa-solid fa-xmark" aria-hidden="true" />
+            </button>
+            <h3>Work Study</h3>
+            {hasWorkStudyLink ? (
+              <a
+                className="work-study-popup-link"
+                href={studio.work_study_url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Open application
+              </a>
+            ) : (
+              <p className="work-study-popup-copy">
+                Email the studio to ask about Work Study availability:{" "}
+                <a href={`mailto:${workStudyEmail}`}>{workStudyEmail}</a>
+              </p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

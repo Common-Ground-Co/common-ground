@@ -17,6 +17,34 @@ const DAYS = [
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=120&q=80";
 
+function normalizeClassDate(value) {
+  if (!value) return "";
+  return String(value).slice(0, 10);
+}
+
+function parseClassDate(value) {
+  const normalized = normalizeClassDate(value);
+  if (!normalized) return null;
+  const parsed = new Date(`${normalized}T12:00:00`);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function formatClassDate(value) {
+  const parsed = parseClassDate(value);
+  if (!parsed) return "Date TBD";
+  return parsed.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function getDayLabelFromDate(value, fallbackDay) {
+  const parsed = parseClassDate(value);
+  if (!parsed) return fallbackDay || "Unknown";
+  return parsed.toLocaleDateString("en-US", { weekday: "long" });
+}
+
 function formatStartTime(value) {
   // Convert 24-hour time to readable format like 7:15 PM.
   if (!value) {
@@ -65,21 +93,22 @@ function ClassSchedulePage() {
   }, []);
 
   const visibleClasses = useMemo(() => {
-    // Show all classes or only the selected weekday.
-    if (selectedDay === "All") {
-      return classes;
-    }
-    return classes.filter((item) => item.day_of_week === selectedDay);
+    // Show all classes or only the selected weekday (derived from class_date).
+    return classes.filter((item) => {
+      if (selectedDay === "All") return true;
+      return getDayLabelFromDate(item.class_date, item.day_of_week) === selectedDay;
+    });
   }, [classes, selectedDay]);
 
   const groupedByDate = useMemo(() => {
     // Group classes by date so each date renders as its own section.
     return visibleClasses.reduce((acc, current) => {
-      const key = current.class_date;
+      const key = normalizeClassDate(current.class_date);
+      const dayOfWeek = getDayLabelFromDate(current.class_date, current.day_of_week);
       if (!acc[key]) {
         acc[key] = {
-          classDate: current.class_date,
-          dayOfWeek: current.day_of_week,
+          classDate: key,
+          dayOfWeek,
           items: [],
         };
       }
@@ -132,7 +161,7 @@ function ClassSchedulePage() {
               <section key={group.classDate} className="day-section">
                 <header className="day-section-header">
                   <h2>{group.dayOfWeek}</h2>
-                  <p>{group.classDate}</p>
+                  <p>{formatClassDate(group.classDate)}</p>
                 </header>
                 <div className="day-class-list">
                   {group.items.map((classItem) => (

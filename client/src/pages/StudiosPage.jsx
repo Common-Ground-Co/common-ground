@@ -18,7 +18,6 @@ const DANCE_STYLES = [
 ];
 const SKILL_LEVELS = [
   "Beginner Friendly",
-  "All Levels",
   "Intermediate",
   "Advanced",
 ];
@@ -75,9 +74,9 @@ function StudiosPage() {
     }
     if (selectedLevels.length > 0) {
       result = result.filter((studio) => {
-        const studioNote = (studio.best_for || "").toLowerCase();
+        const studioLevels = (studio.levels_offered || "").toLowerCase();
         return selectedLevels.some((level) =>
-          studioNote.includes(level.toLowerCase()),
+          studioLevels.includes(level.toLowerCase()),
         );
       });
     }

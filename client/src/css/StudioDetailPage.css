@@ -245,6 +245,14 @@
   transition: opacity 0.2s;
 }
 
+.info-link-button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
 .info-link:hover {
   opacity: 0.75;
   text-decoration: underline;
@@ -273,6 +281,7 @@
 .gallery-main img {
   height: 100%;
   object-fit: cover;
+  object-position: center 10%; /** this moves the image up or doown from its container**/
   width: 100%;
   transition: transform 0.4s ease;
   -webkit-mask-image:
@@ -859,6 +868,68 @@
 }
 
 .back-link:hover {
+  color: var(--color-accent);
+}
+
+.work-study-popup-overlay {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.62);
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  padding: 1rem;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+.work-study-popup {
+  background: rgba(15, 22, 33, 0.97);
+  border: 1px solid rgba(177, 189, 204, 0.32);
+  border-radius: 0.6rem;
+  box-shadow: 0 10px 35px rgba(8, 12, 20, 0.5);
+  max-width: 440px;
+  padding: 1.2rem 1.2rem 1rem;
+  position: relative;
+  width: 100%;
+}
+
+.work-study-popup h3 {
+  color: rgba(233, 236, 242, 0.95);
+  font-size: 1.05rem;
+  margin: 0 0 0.7rem;
+}
+
+.work-study-popup-close {
+  background: transparent;
+  border: 0;
+  color: rgba(177, 189, 204, 0.95);
+  cursor: pointer;
+  font-size: 1rem;
+  position: absolute;
+  right: 0.7rem;
+  top: 0.65rem;
+}
+
+.work-study-popup-link {
+  color: var(--color-accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.work-study-popup-link:hover {
+  text-decoration: underline;
+}
+
+.work-study-popup-copy {
+  color: rgba(210, 218, 228, 0.92);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.work-study-popup-copy a {
   color: var(--color-accent);
 }
 
