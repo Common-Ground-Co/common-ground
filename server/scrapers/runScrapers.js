@@ -14,6 +14,15 @@ import {
   shouldIncludeClass,
   STUDIO_ID as VISCERAL_ID,
 } from "./visceral.js";
+import {
+  scrapeIndieMedia,
+  parseSkillLevel as parseIndieLevel,
+  parseGenre as parseIndieGenre,
+  parseDateFromText as parseIndieDate,
+  parseTimeFromText as parseIndieTime,
+  resolveBookingUrl as resolveIndieBookingUrl,
+  STUDIO_ID as INDIE_ID,
+} from "./indiemedia.js";
 
 // Set DRY_RUN=1 to test scraping without writing to the database.
 const DRY_RUN = process.env.DRY_RUN === "1";
@@ -132,6 +141,54 @@ const runVisceral = async () => {
   console.log(`✅ Visceral: ${inserted} inserted, ${skipped} skipped`);
 };
 
+// Scrape, clean, and save Indie Media classes.
+const runIndieMedia = async () => {
+  console.log("🕷️ Scraping Indie Media...");
+  const { classes } = await scrapeIndieMedia();
+  console.log(`📦 Scraped ${classes.length} raw classes`);
+
+  if (!DRY_RUN) {
+    // Remove old Indie Media classes so we replace with fresh results.
+    await pool.query("DELETE FROM classes WHERE studio_id = $1", [INDIE_ID]);
+  }
+
+  let inserted = 0;
+  let skipped = 0;
+
+  for (const c of classes) {
+    const classDate = parseIndieDate(c.dateTimeText);
+    const startTime = parseIndieTime(c.dateTimeText);
+    const skillLevel = parseIndieLevel(c.className);
+    const genre = parseIndieGenre(c.className);
+    const bookingUrl = resolveIndieBookingUrl(c.bookingHref);
+
+    if (!classDate || !startTime) {
+      // Skip if date or time could not be parsed.
+      skipped++;
+      continue;
+    }
+    if (classDate >= CUTOFF_DATE) {
+      // Skip classes outside our date window.
+      skipped++;
+      continue;
+    }
+
+    const dayOfWeek = getDayOfWeekFromIsoDate(classDate);
+
+    if (!DRY_RUN) {
+      // Save one class row.
+      await pool.query(
+        `INSERT INTO classes (studio_id, name, style, skill_level, day_of_week, class_date, start_time, booking_url)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [INDIE_ID, c.className, genre, skillLevel, dayOfWeek, classDate, startTime, bookingUrl],
+      );
+    }
+    inserted++;
+  }
+
+  console.log(`✅ Indie Media: ${inserted} inserted, ${skipped} skipped`);
+};
+
 // Main runner: executes both scrapers and closes DB connection.
 const run = async () => {
   console.log(
@@ -140,6 +197,7 @@ const run = async () => {
   try {
     await runPuzzleBox();
     await runVisceral();
+    await runIndieMedia();
   } catch (err) {
     console.error("⚠️ Scrape failed:", err);
     process.exit(1);

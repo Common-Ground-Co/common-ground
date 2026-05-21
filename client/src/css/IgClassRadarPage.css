@@ -48,7 +48,7 @@
 .radar-header {
   background-color: rgba(15, 22, 33, 0.873);
   margin-bottom: 2.5rem;
-  padding: 4.5rem 4.5rem;
+  padding: 4.5rem 2rem;
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
@@ -213,7 +213,7 @@
 .radar-section-label {
   color: rgba(210, 218, 228, 0.92);
   font-family: var(--font-body);
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   margin: 0.8rem 0 0.3rem;

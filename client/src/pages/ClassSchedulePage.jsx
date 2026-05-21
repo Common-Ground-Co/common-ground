@@ -14,6 +14,8 @@ const DAYS = [
   "Sunday",
 ];
 
+const LEVELS = ["All", "Beginner", "Intermediate", "Advanced", "Open"];
+
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=120&q=80";
 
@@ -70,11 +72,29 @@ function getSkillLevelClass(level) {
   return "skill-pill";
 }
 
+function matchesDay(item, selectedDay) {
+  if (selectedDay === "All") return true;
+  const dayOfWeek = getDayLabelFromDate(item.class_date, item.day_of_week);
+  return dayOfWeek === selectedDay;
+}
+
+function matchesLevel(skillLevel, selectedLevel) {
+  if (selectedLevel === "All") return true;
+  const normalized = String(skillLevel || "").toLowerCase();
+  const levelLower = selectedLevel.toLowerCase();
+  if (levelLower === "beginner") return normalized.includes("begin");
+  if (levelLower === "intermediate") return normalized.includes("inter");
+  if (levelLower === "advanced") return normalized.includes("adv");
+  if (levelLower === "open") return normalized === "open" || !skillLevel;
+  return false;
+}
+
 function ClassSchedulePage() {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedDay, setSelectedDay] = useState("All");
+  const [selectedLevel, setSelectedLevel] = useState("All");
 
   useEffect(() => {
     // Load all classes once when the page opens.
@@ -93,18 +113,22 @@ function ClassSchedulePage() {
   }, []);
 
   const visibleClasses = useMemo(() => {
-    // Show all classes or only the selected weekday (derived from class_date).
-    return classes.filter((item) => {
-      if (selectedDay === "All") return true;
-      return getDayLabelFromDate(item.class_date, item.day_of_week) === selectedDay;
-    });
-  }, [classes, selectedDay]);
+    // Show classes matching both the selected day AND skill level.
+    return classes.filter(
+      (item) =>
+        matchesDay(item, selectedDay) &&
+        matchesLevel(item.skill_level, selectedLevel),
+    );
+  }, [classes, selectedDay, selectedLevel]);
 
   const groupedByDate = useMemo(() => {
     // Group classes by date so each date renders as its own section.
     return visibleClasses.reduce((acc, current) => {
       const key = normalizeClassDate(current.class_date);
-      const dayOfWeek = getDayLabelFromDate(current.class_date, current.day_of_week);
+      const dayOfWeek = getDayLabelFromDate(
+        current.class_date,
+        current.day_of_week,
+      );
       if (!acc[key]) {
         acc[key] = {
           classDate: key,
@@ -127,21 +151,39 @@ function ClassSchedulePage() {
     <div className="class-schedule-page">
       <Navigation />
       <main className="class-schedule-container">
-        {/* Day buttons let the user quickly filter schedule rows. */}
-        <section
-          className="day-filter-row"
-          aria-label="Filter classes by weekday"
-        >
-          {DAYS.map((day) => (
-            <button
-              key={day}
-              type="button"
-              className={`day-filter-btn ${selectedDay === day ? "active" : ""}`}
-              onClick={() => setSelectedDay(day)}
-            >
-              {day}
-            </button>
-          ))}
+        {/* Filter section with separate day and level groups. */}
+        <section className="filter-section" aria-label="Filter classes">
+          {/* Day filter group */}
+          <div className="filter-group">
+            <div className="filter-row">
+              {DAYS.map((day) => (
+                <button
+                  key={day}
+                  type="button"
+                  className={`filter-btn ${selectedDay === day ? "active" : ""}`}
+                  onClick={() => setSelectedDay(day)}
+                >
+                  {day}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Level filter group */}
+          <div className="filter-group">
+            <div className="filter-row">
+              {LEVELS.map((level) => (
+                <button
+                  key={level}
+                  type="button"
+                  className={`filter-btn ${selectedLevel === level ? "active" : ""}`}
+                  onClick={() => setSelectedLevel(level)}
+                >
+                  {level}
+                </button>
+              ))}
+            </div>
+          </div>
         </section>
 
         {loading ? (

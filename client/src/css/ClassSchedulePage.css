@@ -13,13 +13,13 @@
   width: 100%;
 }
 
-.day-filter-row {
+.filter-section {
   background: rgba(15, 22, 33, 0.873);
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
+  flex-direction: column;
+  gap: 2rem;
   margin-top: 1rem;
-  padding: 2.5rem 2.5rem;
+  padding: 3.5rem 2.5rem 2.5rem 2.5rem;
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
@@ -36,7 +36,19 @@
   );
 }
 
-.day-filter-btn {
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.filter-btn {
   background: transparent;
   border: 1px solid rgba(177, 189, 204, 0.35);
   border-radius: 999px;
@@ -53,12 +65,12 @@
     color 0.2s ease;
 }
 
-.day-filter-btn:hover {
+.filter-btn:hover {
   border-color: var(--color-accent);
   color: rgba(245, 247, 250, 0.95);
 }
 
-.day-filter-btn.active {
+.filter-btn.active {
   background: var(--color-accent);
   border-color: var(--color-accent);
   color: var(--color-background);
@@ -245,7 +257,11 @@
 }
 
 @media (max-width: 650px) {
-  .day-filter-btn {
+  .filter-section {
+    gap: 1.5rem;
+  }
+
+  .filter-btn {
     flex: 1 1 calc(50% - 0.45rem);
     text-align: center;
   }

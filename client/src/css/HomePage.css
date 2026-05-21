@@ -90,7 +90,6 @@
   margin: 0.2rem 0 0.9rem;
   max-width: 650px;
   text-shadow: 10px 0 20px rgba(2, 2, 2, 0.8);
-
 }
 
 .hero-subtitle {
@@ -244,6 +243,7 @@
   gap: 1rem;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 1.4rem;
+  align-items: stretch;
 }
 
 /* ─── Featured Studio Cards ─────────────────────────────────── */
@@ -251,7 +251,8 @@
   border-radius: 0.4rem;
   color: white;
   display: block;
-  min-height: 260px;
+  aspect-ratio: 8 / 7;
+
   overflow: hidden;
   position: relative;
   text-decoration: none;
@@ -290,6 +291,7 @@
 }
 
 .featured-card img {
+  display: block;
   height: 100%;
   object-fit: cover;
   width: 100%;
@@ -357,6 +359,12 @@
   }
   .featured-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 651px) and (max-width: 980px) {
+  .featured-card-content h3 {
+    font-size: 1.45rem;
   }
 }
 

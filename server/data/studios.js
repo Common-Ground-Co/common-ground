@@ -87,7 +87,7 @@ const studios = [
     neighborhood: "Placeholder",
     address: "Placeholder",
     website: "https://www.indiemediastudio.com/",
-    schedule_url: "TBD",
+    schedule_url: "https://www.indiemediastudio.com/",
     instagram: "TBD",
     style: "Placeholder",
     levels_offered: "Placeholder",
