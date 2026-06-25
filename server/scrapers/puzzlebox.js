@@ -83,9 +83,11 @@ const scrapePuzzleBox = async () => {
       slots.forEach((slot) => {
         const nameEl = slot.querySelector(".s_KroQ2");
         const timeEl = slot.querySelector(".ssaqcAw");
+        const instructorEl = slot.querySelector(".sHwjQAH");
         const className = nameEl?.textContent?.trim() || "";
         const timeRaw = timeEl?.childNodes[0]?.textContent?.trim() || "";
-        results.push({ className, timeRaw, dateText, dayText });
+        const instructor = instructorEl?.textContent?.trim() || null;
+        results.push({ className, timeRaw, dateText, dayText, instructor });
       });
     });
     return results;

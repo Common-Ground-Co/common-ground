@@ -1,4 +1,19 @@
+import { writeFile } from "fs/promises";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 import pool from "../config/database.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const STUDIOS_JSON_PATH = join(__dirname, "../data/studios.json");
+
+async function syncStudiosJson() {
+  try {
+    const { rows } = await pool.query("SELECT * FROM studios ORDER BY id ASC");
+    await writeFile(STUDIOS_JSON_PATH, JSON.stringify(rows, null, 2));
+  } catch (err) {
+    console.error("Failed to sync studios.json:", err);
+  }
+}
 
 const EDITABLE_FIELDS = [
   "name",
@@ -54,6 +69,7 @@ export const createStudio = async (req, res) => {
       values
     );
 
+    await syncStudiosJson();
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error("Error creating studio:", error);
@@ -82,6 +98,7 @@ export const updateStudio = async (req, res) => {
       return res.status(404).json({ error: "Studio not found" });
     }
 
+    await syncStudiosJson();
     res.status(200).json(result.rows[0]);
   } catch (error) {
     console.error("Error updating studio:", error);
@@ -102,6 +119,7 @@ export const deleteStudio = async (req, res) => {
       return res.status(404).json({ error: "Studio not found" });
     }
 
+    await syncStudiosJson();
     res.status(200).json({ message: "Studio deleted", id: result.rows[0].id });
   } catch (error) {
     console.error("Error deleting studio:", error);

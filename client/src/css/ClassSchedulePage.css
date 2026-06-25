@@ -149,7 +149,7 @@
   border-top: 1px solid rgba(177, 189, 204, 0.22);
   display: grid;
   gap: 0.8rem;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   padding: 0.78rem 0.9rem;
 }
 
@@ -180,6 +180,16 @@
   height: 38px;
   object-fit: cover;
   width: 38px;
+}
+
+.class-instructor {
+  align-items: center;
+  color: rgba(177, 189, 204, 0.78);
+  display: flex;
+  font-size: 0.84rem;
+  font-weight: 600;
+  min-width: 8rem;
+  justify-content: flex-end;
 }
 
 .class-meta {

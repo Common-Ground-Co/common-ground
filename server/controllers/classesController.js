@@ -7,6 +7,7 @@ export const getAllClasses = async (req, res) => {
       `SELECT
          c.id,
          c.name,
+         c.instructor,
          c.skill_level,
          c.day_of_week,
          c.class_date,

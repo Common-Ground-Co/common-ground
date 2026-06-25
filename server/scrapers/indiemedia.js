@@ -109,16 +109,25 @@ const scrapeIndieMedia = async () => {
       const dateEl = card.querySelector('[data-hook="date"]');
       const rsvpEl = card.querySelector('[data-hook="ev-rsvp-button"]');
 
-      // Strip the day hint in parentheses, e.g. "(Thursday)" — it's captured from the date, not needed in the name.
-      const className = (titleEl?.textContent?.trim() || "").replace(/\s*\(.*?\)\s*/g, "").trim();
+      const rawTitle = titleEl?.textContent?.trim() || "";
+      const hyphenIdx = rawTitle.indexOf(" - ");
+      // No hyphen means no instructor — these are non-dance listings, skip them.
+      if (hyphenIdx === -1) return;
+
+      const instructor = rawTitle.slice(0, hyphenIdx).trim();
+      // Strip the day hint in parentheses, e.g. "(Tuesday)", from the class name portion.
+      const className = rawTitle
+        .slice(hyphenIdx + 3)
+        .replace(/\s*\(.*?\)\s*/g, "")
+        .trim();
+
       const dateTimeText = dateEl?.textContent?.trim() || "";
-      // The Sign Up button and title share the same href — prefer the rsvp button.
       const bookingHref =
         rsvpEl?.getAttribute("href") ||
         titleEl?.getAttribute("href") ||
         null;
 
-      if (className) results.push({ className, dateTimeText, bookingHref });
+      if (className) results.push({ className, instructor, dateTimeText, bookingHref });
     });
     return results;
   });

@@ -23,6 +23,13 @@ import {
   resolveBookingUrl as resolveIndieBookingUrl,
   STUDIO_ID as INDIE_ID,
 } from "./indiemedia.js";
+import {
+  scrapeDanceForever,
+  parseSkillLevel as parseDFLevel,
+  parseDateFromSelected as parseDFDate,
+  parseTimeFromText as parseDFTime,
+  shouldIncludeClass as dfShouldInclude,
+} from "./danceforever.js";
 
 // Set DRY_RUN=1 to test scraping without writing to the database.
 const DRY_RUN = process.env.DRY_RUN === "1";
@@ -78,9 +85,9 @@ const runPuzzleBox = async () => {
     if (!DRY_RUN) {
       // Save one class row.
       await pool.query(
-        `INSERT INTO classes (studio_id, name, skill_level, day_of_week, class_date, start_time)
-         VALUES ($1, $2, $3, $4, $5, $6)`,
-        [PUZZLE_ID, c.className, skillLevel, dayOfWeek, classDate, startTime],
+        `INSERT INTO classes (studio_id, name, instructor, skill_level, day_of_week, class_date, start_time)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [PUZZLE_ID, c.className, c.instructor || null, skillLevel, dayOfWeek, classDate, startTime],
       );
     }
     inserted++;
@@ -130,9 +137,9 @@ const runVisceral = async () => {
     if (!DRY_RUN) {
       // Save one class row.
       await pool.query(
-        `INSERT INTO classes (studio_id, name, skill_level, day_of_week, class_date, start_time)
-         VALUES ($1, $2, $3, $4, $5, $6)`,
-        [VISCERAL_ID, c.className, skillLevel, dayOfWeek, classDate, startTime],
+        `INSERT INTO classes (studio_id, name, instructor, skill_level, day_of_week, class_date, start_time, booking_url)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [VISCERAL_ID, c.className, c.instructor || null, skillLevel, dayOfWeek, classDate, startTime, c.bookingUrl || null],
       );
     }
     inserted++;
@@ -178,9 +185,9 @@ const runIndieMedia = async () => {
     if (!DRY_RUN) {
       // Save one class row.
       await pool.query(
-        `INSERT INTO classes (studio_id, name, style, skill_level, day_of_week, class_date, start_time, booking_url)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [INDIE_ID, c.className, genre, skillLevel, dayOfWeek, classDate, startTime, bookingUrl],
+        `INSERT INTO classes (studio_id, name, instructor, style, skill_level, day_of_week, class_date, start_time, booking_url)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [INDIE_ID, c.className, c.instructor || null, genre, skillLevel, dayOfWeek, classDate, startTime, bookingUrl],
       );
     }
     inserted++;
@@ -189,15 +196,89 @@ const runIndieMedia = async () => {
   console.log(`✅ Indie Media: ${inserted} inserted, ${skipped} skipped`);
 };
 
+// Scrape, clean, and save Dance Forever classes.
+const runDanceForever = async () => {
+  console.log("🕷️ Scraping Dance Forever...");
+
+  // Look up studio id at runtime so we don't hardcode it.
+  const { rows } = await pool.query(
+    "SELECT id FROM studios WHERE name = 'Dance Forever' LIMIT 1",
+  );
+  if (!rows.length) {
+    console.log("⚠️  Dance Forever studio not found in DB — skipping");
+    return;
+  }
+  const DF_ID = rows[0].id;
+
+  const { classes } = await scrapeDanceForever();
+  console.log(`📦 Scraped ${classes.length} raw classes`);
+
+  if (!DRY_RUN) {
+    await pool.query("DELETE FROM classes WHERE studio_id = $1", [DF_ID]);
+  }
+
+  let inserted = 0;
+  let skipped = 0;
+
+  for (const c of classes) {
+    if (!c.className || !dfShouldInclude(c.className)) {
+      skipped++;
+      continue;
+    }
+
+    const classDate = parseDFDate(c.selectedDateText);
+    const startTime = parseDFTime(c.timeText);
+    const skillLevel = parseDFLevel(c.className);
+
+    if (!classDate || !startTime) {
+      skipped++;
+      continue;
+    }
+    if (classDate >= CUTOFF_DATE) {
+      skipped++;
+      continue;
+    }
+
+    const dayOfWeek = getDayOfWeekFromIsoDate(classDate);
+
+    if (!DRY_RUN) {
+      await pool.query(
+        `INSERT INTO classes (studio_id, name, instructor, skill_level, day_of_week, class_date, start_time, booking_url)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [DF_ID, c.className, c.instructor || null, skillLevel, dayOfWeek, classDate, startTime, c.bookingUrl || null],
+      );
+    }
+    inserted++;
+  }
+
+  console.log(`✅ Dance Forever: ${inserted} inserted, ${skipped} skipped`);
+};
+
+const SCRAPERS = {
+  puzzlebox: runPuzzleBox,
+  visceral: runVisceral,
+  indiemedia: runIndieMedia,
+  danceforever: runDanceForever,
+};
+
 // Main runner: executes both scrapers and closes DB connection.
 const run = async () => {
+  const target = process.argv[2]?.toLowerCase();
+
+  if (target && !SCRAPERS[target]) {
+    console.error(`⚠️ Unknown scraper "${target}". Valid options: ${Object.keys(SCRAPERS).join(", ")}`);
+    process.exit(1);
+  }
+
+  const toRun = target ? [SCRAPERS[target]] : Object.values(SCRAPERS);
+
   console.log(
     `🗓️ Scraping window: today through ${CUTOFF_DATE}${DRY_RUN ? " (dry run)" : ""}`,
   );
   try {
-    await runPuzzleBox();
-    await runVisceral();
-    await runIndieMedia();
+    for (const scraper of toRun) {
+      await scraper();
+    }
   } catch (err) {
     console.error("⚠️ Scrape failed:", err);
     process.exit(1);

@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "name": "Visceral Dance Center",
     "neighborhood": "Avondale",
     "address": "3121 N Rockwell St, Chicago, IL 60618",
@@ -19,9 +20,11 @@
     "best_for": "From college students pursuing dance seriously to adults dancing purely for fun, this studio has something for everyone — complete beginners, casual hobbyists, and advanced dancers alike. If you've never danced before, classes like Andrew Tamez-Hull on Thursdays (7:15–8:30pm) and Gabe Stacey on Wednesdays (7:45–9pm) are great places to start building your foundation and getting your foot in the door.",
     "work_study": true,
     "work_study_url": "https://www.visceraldance.com/workstudyprogram",
-    "approved": true
+    "approved": true,
+    "created_at": "2026-04-30T03:38:51.867Z"
   },
   {
+    "id": 2,
     "name": "The Puzzle Box Dance Studio",
     "neighborhood": "Avondale",
     "address": "3360 N Elston Ave, Chicago, IL 60618",
@@ -41,9 +44,11 @@
     "best_for": "Anyone from complete beginners to advanced dancers dancing professionally or at a competitive level. College students, casual hobbyists, adults dancing for fun — all welcome. If you've never danced before, Andrew's biweekly Wednesday class at 8:30pm and Nik's class every Saturday at 4:15pm are great entry points. Gabby's Heels Foundations every other Tuesday at 6pm is also beginner-friendly for anyone new to heels specifically. Nik's class varies between choreography, drills, and technique work. Andrew always does choreography and films every class for confidence building.",
     "work_study": true,
     "work_study_url": "thepuzzleboxdancestudio@gmail.com",
-    "approved": true
+    "approved": true,
+    "created_at": "2026-04-30T03:38:51.893Z"
   },
   {
+    "id": 3,
     "name": "The Hive",
     "neighborhood": "Placeholder",
     "address": "Placeholder",
@@ -63,14 +68,16 @@
     "best_for": "Placeholder",
     "work_study": false,
     "work_study_url": "TBD",
-    "approved": true
+    "approved": true,
+    "created_at": "2026-04-30T03:38:51.916Z"
   },
   {
+    "id": 4,
     "name": "Indie Media Studio",
     "neighborhood": "Placeholder",
     "address": "Placeholder",
     "website": "https://www.indiemediastudio.com/",
-    "schedule_url": "https://www.indiemediastudio.com/",
+    "schedule_url": "TBD",
     "instagram": "TBD",
     "style": "Placeholder",
     "levels_offered": "Placeholder",
@@ -80,11 +87,36 @@
     "photo_url_studio_space": "https://static.wixstatic.com/media/499aa8_0d711b462d0946ce96568afe452ee9e3~mv2.jpg/v1/fill/w_793,h_513,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/499aa8_0d711b462d0946ce96568afe452ee9e3~mv2.jpg",
     "polaroid_photo_url": "https://i.imgur.com/NkNSgPQ.png",
     "about_studio": "Placeholder",
-    "banner_photo_url": "https://i.imgur.com/6X1bhZc.jpeg",
+    "banner_photo_url": "https://i.ibb.co/G4rfKZGR/indiebanner.png",
     "curator_review": "Placeholder",
     "best_for": "Placeholder",
     "work_study": false,
     "work_study_url": "TBD",
-    "approved": true
+    "approved": true,
+    "created_at": "2026-04-30T03:38:51.940Z"
+  },
+  {
+    "id": 7,
+    "name": "Dance Forever",
+    "neighborhood": "Old Town",
+    "address": " 1550 N Cleveland Ave, Chicago, IL 60610",
+    "website": "https://www.dance-forever.com/",
+    "schedule_url": "https://www.dance-forever.com/schedule",
+    "instagram": "@dance_forever_studio",
+    "style": "Hip-Hop, Jazz, Contemporary",
+    "levels_offered": "Intermediate, Advanced",
+    "price_range": "$22+ per class",
+    "classpass": true,
+    "photo_url": "https://classpass-res.cloudinary.com/image/upload/f_auto/q_auto/zidets2gqmb7aoybux4l.jpg",
+    "photo_url_studio_space": "https://s3-media0.fl.yelpcdn.com/bphoto/1rOtVPBZoBsi6XuQHnQK3A/348s.jpg",
+    "polaroid_photo_url": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAE5PqIyUmy6bPF9nROh-2AKC2CnkCY2KJPLUZMVoXHe4wkweMOaEsnamv86KVK_wbk6Ka0polsA9Xz6gdIvRUuWMaFTZz5ju_sLKR17599G8lv8y1O8p7-_ec_9Shm38kraB2yjlw=w289-h312-n-k-no",
+    "about_studio": "TBD",
+    "banner_photo_url": "https://images.squarespace-cdn.com/content/v1/5ce59ff668db540001384e7a/fcfbc102-ae0c-48dc-be60-23923003ce89/47-DSC_9474.jpg",
+    "curator_review": "TBD",
+    "best_for": "TBD",
+    "work_study": false,
+    "work_study_url": "Not Available",
+    "approved": true,
+    "created_at": "2026-06-25T23:54:26.383Z"
   }
 ]

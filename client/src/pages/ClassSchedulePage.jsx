@@ -219,6 +219,11 @@ function ClassSchedulePage() {
                           <span>{classItem.studio_name}</span>
                         </div>
                       </div>
+                      <div className="class-instructor">
+                        {classItem.instructor ? (
+                          <span>{classItem.instructor}</span>
+                        ) : null}
+                      </div>
                       <div className="class-meta">
                         <p className="class-time">
                           {formatStartTime(classItem.start_time)}
