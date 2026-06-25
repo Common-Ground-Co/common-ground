@@ -5,6 +5,7 @@ import studiosRouter from "./routes/studios.js";
 import classesRouter from "./routes/classes.js";
 import igAccountsRouter from "./routes/igAccounts.js";
 import reviewsRouter from "./routes/reviews.js";
+import adminStudiosRouter from "./routes/adminStudios.js";
 import cors from "cors";
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.use("/api/studios", studiosRouter);
 app.use("/api/classes", classesRouter);
 app.use("/api/ig-accounts", igAccountsRouter);
 app.use("/api/reviews", reviewsRouter);
+app.use("/api/admin/studios", adminStudiosRouter);
 
 app.get("/", (req, res) => {
   res.send("Common Ground API is running");

@@ -1,0 +1,22 @@
+{
+  "name": "Test Dance Studio",
+  "neighborhood": "Logan Square",
+  "address": "1234 N Milwaukee Ave, Chicago, IL 60647",
+  "website": "https://www.testdancestudio.com/",
+  "schedule_url": "https://www.testdancestudio.com/schedule",
+  "instagram": "@testdancestudio",
+  "style": "Hip-Hop, Jazz, Contemporary",
+  "levels_offered": "Beginner Friendly, Intermediate",
+  "price_range": "$15-$20 per class",
+  "classpass": false,
+  "photo_url": "https://i.imgur.com/27piA1D.png",
+  "photo_url_studio_space": "https://i.imgur.com/27piA1D.png",
+  "polaroid_photo_url": "https://i.imgur.com/27piA1D.png",
+  "about_studio": "A test studio used for development purposes.",
+  "banner_photo_url": "https://i.imgur.com/27piA1D.png",
+  "curator_review": "This is a placeholder curator review for the test studio.",
+  "best_for": "Developers testing the admin CMS endpoints.",
+  "work_study": false,
+  "work_study_url": "https://www.testdancestudio.com/workstudy",
+  "approved": false
+}
