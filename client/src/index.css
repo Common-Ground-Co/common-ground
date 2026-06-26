@@ -1,7 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&family=Pacifico&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&family=Pacifico&family=Rubik+80s+Fade&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&family=Pacifico&family=Rubik+80s+Fade&family=Poppins:wght@200;300;400;500;600;700&display=swap");
-/* Global design tokens: semantic color palette + typography defaults. */
+
+/* Shared color and font values used everywhere in the app.
+   Change something here and it updates across every page. */
 :root {
   --color-primary: #384b70;
 
@@ -25,12 +27,12 @@
   --cg-ink: var(--color-text);
 }
 
-/* Global box model reset for predictable layout sizing. */
+/* Prevents padding from accidentally making elements bigger than intended. */
 * {
   box-sizing: border-box;
 }
 
-/* Root element sizing/reset for full-height page layouts. */
+/* Makes the page fill the full browser window with no default gap around the edges. */
 html,
 body,
 #root {
@@ -40,17 +42,7 @@ body,
   /* font-weight: 300; */
 }
 
-/* html {
-  background: #e2e7f0;
-}
-
-/* App-wide background and default font family. */
-/* body {
-  background: var(--color-background);
-  color: var(--color-text);
-  font-family: var(--font-body);
-} */
-
+/* The background photo that stays fixed in place as you scroll through the app. */
 html,
 body {
   background-image: url("https://i.imgur.com/ZhH65Rv.png");
@@ -59,18 +51,20 @@ body {
   background-position: center;
 }
 
+/* Default text color and font for everything on the page. */
 body {
   color: var(--color-text);
   font-family: var(--font-body);
 }
 
-/* Global heading typography to keep title styling consistent across pages. */
+/* The retro Rubik 80s Fade display font used for all main headings (h1, h2, h3). */
 h1,
 h2,
 h3 {
   font-family: var(--font-heading);
 }
 
+/* Josefin Sans for smaller subheadings (h4, h5, h6) — cleaner and easier to read at small sizes. */
 h4,
 h5,
 h6 {

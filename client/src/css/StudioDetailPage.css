@@ -1,4 +1,6 @@
-/* ─── Studio Detail Page ────────────────────────────────────── */
+/* ─── Studio Detail Page ─────────────────────────────────────── */
+
+/* Outermost wrapper for the individual studio detail page. */
 .studio-detail-page {
   background: transparent;
   color: rgba(210, 218, 228, 0.92);
@@ -7,22 +9,29 @@
   padding-bottom: 4rem;
 }
 
+/* Loading or error text shown while the studio data is being fetched. */
 .detail-status {
   color: rgba(177, 189, 204, 0.88);
   padding: 3rem;
   text-align: center;
 }
+
+/* Error variant — turns the status text red. */
 .detail-status.error {
   color: var(--color-accent);
 }
 
-/* ─── Hero (mirrors HomePage hero) ─────────────────────────── */
+/* ─── Hero ───────────────────────────────────────────────────── */
+
+/* The full-width photo banner at the top of the studio detail page. */
 .detail-hero {
   min-height: 62vh;
   overflow: hidden;
   position: relative;
 }
 
+/* The background photo that fills the hero area.
+   All four edges fade out so there are no hard borders. */
 .detail-hero-image {
   height: 100%;
   inset: 0;
@@ -64,6 +73,7 @@
   mask-composite: intersect;
 }
 
+/* Dark tinted layer over the hero photo so the text is readable. */
 .detail-hero-overlay {
   background: linear-gradient(
     105deg,
@@ -75,6 +85,7 @@
   position: absolute;
 }
 
+/* The text column on the left side of the hero — studio name, location, pills, CTAs. */
 .detail-hero-content {
   box-sizing: border-box;
   margin-left: 5rem;
@@ -84,6 +95,7 @@
   z-index: 3;
 }
 
+/* The small cursive text above the studio name in the hero. */
 .detail-hero-kicker {
   color: var(--color-background);
   font-family: var(--font-accent);
@@ -91,6 +103,7 @@
   margin: 0;
 }
 
+/* The studio name in the hero. */
 .detail-hero-content h1 {
   color: white;
   font-size: clamp(2.2rem, 3.5vw, 4rem);
@@ -99,6 +112,7 @@
   margin: 0.2rem 0 0.7rem;
 }
 
+/* The neighborhood/address line below the studio name. */
 .detail-hero-location {
   align-items: center;
   color: rgba(255, 255, 255, 0.85);
@@ -109,10 +123,12 @@
   margin: 0 0 1.2rem;
 }
 
+/* The red pin icon next to the location text. */
 .detail-hero-location i {
   color: var(--color-accent);
 }
 
+/* The row of style/level tags in the hero. */
 .detail-hero-pills {
   display: flex;
   flex-wrap: wrap;
@@ -122,7 +138,9 @@
 
 /* Reuse hero-pill from HomePage */
 
-/* ─── Body Layout ───────────────────────────────────────────── */
+/* ─── Body Layout ────────────────────────────────────────────── */
+
+/* Two-column layout below the hero — info sidebar on the left, content on the right. */
 .detail-body {
   display: grid;
   gap: 2rem;
@@ -132,13 +150,17 @@
   padding: 0 1rem;
 }
 
-/* ─── Sidebar Info Card ─────────────────────────────────────── */
+/* ─── Sidebar Info Card ──────────────────────────────────────── */
+
+/* The sticky left column — stays visible while you scroll through the content. */
 .detail-sidebar {
   position: sticky;
   top: 1rem;
   height: fit-content;
 }
 
+/* The dark card that holds quick-access studio info (price, links, work study, etc.).
+   All four edges fade out. */
 .detail-info-card {
   background: rgba(15, 22, 33, 0.873);
   border: 1px solid rgba(177, 189, 204, 0.22);
@@ -179,6 +201,7 @@
   mask-composite: intersect;
 }
 
+/* The "Studio Info" label at the top of the info card. */
 .info-card-title {
   color: rgba(233, 236, 242, 0.95);
   font-size: 1.15rem;
@@ -186,6 +209,7 @@
   margin: 0 0 0.6rem;
 }
 
+/* The thin horizontal line below the info card title. */
 .info-card-divider {
   background: rgba(177, 189, 204, 0.28);
   height: 1px;
@@ -193,6 +217,7 @@
   width: 100%;
 }
 
+/* A single info row inside the card (e.g. Price, Instagram, Schedule). */
 .info-row {
   display: flex;
   flex-direction: column;
@@ -200,10 +225,12 @@
   margin-bottom: 1rem;
 }
 
+/* Removes bottom spacing from the last info row. */
 .info-row:last-child {
   margin-bottom: 0;
 }
 
+/* The small uppercase label for an info row (e.g. "PRICE RANGE", "INSTAGRAM"). */
 .info-label {
   align-items: center;
   color: rgba(177, 189, 204, 0.88);
@@ -215,17 +242,20 @@
   text-transform: uppercase;
 }
 
+/* The red icon next to each info label. */
 .info-label i {
   color: var(--color-accent);
   font-size: 0.8rem;
 }
 
+/* The value text inside an info row (e.g. "$10–$16 per class"). */
 .info-value {
   color: rgba(210, 218, 228, 0.92);
   font-size: 0.9rem;
   font-weight: 500;
 }
 
+/* A red pill badge used to show a status like "ClassPass" or "Work Study Available". */
 .info-badge {
   background: rgba(196, 69, 69, 0.16);
   border: 1px solid rgba(219, 121, 121, 0.4);
@@ -237,6 +267,7 @@
   padding: 0.2rem 0.65rem;
 }
 
+/* A clickable link inside an info row (e.g. to the studio website or Instagram). */
 .info-link {
   color: var(--color-accent);
   font-size: 0.9rem;
@@ -245,6 +276,7 @@
   transition: opacity 0.2s;
 }
 
+/* Makes a button look like a link (used for the work study popup trigger). */
 .info-link-button {
   background: none;
   border: 0;
@@ -253,31 +285,39 @@
   text-align: left;
 }
 
+/* Dims the link on hover and underlines it. */
 .info-link:hover {
   opacity: 0.75;
   text-decoration: underline;
 }
 
-/* ─── Main Content ──────────────────────────────────────────── */
+/* ─── Main Content ────────────────────────────────────────────── */
+
+/* The right column — stacks the gallery, about section, pricing, curator review, and CTAs. */
 .detail-main {
   display: flex;
   flex-direction: column;
   gap: 1.8rem;
 }
 
-/* ─── Photo Gallery ─────────────────────────────────────────── */
+/* ─── Photo Gallery ──────────────────────────────────────────── */
+
+/* The photo gallery section — large main photo above a row of thumbnails. */
 .detail-gallery {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
 }
 
+/* The large featured photo at the top of the gallery. */
 .gallery-main {
   aspect-ratio: 16 / 9;
   border-radius: 0.6rem;
   overflow: hidden;
 }
 
+/* The main gallery photo.
+   All four edges fade out. Scales slightly on hover. */
 .gallery-main img {
   height: 100%;
   object-fit: cover;
@@ -318,15 +358,18 @@
   mask-composite: intersect;
 }
 
+/* Zooms the main photo slightly when you hover over it. */
 .gallery-main img:hover {
   transform: scale(1.02);
 }
 
+/* The row of small thumbnail buttons below the main photo. */
 .gallery-thumbs {
   display: flex;
   gap: 0.5rem;
 }
 
+/* A single thumbnail button — click it to switch the main photo. */
 .gallery-thumb {
   background: none;
   border: 2px solid transparent;
@@ -339,17 +382,22 @@
   width: 80px;
 }
 
+/* Red border shown on the currently selected thumbnail. */
 .gallery-thumb.active {
   border-color: var(--color-accent);
 }
 
+/* The photo inside each thumbnail. */
 .gallery-thumb img {
   height: 100%;
   object-fit: cover;
   width: 100%;
 }
 
-/* ─── Section Blocks ────────────────────────────────────────── */
+/* ─── Section Blocks ─────────────────────────────────────────── */
+
+/* A dark content block (e.g. About, Pricing, Best For).
+   All four edges fade out to blend with the background. */
 .detail-section {
   background: rgba(15, 22, 33, 0.873);
   border: 1px solid rgba(177, 189, 204, 0.2);
@@ -390,6 +438,7 @@
   mask-composite: intersect;
 }
 
+/* The heading row at the top of each section block — red accent bar + section title. */
 .section-label {
   align-items: center;
   display: flex;
@@ -397,6 +446,7 @@
   margin-bottom: 0.9rem;
 }
 
+/* The small red vertical bar to the left of a section title. */
 .section-accent-line {
   background: var(--color-accent);
   border-radius: 2px;
@@ -405,6 +455,7 @@
   width: 3px;
 }
 
+/* The section title text (e.g. "About This Studio", "Best For"). */
 .section-label h3 {
   color: rgba(233, 236, 242, 0.95);
   font-size: 1rem;
@@ -414,6 +465,7 @@
   text-transform: uppercase;
 }
 
+/* The body text inside a content section. */
 .detail-description {
   color: rgba(210, 218, 228, 0.92);
   font-size: 0.97rem;
@@ -421,7 +473,9 @@
   margin: 0;
 }
 
-/* ─── Pricing Grid ──────────────────────────────────────────── */
+/* ─── Pricing Grid ───────────────────────────────────────────── */
+
+/* The row of pricing option cards inside the pricing section. */
 .pricing-grid {
   display: flex;
   flex-wrap: wrap;
@@ -429,6 +483,7 @@
   margin-top: 0.2rem;
 }
 
+/* A single pricing option card (e.g. Drop-in, 10-class pack). */
 .pricing-card {
   align-items: center;
   background: rgba(177, 189, 204, 0.12);
@@ -442,20 +497,24 @@
   text-align: center;
 }
 
+/* The icon inside a pricing card. */
 .pricing-card i {
   color: rgba(177, 189, 204, 0.88);
   font-size: 1.1rem;
 }
 
+/* A highlighted pricing card (e.g. best value or ClassPass option) — red tint. */
 .pricing-card--accent {
   background: rgba(196, 69, 69, 0.16);
   border-color: rgba(219, 121, 121, 0.4);
 }
 
+/* The red icon inside the accented pricing card. */
 .pricing-card--accent i {
   color: var(--color-accent);
 }
 
+/* The small uppercase label above the price (e.g. "Drop-in", "Monthly"). */
 .pricing-label {
   color: rgba(177, 189, 204, 0.88);
   font-size: 0.72rem;
@@ -464,13 +523,16 @@
   text-transform: uppercase;
 }
 
+/* The price value itself (e.g. "$18"). */
 .pricing-value {
   color: rgba(233, 236, 242, 0.95);
   font-size: 0.95rem;
   font-weight: 700;
 }
 
-/* ─── Curator Quote ─────────────────────────────────────────── */
+/* ─── Curator Quote ──────────────────────────────────────────── */
+
+/* The curator review section — slightly different background to stand out. */
 .curator-section {
   background: linear-gradient(
     135deg,
@@ -480,11 +542,13 @@
   border-color: rgba(177, 189, 204, 0.22);
 }
 
+/* The blockquote area inside the curator section. */
 .curator-quote {
   position: relative;
   padding-left: 1rem;
 }
 
+/* The large decorative quotation mark behind the review text. */
 .curator-quote-icon {
   color: rgba(196, 69, 69, 0.2);
   font-size: 2.5rem;
@@ -494,6 +558,7 @@
   top: -0.3rem;
 }
 
+/* The review text itself. */
 .curator-quote blockquote {
   color: rgba(233, 236, 242, 0.95);
   font-size: 1rem;
@@ -503,6 +568,7 @@
   padding-left: 2rem;
 }
 
+/* The "— Common Ground" signature below the review. */
 .curator-sig {
   color: rgba(177, 189, 204, 0.88);
   font-size: 0.82rem;
@@ -511,13 +577,16 @@
   padding-left: 2rem;
 }
 
-/* ─── CTA Buttons ───────────────────────────────────────────── */
+/* ─── CTA Buttons ────────────────────────────────────────────── */
+
+/* The row of action buttons (e.g. "View Schedule", "Visit Website"). */
 .detail-ctas {
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
 }
 
+/* Base style shared by all CTA buttons. */
 .cta-btn {
   align-items: center;
   border-radius: 0.4rem;
@@ -535,33 +604,40 @@
     transform 0.2s ease;
 }
 
+/* The main CTA button — solid red (e.g. "View Schedule"). */
 .cta-btn--primary {
   background: var(--color-accent);
   color: var(--color-background);
 }
 
+/* Darkens the primary CTA on hover and lifts it slightly. */
 .cta-btn--primary:hover {
   background: #ad3d3d;
   transform: translateY(-1px);
 }
 
+/* A secondary CTA button — dark with a muted outline (e.g. "Visit Website"). */
 .cta-btn--secondary {
   background: rgba(9, 14, 22, 0.65);
   border: 1.5px solid rgba(177, 189, 204, 0.45);
   color: rgba(210, 218, 228, 0.92);
 }
 
+/* Lightens the secondary CTA on hover. */
 .cta-btn--secondary:hover {
   background: rgba(177, 189, 204, 0.2);
   transform: translateY(-1px);
 }
 
-/* ─── Reviews ───────────────────────────────────────────────── */
+/* ─── Reviews ────────────────────────────────────────────────── */
+
+/* The full-width reviews section below the main content columns. */
 .detail-reviews {
   background: rgba(15, 22, 33, 0.873);
   border-top: 1px solid rgba(177, 189, 204, 0.3);
   margin-top: 2.5rem;
   padding: 2rem 0;
+  /* Top and bottom edges fade out. */
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
@@ -578,6 +654,7 @@
   );
 }
 
+/* The inner wrapper that adds top/bottom borders inside the reviews section. */
 .reviews-inner {
   background: transparent;
   border-top: 1px solid rgba(177, 189, 204, 0.24);
@@ -588,6 +665,7 @@
   padding: 1.5rem 1.5rem;
 }
 
+/* The polaroid photo overlay on the detail page hero (fades edges). */
 .hero-polaroid-photo {
   -webkit-mask-image:
     linear-gradient(
@@ -623,6 +701,7 @@
   mask-composite: intersect;
 }
 
+/* The "Reviews" heading inside the reviews section. */
 .reviews-title {
   align-items: center;
   color: rgba(233, 236, 242, 0.95);
@@ -632,34 +711,40 @@
   margin: 0 0 0.5rem;
 }
 
+/* The red star icon next to the Reviews heading. */
 .reviews-title i {
   color: var(--color-accent);
   font-size: 1.1rem;
 }
 
+/* The horizontal line below the Reviews heading. */
 .reviews-divider {
   background: rgba(177, 189, 204, 0.4);
   height: 1px;
   margin-bottom: 1.5rem;
 }
 
+/* Text shown when there are no reviews yet. */
 .reviews-empty {
   color: rgba(205, 218, 232, 0.95);
   font-size: 0.95rem;
   margin: 0;
 }
 
+/* The form for submitting a new review. */
 .review-form {
   display: grid;
   gap: 0.9rem;
   margin-bottom: 1.25rem;
 }
 
+/* A single row inside the review form (label + input). */
 .review-form-row {
   display: grid;
   gap: 0.4rem;
 }
 
+/* The small uppercase label above a review form field. */
 .review-label {
   color: rgba(177, 189, 204, 0.9);
   font-size: 0.74rem;
@@ -668,6 +753,7 @@
   text-transform: uppercase;
 }
 
+/* Text inputs and textareas inside the review form. */
 .review-input,
 .review-textarea {
   background: rgba(9, 14, 22, 0.72);
@@ -679,16 +765,19 @@
   padding: 0.65rem 0.75rem;
 }
 
+/* Red border ring when a review form field is focused. */
 .review-input:focus,
 .review-textarea:focus {
   border-color: rgba(196, 69, 69, 0.8);
   outline: none;
 }
 
+/* The textarea can be dragged taller by the user. */
 .review-textarea {
   resize: vertical;
 }
 
+/* The "Submit Review" button. */
 .review-submit-btn {
   background: var(--color-accent);
   border: 0;
@@ -705,37 +794,44 @@
   width: fit-content;
 }
 
+/* Darkens the submit button on hover (only when enabled). */
 .review-submit-btn:hover:not(:disabled) {
   background: #ad3d3d;
 }
 
+/* Dims the submit button while the review is being sent. */
 .review-submit-btn:disabled {
   cursor: default;
   opacity: 0.72;
 }
 
+/* Red error message shown above the form when submission fails. */
 .reviews-error {
   color: rgba(244, 192, 192, 0.97);
   font-size: 0.88rem;
   margin: 0 0 1rem;
 }
 
+/* Green success message shown after a review is submitted. */
 .reviews-notice {
   color: rgba(177, 224, 194, 0.96);
   font-size: 0.88rem;
   margin: 0 0 1rem;
 }
 
+/* The list of submitted reviews. */
 .review-list {
   display: grid;
   gap: 0.8rem;
 }
 
+/* A single review card in the list. */
 .review-card {
   border-top: 1px solid rgba(177, 189, 204, 0.26);
   padding: 0.9rem 0;
 }
 
+/* The top row of a review card — reviewer name and rating side by side. */
 .review-card-head {
   align-items: center;
   display: flex;
@@ -743,6 +839,7 @@
   gap: 0.5rem;
 }
 
+/* The reviewer's name. */
 .review-author {
   color: rgba(233, 236, 242, 0.95);
   font-size: 0.9rem;
@@ -750,6 +847,7 @@
   margin: 0;
 }
 
+/* The star rating text (e.g. "★★★★☆"). */
 .review-rating {
   color: var(--color-accent);
   font-size: 0.86rem;
@@ -757,6 +855,7 @@
   margin: 0;
 }
 
+/* The review text body. */
 .review-description {
   color: rgba(205, 218, 232, 0.94);
   font-size: 0.9rem;
@@ -764,6 +863,7 @@
   margin: 0.45rem 0 0;
 }
 
+/* Small italic note shown if the review has been edited. */
 .review-edited {
   color: rgba(177, 189, 204, 0.84);
   font-size: 0.76rem;
@@ -771,6 +871,7 @@
   margin: 0.45rem 0 0;
 }
 
+/* The "Delete" button on a review card (visible to the review owner). */
 .review-delete-btn {
   background: transparent;
   border: 1px solid rgba(196, 69, 69, 0.55);
@@ -785,15 +886,18 @@
   text-transform: uppercase;
 }
 
+/* Red tint fills in on hover. */
 .review-delete-btn:hover {
   background: rgba(196, 69, 69, 0.16);
 }
 
+/* The inline edit form that replaces a review when you click "Edit". */
 .review-edit-form {
   display: grid;
   gap: 0.7rem;
 }
 
+/* The row of action buttons on a review card (Edit, Delete, Save, Cancel). */
 .review-actions {
   display: flex;
   flex-wrap: wrap;
@@ -801,6 +905,7 @@
   margin-top: 0.65rem;
 }
 
+/* Base style for all review action buttons. */
 .review-action-btn {
   background: transparent;
   border-radius: 999px;
@@ -812,6 +917,7 @@
   text-transform: uppercase;
 }
 
+/* The "Edit" button on a review — muted outline. */
 .review-action-btn--edit {
   border: 1px solid rgba(177, 189, 204, 0.5);
   color: rgba(210, 218, 228, 0.95);
@@ -821,6 +927,7 @@
   background: rgba(177, 189, 204, 0.15);
 }
 
+/* The "Delete" button on a review — red outline. */
 .review-action-btn--delete {
   border: 1px solid rgba(196, 69, 69, 0.55);
   color: rgba(244, 192, 192, 0.97);
@@ -830,6 +937,7 @@
   background: rgba(196, 69, 69, 0.16);
 }
 
+/* The "Save" button when editing a review — solid red. */
 .review-action-btn--save {
   background: var(--color-accent);
   border: 1px solid var(--color-accent);
@@ -840,6 +948,7 @@
   background: #ad3d3d;
 }
 
+/* The "Cancel" button when editing a review — muted outline. */
 .review-action-btn--cancel {
   border: 1px solid rgba(177, 189, 204, 0.5);
   color: rgba(210, 218, 228, 0.95);
@@ -849,13 +958,16 @@
   background: rgba(177, 189, 204, 0.15);
 }
 
-/* ─── Back Link ─────────────────────────────────────────────── */
+/* ─── Back Link ──────────────────────────────────────────────── */
+
+/* Wrapper for the "← Back to Studios" link above the page. */
 .detail-back {
   margin: 1.5rem auto 0;
   max-width: 1100px;
   padding: 0 1rem;
 }
 
+/* The "← Back to Studios" navigation link. */
 .back-link {
   align-items: center;
   color: rgba(177, 189, 204, 0.88);
@@ -867,10 +979,12 @@
   transition: color 0.2s;
 }
 
+/* Turns red on hover. */
 .back-link:hover {
   color: var(--color-accent);
 }
 
+/* The dark backdrop behind the work study info popup. */
 .work-study-popup-overlay {
   align-items: center;
   background: rgba(0, 0, 0, 0.62);
@@ -885,6 +999,7 @@
   z-index: 1000;
 }
 
+/* The work study info popup dialog. */
 .work-study-popup {
   background: rgba(15, 22, 33, 0.97);
   border: 1px solid rgba(177, 189, 204, 0.32);
@@ -896,12 +1011,14 @@
   width: 100%;
 }
 
+/* The heading inside the work study popup. */
 .work-study-popup h3 {
   color: rgba(233, 236, 242, 0.95);
   font-size: 1.05rem;
   margin: 0 0 0.7rem;
 }
 
+/* The "×" close button in the top-right of the work study popup. */
 .work-study-popup-close {
   background: transparent;
   border: 0;
@@ -913,6 +1030,7 @@
   top: 0.65rem;
 }
 
+/* A red link inside the work study popup. */
 .work-study-popup-link {
   color: var(--color-accent);
   font-weight: 700;
@@ -923,17 +1041,21 @@
   text-decoration: underline;
 }
 
+/* The body text inside the work study popup. */
 .work-study-popup-copy {
   color: rgba(210, 218, 228, 0.92);
   line-height: 1.55;
   margin: 0;
 }
 
+/* Links inside the popup copy text. */
 .work-study-popup-copy a {
   color: var(--color-accent);
 }
 
-/* ─── Responsive ────────────────────────────────────────────── */
+/* ─── Responsive ─────────────────────────────────────────────── */
+
+/* Tablet: sidebar moves above the content, info card becomes 2 columns. */
 @media (max-width: 980px) {
   .detail-body {
     grid-template-columns: 1fr;
@@ -941,11 +1063,13 @@
   .detail-sidebar {
     position: static;
   }
+  /* Info card fields display side-by-side on tablet. */
   .detail-info-card {
     display: grid;
     gap: 0;
     grid-template-columns: 1fr 1fr;
   }
+  /* Title and divider span both columns in the info card. */
   .info-card-title,
   .info-card-divider {
     grid-column: 1 / -1;
@@ -955,6 +1079,7 @@
   }
 }
 
+/* Phone: hero shrinks, content stacks vertically, CTAs go full width. */
 @media (max-width: 640px) {
   .detail-hero {
     min-height: 52vh;
@@ -966,12 +1091,15 @@
   .detail-hero-content h1 {
     font-size: 2rem;
   }
+  /* Info card goes back to single column on phones. */
   .detail-info-card {
     grid-template-columns: 1fr;
   }
+  /* Gallery photo becomes a 4:3 ratio on phones. */
   .gallery-main {
     aspect-ratio: 4 / 3;
   }
+  /* CTAs stack vertically on phones. */
   .detail-ctas {
     flex-direction: column;
   }

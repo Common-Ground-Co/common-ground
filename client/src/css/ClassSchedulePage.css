@@ -1,11 +1,11 @@
-/* Class schedule page follows the same visual language as Studios page (no banner). */
-
+/* The outermost wrapper for the class schedule page. */
 .class-schedule-page {
   background: transparent;
   color: var(--color-text);
   min-height: 100vh;
 }
 
+/* The main content area inside the schedule page. */
 .class-schedule-container {
   margin: 0;
   max-width: none;
@@ -13,6 +13,8 @@
   width: 100%;
 }
 
+/* The dark panel that holds the day and skill level filter buttons.
+   Edges fade out so it blends into the background. */
 .filter-section {
   background: rgba(15, 22, 33, 0.873);
   display: flex;
@@ -36,18 +38,21 @@
   );
 }
 
+/* A single row of filter buttons (one group for days, one for levels). */
 .filter-group {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 }
 
+/* The row of pill buttons inside a filter group. */
 .filter-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
 }
 
+/* Each individual day or skill level filter button. */
 .filter-btn {
   background: transparent;
   border: 1px solid rgba(177, 189, 204, 0.35);
@@ -65,26 +70,31 @@
     color 0.2s ease;
 }
 
+/* Hover state — red border appears. */
 .filter-btn:hover {
   border-color: var(--color-accent);
   color: rgba(245, 247, 250, 0.95);
 }
 
+/* Active/selected filter button — filled red. */
 .filter-btn.active {
   background: var(--color-accent);
   border-color: var(--color-accent);
   color: var(--color-background);
 }
 
+/* General info or loading text shown while the schedule is fetching. */
 .schedule-message {
   color: rgba(177, 189, 204, 0.88);
   margin: 1rem 0;
 }
 
+/* Error variant — turns the message red. */
 .schedule-message.error {
   color: var(--color-accent);
 }
 
+/* Vertical stack of date sections (one per day). */
 .schedule-sections {
   display: flex;
   flex-direction: column;
@@ -92,6 +102,8 @@
   margin-top: 1rem;
 }
 
+/* The dark panel for a single day's classes.
+   Top and bottom edges fade out to blend into the background. */
 .day-section {
   background: rgba(15, 22, 33, 0.873);
   overflow: hidden;
@@ -112,6 +124,7 @@
   );
 }
 
+/* The date header row at the top of each day section (day name + date). */
 .day-section-header {
   align-items: baseline;
   border-bottom: 2px solid rgba(177, 189, 204, 0.28);
@@ -122,6 +135,7 @@
   padding: 0.75rem 0.9rem 0.95rem;
 }
 
+/* The day name (e.g. "Monday") in the date header. */
 .day-section-header h2 {
   color: rgba(233, 236, 242, 0.95);
   font-family: var(--font-body);
@@ -131,6 +145,7 @@
   margin: 0;
 }
 
+/* The formatted date (e.g. "Jun 30, 2026") next to the day name. */
 .day-section-header p {
   color: rgba(177, 189, 204, 0.88);
   font-size: 1.5rem;
@@ -138,12 +153,14 @@
   margin: 0;
 }
 
+/* The list of class cards inside a day section. */
 .day-class-list {
   display: flex;
   flex-direction: column;
   padding-top: 0.2rem;
 }
 
+/* A single class row — 4 columns: class info, instructor, time/level, book button. */
 .class-card {
   align-items: center;
   border-top: 1px solid rgba(177, 189, 204, 0.22);
@@ -153,10 +170,12 @@
   padding: 0.78rem 0.9rem;
 }
 
+/* Removes the top border from the first class card in each day (it already has the header above it). */
 .class-card:first-of-type {
   border-top: 0;
 }
 
+/* The class name text inside each card. */
 .class-main h3 {
   color: rgba(233, 236, 242, 0.95);
   font-family: var(--font-body);
@@ -165,6 +184,7 @@
   margin: 0 0 0.35rem;
 }
 
+/* The studio name and photo row below the class name. */
 .studio-row {
   align-items: center;
   color: rgba(210, 218, 228, 0.92);
@@ -174,6 +194,7 @@
   font-weight: 600;
 }
 
+/* The small circular studio photo next to the studio name. */
 .studio-row img {
   border: 2px solid rgba(56, 75, 112, 0.18);
   border-radius: 999px;
@@ -182,6 +203,7 @@
   width: 38px;
 }
 
+/* The instructor name column on the right side of the card. */
 .class-instructor {
   align-items: center;
   color: rgba(177, 189, 204, 0.78);
@@ -192,12 +214,14 @@
   justify-content: flex-end;
 }
 
+/* The time and skill level column. */
 .class-meta {
   align-items: center;
   display: flex;
   gap: 0.5rem;
 }
 
+/* The class start time text. */
 .class-time {
   color: rgba(210, 218, 228, 0.92);
   font-size: 0.88rem;
@@ -205,6 +229,7 @@
   margin: 0;
 }
 
+/* Skill level tag (default muted style when no level is matched). */
 .skill-pill {
   background: rgba(112, 138, 162, 0.16);
   border: 1px solid rgba(164, 186, 208, 0.4);
@@ -215,24 +240,28 @@
   padding: 0.22rem 0.58rem;
 }
 
+/* Beginner skill level tag — soft green tint. */
 .skill-pill--beg {
   background: rgba(130, 160, 140, 0.16);
   border-color: rgba(158, 191, 168, 0.4);
   color: rgba(187, 213, 194, 0.96);
 }
 
+/* Intermediate skill level tag — blue tint. */
 .skill-pill--int {
   background: rgba(97, 126, 160, 0.16);
   border-color: rgba(154, 178, 204, 0.4);
   color: rgba(206, 220, 236, 0.96);
 }
 
+/* Advanced skill level tag — red tint. */
 .skill-pill--adv {
   background: rgba(196, 69, 69, 0.16);
   border-color: rgba(219, 121, 121, 0.42);
   color: rgba(244, 192, 192, 0.97);
 }
 
+/* The red "Book Class" button linking to the studio's booking page. */
 .book-class-btn {
   background: var(--color-accent);
   border-radius: 0.35rem;
@@ -245,16 +274,19 @@
   transition: background 0.2s ease;
 }
 
+/* Darkens the book button on hover. */
 .book-class-btn:hover {
   background: #ad3d3d;
 }
 
+/* Shown instead of a book button when the studio has no booking link. */
 .no-link {
   color: rgba(177, 189, 204, 0.88);
   font-size: 0.82rem;
   font-weight: 600;
 }
 
+/* Tablet and below — each class card stacks vertically instead of side by side. */
 @media (max-width: 980px) {
   .class-card {
     align-items: start;
@@ -266,6 +298,7 @@
   }
 }
 
+/* Phone — filter buttons each take up roughly half the row. */
 @media (max-width: 650px) {
   .filter-section {
     gap: 1.5rem;
@@ -276,6 +309,7 @@
     text-align: center;
   }
 
+  /* Smaller day/date text in the section headers on phones. */
   .day-section-header h2 {
     font-size: 2rem;
   }
@@ -284,6 +318,7 @@
     font-size: 1.25rem;
   }
 
+  /* Stacks the day name and date on phones instead of side by side. */
   .day-section-header {
     align-items: start;
     flex-direction: column;

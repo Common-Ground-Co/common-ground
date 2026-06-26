@@ -1,4 +1,6 @@
-/* ─── Admin Page Shell ──────────────────────────────────────── */
+/* ─── Admin Page Shell ───────────────────────────────────────── */
+
+/* Outermost wrapper for the admin studios management page. */
 .admin-page {
   color: rgba(210, 218, 228, 0.92);
   font-family: var(--font-body);
@@ -6,12 +8,14 @@
   padding-bottom: 4rem;
 }
 
+/* Centered content column inside the admin page. */
 .admin-inner {
   margin: 0 auto;
   max-width: 900px;
   padding: 2.5rem 1.5rem;
 }
 
+/* The top row of the admin page — title on the left, "Add Studio" button on the right. */
 .admin-header {
   align-items: flex-start;
   display: flex;
@@ -19,6 +23,7 @@
   margin-bottom: 2rem;
 }
 
+/* The small red cursive label above the admin page title. */
 .admin-kicker {
   color: var(--color-accent);
   font-family: var(--font-accent);
@@ -26,12 +31,14 @@
   margin: 0 0 0.2rem;
 }
 
+/* The main admin page title (e.g. "Studios"). */
 .admin-title {
   color: rgba(233, 236, 242, 0.95);
   font-size: clamp(1.8rem, 3vw, 2.6rem);
   margin: 0;
 }
 
+/* The red "Add Studio" button in the top-right of the admin header. */
 .admin-add-btn {
   align-items: center;
   background: var(--color-accent);
@@ -51,34 +58,41 @@
   white-space: nowrap;
 }
 
+/* Darkens the add button on hover. */
 .admin-add-btn:hover {
   background: #ad3d3d;
 }
 
+/* Green success message shown after a studio is saved or updated. */
 .admin-notice {
   color: rgba(177, 224, 194, 0.96);
   font-size: 0.88rem;
   margin: 0 0 1rem;
 }
 
+/* Red error message shown when something goes wrong. */
 .admin-error {
   color: rgba(244, 192, 192, 0.97);
   font-size: 0.88rem;
   margin: 0 0 1rem;
 }
 
+/* Muted text shown while the studio list is loading. */
 .admin-status {
   color: rgba(177, 189, 204, 0.88);
   padding: 2rem 0;
 }
 
-/* ─── Studio List ───────────────────────────────────────────── */
+/* ─── Studio List ────────────────────────────────────────────── */
+
+/* The vertical list of studio rows. */
 .admin-studio-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
+/* A single studio row — thumbnail, name/meta, and action buttons. */
 .admin-studio-row {
   align-items: center;
   background: rgba(15, 22, 33, 0.873);
@@ -89,6 +103,7 @@
   padding: 0.9rem 1rem;
 }
 
+/* The small thumbnail image on the left side of each studio row. */
 .admin-studio-thumb {
   border-radius: 0.4rem;
   flex-shrink: 0;
@@ -97,12 +112,14 @@
   width: 80px;
 }
 
+/* The thumbnail photo itself. */
 .admin-studio-thumb img {
   height: 100%;
   object-fit: cover;
   width: 100%;
 }
 
+/* Shown when a studio has no photo — a dark box with a placeholder icon. */
 .admin-studio-thumb-placeholder {
   align-items: center;
   background: rgba(9, 14, 22, 0.6);
@@ -114,11 +131,13 @@
   width: 100%;
 }
 
+/* The middle section of the studio row — name, address, and status badges. */
 .admin-studio-meta {
   flex: 1;
   min-width: 0;
 }
 
+/* The studio name in the row list. */
 .admin-studio-name {
   color: rgba(233, 236, 242, 0.95);
   font-size: 0.97rem;
@@ -129,18 +148,21 @@
   white-space: nowrap;
 }
 
+/* The studio address or secondary info below the name. */
 .admin-studio-sub {
   color: rgba(177, 189, 204, 0.78);
   font-size: 0.8rem;
   margin: 0 0 0.45rem;
 }
 
+/* The row of status badges (e.g. "Approved", "ClassPass"). */
 .admin-studio-badges {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
 }
 
+/* Base style for all admin status badges. */
 .admin-badge {
   border-radius: 999px;
   font-size: 0.7rem;
@@ -150,24 +172,28 @@
   text-transform: uppercase;
 }
 
+/* Green badge — used for positive status (e.g. "Approved", "Live"). */
 .admin-badge--green {
   background: rgba(69, 196, 117, 0.14);
   border: 1px solid rgba(121, 219, 155, 0.4);
   color: rgba(177, 224, 194, 0.96);
 }
 
+/* Muted grey badge — used for neutral or inactive status. */
 .admin-badge--muted {
   background: rgba(177, 189, 204, 0.1);
   border: 1px solid rgba(177, 189, 204, 0.3);
   color: rgba(177, 189, 204, 0.78);
 }
 
+/* The Edit and Delete button group on the right side of each studio row. */
 .admin-studio-actions {
   display: flex;
   flex-shrink: 0;
   gap: 0.5rem;
 }
 
+/* Base style for Edit and Delete action buttons. */
 .admin-action-btn {
   border-radius: 999px;
   cursor: pointer;
@@ -180,27 +206,33 @@
   transition: background 0.2s;
 }
 
+/* The "Edit" button — outlined, neutral color. */
 .admin-action-btn--edit {
   background: transparent;
   border: 1px solid rgba(177, 189, 204, 0.5);
   color: rgba(210, 218, 228, 0.95);
 }
 
+/* Hover state for the Edit button. */
 .admin-action-btn--edit:hover {
   background: rgba(177, 189, 204, 0.15);
 }
 
+/* The "Delete" button — outlined in red. */
 .admin-action-btn--delete {
   background: transparent;
   border: 1px solid rgba(196, 69, 69, 0.55);
   color: rgba(244, 192, 192, 0.97);
 }
 
+/* Hover state for the Delete button — red tint fills in. */
 .admin-action-btn--delete:hover {
   background: rgba(196, 69, 69, 0.16);
 }
 
-/* ─── Modal ─────────────────────────────────────────────────── */
+/* ─── Modal ──────────────────────────────────────────────────── */
+
+/* The dark semi-transparent backdrop behind the Add/Edit modal. */
 .admin-modal-overlay {
   align-items: center;
   background: rgba(0, 0, 0, 0.68);
@@ -215,6 +247,7 @@
   z-index: 1000;
 }
 
+/* The modal dialog box itself — scrollable, dark background. */
 .admin-modal {
   background: rgba(12, 18, 28, 0.98);
   border: 1px solid rgba(177, 189, 204, 0.22);
@@ -228,6 +261,7 @@
   width: 100%;
 }
 
+/* The top bar of the modal — title and close button. */
 .admin-modal-head {
   align-items: center;
   border-bottom: 1px solid rgba(177, 189, 204, 0.2);
@@ -237,12 +271,14 @@
   padding: 1.2rem 1.5rem;
 }
 
+/* The modal title (e.g. "Add Studio" or "Edit Studio"). */
 .admin-modal-head h2 {
   color: rgba(233, 236, 242, 0.95);
   font-size: 1.1rem;
   margin: 0;
 }
 
+/* The "×" close button in the top-right corner of the modal. */
 .admin-modal-close {
   background: transparent;
   border: 0;
@@ -253,11 +289,14 @@
   padding: 0.2rem;
 }
 
+/* Turns the close button red on hover. */
 .admin-modal-close:hover {
   color: var(--color-accent);
 }
 
-/* ─── Form ──────────────────────────────────────────────────── */
+/* ─── Form ───────────────────────────────────────────────────── */
+
+/* The scrollable form inside the modal. */
 .admin-form {
   display: flex;
   flex-direction: column;
@@ -266,6 +305,7 @@
   padding: 1.5rem;
 }
 
+/* A section divider label inside the form (e.g. "Basic Info", "Photos"). */
 .admin-form-section-label {
   border-bottom: 1px solid rgba(177, 189, 204, 0.2);
   color: rgba(177, 189, 204, 0.7);
@@ -277,18 +317,21 @@
   text-transform: uppercase;
 }
 
+/* A single field row — label stacked above its input. */
 .admin-form-row {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
 
+/* Two fields side by side in the same row. */
 .admin-form-grid {
   display: grid;
   gap: 0.9rem;
   grid-template-columns: 1fr 1fr;
 }
 
+/* The small uppercase label above each form field. */
 .admin-label {
   color: rgba(177, 189, 204, 0.9);
   font-size: 0.74rem;
@@ -297,6 +340,7 @@
   text-transform: uppercase;
 }
 
+/* A text input or textarea inside the form. */
 .admin-input,
 .admin-textarea {
   background: rgba(9, 14, 22, 0.72);
@@ -309,22 +353,26 @@
   width: 100%;
 }
 
+/* Red border highlight when a field is focused. */
 .admin-input:focus,
 .admin-textarea:focus {
   border-color: rgba(196, 69, 69, 0.8);
   outline: none;
 }
 
+/* Textareas can be resized vertically by dragging. */
 .admin-textarea {
   resize: vertical;
 }
 
+/* The row of boolean checkboxes (ClassPass, Work Study, Approved). */
 .admin-checkboxes {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
+/* A single checkbox with its label text. */
 .admin-checkbox-label {
   align-items: center;
   color: rgba(210, 218, 228, 0.9);
@@ -334,18 +382,21 @@
   gap: 0.45rem;
 }
 
+/* The checkbox input itself — uses the red accent color when checked. */
 .admin-checkbox-label input[type="checkbox"] {
   accent-color: var(--color-accent);
   height: 1rem;
   width: 1rem;
 }
 
+/* Inline error message shown when form validation fails. */
 .admin-form-error {
   color: rgba(244, 192, 192, 0.97);
   font-size: 0.88rem;
   margin: 0;
 }
 
+/* The bottom bar of the form with Save and Cancel buttons. */
 .admin-form-footer {
   border-top: 1px solid rgba(177, 189, 204, 0.18);
   display: flex;
@@ -354,6 +405,7 @@
   padding-top: 1rem;
 }
 
+/* The red "Save" submit button. */
 .admin-submit-btn {
   background: var(--color-accent);
   border: 0;
@@ -369,15 +421,18 @@
   transition: background 0.2s;
 }
 
+/* Darkens the save button on hover (only when not disabled). */
 .admin-submit-btn:hover:not(:disabled) {
   background: #ad3d3d;
 }
 
+/* Dims the save button while a request is in progress. */
 .admin-submit-btn:disabled {
   cursor: default;
   opacity: 0.7;
 }
 
+/* The "Cancel" button next to Save — closes the modal without saving. */
 .admin-cancel-btn {
   background: transparent;
   border: 1px solid rgba(177, 189, 204, 0.4);
@@ -393,11 +448,14 @@
   transition: background 0.2s;
 }
 
+/* Hover state for the Cancel button. */
 .admin-cancel-btn:hover {
   background: rgba(177, 189, 204, 0.12);
 }
 
-/* ─── Delete Confirm ────────────────────────────────────────── */
+/* ─── Delete Confirm ─────────────────────────────────────────── */
+
+/* The small confirmation dialog that appears when you click Delete. */
 .admin-confirm {
   background: rgba(12, 18, 28, 0.98);
   border: 1px solid rgba(177, 189, 204, 0.22);
@@ -408,6 +466,7 @@
   width: 100%;
 }
 
+/* The "Are you sure you want to delete X?" message inside the confirm dialog. */
 .admin-confirm-text {
   color: rgba(210, 218, 228, 0.92);
   font-size: 0.95rem;
@@ -415,16 +474,20 @@
   margin: 0 0 1.2rem;
 }
 
+/* The studio name highlighted in bold inside the confirmation message. */
 .admin-confirm-text strong {
   color: rgba(233, 236, 242, 0.95);
 }
 
+/* The row of "Confirm" and "Cancel" buttons inside the delete dialog. */
 .admin-confirm-actions {
   display: flex;
   gap: 0.6rem;
 }
 
-/* ─── Responsive ────────────────────────────────────────────── */
+/* ─── Responsive ─────────────────────────────────────────────── */
+
+/* Phone: header stacks vertically, form grid goes single column. */
 @media (max-width: 640px) {
   .admin-header {
     flex-direction: column;
@@ -435,10 +498,12 @@
     grid-template-columns: 1fr;
   }
 
+  /* Studio rows wrap on phones so the action buttons go below the meta. */
   .admin-studio-row {
     flex-wrap: wrap;
   }
 
+  /* Action buttons take full width on phones. */
   .admin-studio-actions {
     width: 100%;
   }

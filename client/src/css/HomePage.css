@@ -1,4 +1,6 @@
-/* ─── Page ──────────────────────────────────────────────────── */
+/* ─── Page Container ─────────────────────────────────────────── */
+
+/* The outermost wrapper for the entire home page. */
 .home-page {
   background: transparent;
   color: var(--color-text);
@@ -7,15 +9,19 @@
   padding-bottom: 3rem;
 }
 
-/* ─── Hero Banner ───────────────────────────────────────────── */
+/* ─── Hero Banner ────────────────────────────────────────────── */
+
+/* The big photo section that fills the top of the home page. */
 .hero-banner {
   min-height: 65vh;
   overflow: visible;
   position: relative;
+  /* Fades the bottom of the hero so it blends smoothly into the section below. */
   -webkit-mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
 }
 
+/* The full-bleed background photo behind the hero text. */
 .hero-image {
   height: 100%;
   inset: 0;
@@ -24,6 +30,7 @@
   width: 100%;
 }
 
+/* Dark tinted layer on top of the hero photo so the white text is readable. */
 .hero-overlay {
   background: linear-gradient(
     105deg,
@@ -35,7 +42,9 @@
   position: absolute;
 }
 
-/* ─── Hero Polaroid ─────────────────────────────────────────── */
+/* ─── Hero Polaroid ──────────────────────────────────────────── */
+
+/* The tilted polaroid-style photo floating on the right side of the hero. */
 .hero-polaroid {
   pointer-events: none;
   position: absolute;
@@ -46,6 +55,7 @@
   z-index: 2;
 }
 
+/* The white polaroid frame with a drop shadow. */
 .hero-polaroid-frame {
   background: #fff;
   border-radius: 0.2rem;
@@ -55,6 +65,7 @@
   padding: 0.65rem 0.65rem 2.65rem;
 }
 
+/* The photo inside the polaroid frame. */
 .hero-polaroid-photo {
   aspect-ratio: 4 / 5;
   display: block;
@@ -64,7 +75,9 @@
   width: 100%;
 }
 
-/* ─── Hero Content ──────────────────────────────────────────── */
+/* ─── Hero Content ───────────────────────────────────────────── */
+
+/* The left-side text column in the hero: title, subtitle, search bar, and pills. */
 .hero-content {
   box-sizing: border-box;
   margin-left: 5rem;
@@ -75,6 +88,7 @@
   z-index: 3;
 }
 
+/* The small cursive text above the main hero heading. */
 .hero-kicker {
   color: var(--color-background);
   font-family: var(--font-accent);
@@ -82,6 +96,7 @@
   margin: 0;
 }
 
+/* The main hero heading. */
 .hero-content h1 {
   color: rgba(235, 237, 243, 0.95);
   font-size: clamp(2rem, 3vw, 3.6rem);
@@ -92,6 +107,7 @@
   text-shadow: 10px 0 20px rgba(2, 2, 2, 0.8);
 }
 
+/* The short description text below the hero heading. */
 .hero-subtitle {
   color: rgba(255, 255, 255, 0.92);
   font-size: 1rem;
@@ -100,7 +116,9 @@
   max-width: 700px;
 }
 
-/* ─── Hero Search ───────────────────────────────────────────── */
+/* ─── Hero Search ────────────────────────────────────────────── */
+
+/* The search bar + button row inside the hero. */
 .hero-search-form {
   align-items: stretch;
   display: grid;
@@ -110,6 +128,7 @@
   max-width: 550px;
 }
 
+/* The text input field inside the hero search bar. */
 .hero-search-input {
   background: var(--color-background);
   border: 1px solid rgba(56, 75, 112, 0.15);
@@ -124,16 +143,19 @@
   width: 100%;
 }
 
+/* Placeholder text inside the search input. */
 .hero-search-input::placeholder {
   color: rgba(56, 75, 112, 0.72);
   font-size: 0.9rem;
 }
 
+/* Red ring that appears around the search input when you click into it. */
 .hero-search-input:focus {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px rgba(196, 69, 69, 0.18);
 }
 
+/* The red search submit button. */
 .hero-search-button {
   align-items: center;
   background: var(--color-accent);
@@ -152,16 +174,20 @@
   text-transform: uppercase;
 }
 
+/* Darkens the search button when you hover over it. */
 .hero-search-button:hover {
   background: #ad3d3d;
 }
 
+/* Accessibility focus ring for keyboard users. */
 .hero-search-button:focus-visible {
   box-shadow: 0 0 0 3px rgba(252, 250, 238, 0.55);
   outline: none;
 }
 
-/* ─── Hero Pills ────────────────────────────────────────────── */
+/* ─── Hero Pills ─────────────────────────────────────────────── */
+
+/* The row of quick-filter tags below the hero search bar. */
 .hero-pills {
   display: flex;
   flex-wrap: wrap;
@@ -170,6 +196,7 @@
   max-width: 760px;
 }
 
+/* Each individual quick-filter tag in the hero. */
 .hero-pill {
   background: transparent;
   border: 1px solid rgba(252, 250, 238, 0.55);
@@ -181,9 +208,9 @@
   padding: 0.35rem 0.7rem;
 }
 
-/* ─── Featured Studios Section ──────────────────────────────── */
-/* Outer section: invisible layout box only — no background, no border,
-   no shadow. Nothing here that can create a hard visible edge. */
+/* ─── Featured Studios Section ───────────────────────────────── */
+
+/* Invisible layout wrapper — just controls spacing for the featured section. */
 .featured-section {
   margin: 3rem 0 0;
   max-width: none;
@@ -191,9 +218,8 @@
   width: 100%;
 }
 
-/* Inner div: this is what gets the background color and the fade mask.
-   Keeping it free of border/border-radius/box-shadow means the mask
-   gradient is the only thing defining the edges — no hard lines. */
+/* The dark panel behind the featured studio cards.
+   Edges fade out so it blends into the background photo. */
 .featured-inner {
   /* background-color: rgba(252, 250, 238, 0.93); */
   background-color: rgba(15, 22, 33, 0.873);
@@ -214,11 +240,14 @@
   );
 }
 
-/* ─── Section Heading ───────────────────────────────────────── */
+/* ─── Section Heading ────────────────────────────────────────── */
+
+/* Centers the heading and subtitle above the featured studio grid. */
 .section-heading {
   text-align: center;
 }
 
+/* The small red cursive label above the section heading. */
 .section-kicker {
   color: var(--color-accent);
   font-family: var(--font-accent);
@@ -226,18 +255,22 @@
   margin: 0;
 }
 
+/* The main section heading text. */
 .section-heading h2 {
   color: rgba(235, 237, 243, 0.95);
   font-size: clamp(1.8rem, 3vw, 2.3rem);
   margin: 0.2rem 0 0.45rem;
 }
 
+/* The descriptive subtext below the section heading. */
 .section-heading p {
   color: rgba(177, 189, 204, 0.88);
   margin: 0;
 }
 
-/* ─── Featured Grid ─────────────────────────────────────────── */
+/* ─── Featured Grid ──────────────────────────────────────────── */
+
+/* The 3-column grid that holds the featured studio photo cards. */
 .featured-grid {
   display: grid;
   gap: 1rem;
@@ -246,16 +279,18 @@
   align-items: stretch;
 }
 
-/* ─── Featured Studio Cards ─────────────────────────────────── */
+/* ─── Featured Studio Cards ──────────────────────────────────── */
+
+/* Each studio photo card in the featured grid — clicking it goes to the studio page. */
 .featured-card {
   border-radius: 0.4rem;
   color: white;
   display: block;
   aspect-ratio: 8 / 7;
-
   overflow: hidden;
   position: relative;
   text-decoration: none;
+  /* Fades all four edges of the card so it feels embedded rather than bordered. */
   -webkit-mask-image:
     linear-gradient(
       to bottom,
@@ -290,6 +325,7 @@
   mask-composite: intersect;
 }
 
+/* The studio photo inside the card — fills the full card area. */
 .featured-card img {
   display: block;
   height: 100%;
@@ -297,6 +333,7 @@
   width: 100%;
 }
 
+/* Dark gradient that fades in over the bottom of the card photo so the studio name is readable. */
 .featured-card-overlay {
   background: linear-gradient(
     180deg,
@@ -307,6 +344,7 @@
   position: absolute;
 }
 
+/* The studio name and neighborhood label at the bottom of each card. */
 .featured-card-content {
   bottom: 0;
   left: 0;
@@ -314,6 +352,7 @@
   position: absolute;
 }
 
+/* Studio name text on the card. */
 .featured-card-content h3 {
   font-family: var(--font-body);
   font-size: 1.75rem;
@@ -322,23 +361,29 @@
   margin: 0;
 }
 
+/* Neighborhood or style text below the studio name on the card. */
 .featured-card-content p {
   color: rgba(252, 250, 238, 0.92);
   margin-top: 0.4rem;
 }
 
-/* ─── Status Messages ───────────────────────────────────────── */
+/* ─── Status Messages ────────────────────────────────────────── */
+
+/* Generic loading or info message shown when studios are loading. */
 .status-message {
   color: rgba(177, 189, 204, 0.88);
   margin-top: 1rem;
   text-align: center;
 }
 
+/* Error state — turns the message red. */
 .status-message.error {
   color: var(--color-accent);
 }
 
-/* ─── Placeholder Pages ─────────────────────────────────────── */
+/* ─── Placeholder Pages ──────────────────────────────────────── */
+
+/* Cream panel used on pages that aren't fully built out yet. */
 .placeholder-page {
   background: rgba(252, 250, 238, 0.93);
   border-radius: 0.8rem;
@@ -350,7 +395,9 @@
   padding: 2.5rem 1rem;
 }
 
-/* ─── Responsive ────────────────────────────────────────────── */
+/* ─── Responsive ─────────────────────────────────────────────── */
+
+/* Tablet: shrinks the polaroid and switches the grid to 2 columns. */
 @media (max-width: 980px) {
   .hero-polaroid {
     right: 1rem;
@@ -362,12 +409,14 @@
   }
 }
 
+/* Tablet mid-range: slightly smaller card titles. */
 @media (min-width: 651px) and (max-width: 980px) {
   .featured-card-content h3 {
     font-size: 1.45rem;
   }
 }
 
+/* Phone: hides the polaroid, collapses the hero text, single-column grid. */
 @media (max-width: 640px) {
   .hero-banner {
     min-height: 59vh;

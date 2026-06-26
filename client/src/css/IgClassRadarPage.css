@@ -1,4 +1,6 @@
-/* ─── Page ──────────────────────────────────────────────────── */
+/* ─── Page ───────────────────────────────────────────────────── */
+
+/* Outermost wrapper for the IG Class Radar page. */
 .radar-page {
   background: transparent;
   color: var(--color-text);
@@ -7,15 +9,19 @@
   padding-bottom: 4rem;
 }
 
-/* ─── Hero Banner ───────────────────────────────────────────── */
+/* ─── Hero Banner ────────────────────────────────────────────── */
+
+/* The photo banner at the top of the radar page. */
 .radar-hero {
   min-height: 50vh;
   overflow: visible;
   position: relative;
+  /* Fades the bottom of the hero into the section below. */
   -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
 }
 
+/* The full-bleed background photo inside the hero. */
 .radar-hero-image {
   height: 100%;
   inset: 0;
@@ -25,6 +31,7 @@
   width: 100%;
 }
 
+/* Dark tinted overlay on top of the hero photo so text stays readable. */
 .radar-hero-overlay {
   background: linear-gradient(
     105deg,
@@ -36,7 +43,9 @@
   position: absolute;
 }
 
-/* ─── Container ─────────────────────────────────────────────── */
+/* ─── Container ──────────────────────────────────────────────── */
+
+/* Invisible wrapper that controls spacing below the hero. */
 .radar-container {
   margin: 2rem 0 0;
   max-width: none;
@@ -44,11 +53,14 @@
   width: 100%;
 }
 
-/* ─── Page Header ───────────────────────────────────────────── */
+/* ─── Page Header ────────────────────────────────────────────── */
+
+/* The dark panel below the hero that holds the page title and description. */
 .radar-header {
   background-color: rgba(15, 22, 33, 0.873);
   margin-bottom: 2.5rem;
   padding: 4.5rem 2rem;
+  /* Fades top and bottom edges to blend with the background. */
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
@@ -65,6 +77,7 @@
   );
 }
 
+/* The main page title inside the header panel. */
 .radar-header h1 {
   color: rgba(233, 236, 242, 0.95);
   font-size: clamp(2rem, 4vw, 3rem);
@@ -73,6 +86,7 @@
   margin: 0 0 0.6rem;
 }
 
+/* The description text below the page title. */
 .radar-header div {
   color: rgba(177, 189, 204, 0.88);
   font-size: 1rem;
@@ -82,25 +96,32 @@
   max-width: 680px;
 }
 
-/* ─── Status Messages ───────────────────────────────────────── */
+/* ─── Status Messages ────────────────────────────────────────── */
+
+/* Loading or info text shown while accounts are fetching. */
 .radar-message {
   color: rgba(177, 189, 204, 0.88);
   margin: 1rem 0;
 }
 
+/* Error variant — turns the message red. */
 .radar-message.error {
   color: var(--color-accent);
 }
 
-/* ─── Cards List ────────────────────────────────────────────── */
+/* ─── Cards List ─────────────────────────────────────────────── */
+
+/* The vertical stack of radar account cards. */
 .radar-list {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
 }
 
-/* ─── Individual Card ───────────────────────────────────────── */
-/* Height is driven entirely by the content column — image stretches to match */
+/* ─── Individual Card ────────────────────────────────────────── */
+
+/* Each radar card — photo on the left, info on the right.
+   Top and bottom edges fade out to blend with the background. */
 .radar-card {
   background: rgba(15, 22, 33, 0.873);
   display: grid;
@@ -124,15 +145,15 @@
   );
 }
 
-/* ─── Card Left: Photo ──────────────────────────────────────── */
-/* Position relative so the img can be absolute and always fill the column */
+/* ─── Card Left: Photo ───────────────────────────────────────── */
+
+/* The photo column on the left side of the card. */
 .radar-card-image {
   overflow: hidden;
   position: relative;
 }
 
-/* Absolutely fills the column height — no harsh bottom edge regardless of
-   image dimensions or screen size */
+/* The photo stretches to fill the full height of the card regardless of image size. */
 .radar-card-image img {
   display: block;
   height: 100%;
@@ -143,6 +164,7 @@
   width: 100%;
 }
 
+/* Shown when no photo is available — a dark placeholder with an icon. */
 .radar-card-image-placeholder {
   align-items: center;
   background: rgba(56, 75, 112, 0.08);
@@ -152,23 +174,29 @@
   min-height: 200px;
 }
 
+/* The icon inside the photo placeholder. */
 .radar-card-image-placeholder i {
   color: rgba(56, 75, 112, 0.3);
   font-size: 3rem;
 }
 
-/* ─── Card Right: Body ──────────────────────────────────────── */
+/* ─── Card Right: Body ───────────────────────────────────────── */
+
+/* The right column that holds the info section and the links bar. */
 .radar-card-body {
   display: flex;
   flex-direction: column;
 }
 
-/* ─── Row 1: Info ───────────────────────────────────────────── */
+/* ─── Row 1: Info ────────────────────────────────────────────── */
+
+/* The main info area — account name, handle, description. */
 .radar-card-info {
   flex: 1;
   padding: 1.5rem 1.5rem;
 }
 
+/* The row with the account name and content-type badge. */
 .radar-card-title-row {
   align-items: center;
   display: flex;
@@ -176,6 +204,7 @@
   margin-bottom: 0.3rem;
 }
 
+/* The account or studio name. */
 .radar-card-title-row h2 {
   color: rgba(233, 236, 242, 0.95);
   font-size: 1.3rem;
@@ -183,6 +212,7 @@
   margin: 0;
 }
 
+/* The small pill badge showing the account type (e.g. "Studio", "Choreographer"). */
 .radar-type-badge {
   background: rgba(177, 189, 204, 0.12);
   border: 1px solid rgba(177, 189, 204, 0.3);
@@ -196,6 +226,7 @@
   white-space: nowrap;
 }
 
+/* The red Instagram handle below the account name. */
 .radar-insta-handle {
   align-items: center;
   color: var(--color-accent);
@@ -206,10 +237,12 @@
   margin: 0 0 1rem;
 }
 
+/* The Instagram icon next to the handle. */
 .radar-insta-handle i {
   font-size: 0.9rem;
 }
 
+/* A small uppercase section label above a description block (e.g. "About", "Stay Updated"). */
 .radar-section-label {
   color: rgba(210, 218, 228, 0.92);
   font-family: var(--font-body);
@@ -220,6 +253,7 @@
   text-transform: uppercase;
 }
 
+/* The description text about the account. */
 .radar-description {
   color: rgba(210, 218, 228, 0.92);
   font-size: 0.9rem;
@@ -227,6 +261,7 @@
   margin: 0;
 }
 
+/* The "stay updated" blurb text (e.g. follow instructions or context). */
 .radar-stay-updated {
   color: rgba(177, 189, 204, 0.88);
   font-size: 0.88rem;
@@ -234,7 +269,9 @@
   margin: 0;
 }
 
-/* ─── Row 2: Links Bar ──────────────────────────────────────── */
+/* ─── Row 2: Links Bar ───────────────────────────────────────── */
+
+/* The bottom bar of the card with external links (IG, website, etc.). */
 .radar-card-links {
   align-items: center;
   border-top: 1px solid rgba(177, 189, 204, 0.2);
@@ -244,6 +281,7 @@
   padding: 0.65rem 1.1rem 2rem;
 }
 
+/* Each individual link in the links bar. */
 .radar-link {
   align-items: center;
   color: var(--color-accent);
@@ -255,33 +293,40 @@
   transition: opacity 0.2s;
 }
 
+/* Dims the link slightly on hover. */
 .radar-link:hover {
   opacity: 0.75;
 }
 
+/* The icon inside each link. */
 .radar-link i {
   font-size: 0.88rem;
 }
 
+/* The vertical separator between links (e.g. "•"). */
 .radar-link-divider {
   color: rgba(177, 189, 204, 0.45);
   font-size: 0.8rem;
   user-select: none;
 }
 
+/* A muted text label next to a link (e.g. showing what type of link it is). */
 .radar-link-type {
   color: rgba(177, 189, 204, 0.88);
   font-size: 0.8rem;
   font-weight: 500;
 }
 
-/* ─── Responsive ────────────────────────────────────────────── */
+/* ─── Responsive ─────────────────────────────────────────────── */
+
+/* Tablet: narrows the photo column. */
 @media (max-width: 900px) {
   .radar-card {
     grid-template-columns: 14rem 1fr;
   }
 }
 
+/* Phone: stacks photo on top of info, hero shrinks. */
 @media (max-width: 640px) {
   .radar-hero {
     min-height: 35vh;
@@ -291,12 +336,13 @@
     padding: 3rem 2rem;
   }
 
+  /* Card becomes single column — photo stacks on top. */
   .radar-card {
     grid-template-columns: 1fr;
     overflow: visible;
   }
 
-  /* Image is now a normal block — not absolute — so it shows fully */
+  /* Photo becomes a fixed-height block on phones. */
   .radar-card-image {
     height: 260px;
     overflow: hidden;
@@ -312,6 +358,7 @@
     object-position: center center;
   }
 
+  /* Title and badge wrap on phones. */
   .radar-card-title-row {
     flex-wrap: wrap;
   }
