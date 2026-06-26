@@ -6,22 +6,28 @@ A curated directory of adult dance studios in Chicago, with class schedules, rev
 
 ## Tech Stack
 
-**Frontend**
+**Frontend** — React 19, React Router 7, Vite
 
-- React 19
-- React Router 7
-- Vite
+**Backend** — Node.js, Express 5, PostgreSQL
 
-**Backend**
+**Scraping** — Puppeteer (headless browser scraping for live class schedules)
 
-- Node.js with Express 5
-- PostgreSQL via `pg`
+---
 
-**Scraping**
+## Project Structure
 
-- Puppeteer — headless browser scraping for live class schedules across studio websites (Wix, Squarespace, custom Ribbon widgets)
-
-**Data**
-
-- PostgreSQL database for studios and classes
-- `studios.json` snapshot kept in sync with the database for backup
+```
+common-ground/
+├── client/          # React frontend (Vite)
+│   └── src/
+│       ├── pages/
+│       ├── components/
+│       ├── services/
+│       └── css/
+└── server/          # Express backend
+    ├── config/      # Database connection + schema
+    ├── controllers/ # Route handlers
+    ├── routes/      # API route definitions
+    ├── scrapers/    # Puppeteer scraping scripts
+    └── data/        # Seed data + studios.json snapshot
+```
