@@ -24,4 +24,4 @@ A curated directory of adult dance studios in Chicago, with class schedules, rev
 **Data**
 
 - PostgreSQL database for studios and classes
-- `studios.json` snapshot kept in sync with the database for static reads
+- `studios.json` snapshot kept in sync with the database for backup
