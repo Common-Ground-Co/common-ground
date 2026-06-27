@@ -78,13 +78,30 @@ const scrapeVisceral = async () => {
   // Give Wix time to add the embedded iframe to the page.
   await new Promise((resolve) => setTimeout(resolve, 8000));
 
-  // Find the iframe that contains the schedule widget.
+  // Give all frames a moment to finish loading before scanning.
+  await new Promise((r) => setTimeout(r, 3000));
+
   const frames = page.frames();
-  const widgetFrame = frames.find((f) => f.url().includes("filesusr.com"));
+
+  // First try: find frame by known Wix CDN URL patterns.
+  let widgetFrame = frames.find(
+    (f) => f.url().includes("filesusr.com") || f.url().includes("wixapps.net"),
+  );
+
+  // Second try: find whichever frame actually contains the Mindbody widget.
+  if (!widgetFrame) {
+    for (const frame of frames) {
+      try {
+        const found = await frame.$(".bw-session");
+        if (found) { widgetFrame = frame; break; }
+      } catch { /* cross-origin frames will throw — skip them */ }
+    }
+  }
 
   if (!widgetFrame) {
+    const frameUrls = frames.map((f) => f.url()).join("\n  ");
     await browser.close();
-    throw new Error("Widget iframe not found — Wix may not have loaded it yet");
+    throw new Error(`Visceral widget iframe not found.\nFrames available:\n  ${frameUrls}`);
   }
 
   // Wait for class rows to appear before reading page data.
