@@ -3,8 +3,6 @@ import Navigation from "../components/Navigation.jsx";
 import { fetchIgAccounts } from "../services/igAccountsService.js";
 import "../css/IgClassRadarPage.css";
 
-const bannerImageSrc = "https://i.imgur.com/5rl3AP3.jpeg";
-
 const TYPE_LABELS = {
   instructor: "Instructor",
   dance_team: "Dance Team",
@@ -33,30 +31,26 @@ function IgClassRadarPage() {
 
   return (
     <div className="radar-page">
-      {/* Hero banner — fades out at bottom like homepage */}
-      <section className="radar-hero">
-        <img
-          className="radar-hero-image"
-          src={bannerImageSrc}
-          alt="Chicago dance community"
-        />
-        <div className="radar-hero-overlay" />
-      </section>
-
-      <Navigation variant="category-strip--floating" />
+      <div className="page-nav-wrap">
+        <Navigation variant="category-strip--page" />
+      </div>
 
       <main className="radar-container">
-        {/* Page header */}
-        <section className="radar-header">
-          <h1>Instagram Class Radar</h1>
-          <div>
-            Chicago's independent dance instructors, teams, and collectives
-            worth following — curated picks for finding classes, workshops, and
-            community events outside the studio walls.
-          </div>
-        </section>
+        {/* Under construction notice */}
+        <div className="wip-banner">
+          <i className="fa-solid fa-triangle-exclamation" aria-hidden="true" />
+          <span>This section is still being built — more accounts coming soon.</span>
+        </div>
 
-        {/* Cards */}
+        <div className="radar-header">
+          <h1>Instagram Class Radar</h1>
+          <p>
+            Chicago's independent dance instructors, teams, and collectives
+            worth following — curated picks for classes, workshops, and
+            community events outside the studio walls.
+          </p>
+        </div>
+
         {loading ? (
           <p className="radar-message">Loading...</p>
         ) : error ? (
@@ -84,7 +78,6 @@ function IgClassRadarPage() {
 
                 {/* Right column */}
                 <div className="radar-card-body">
-                  {/* Row 1: main info */}
                   <div className="radar-card-info">
                     <div className="radar-card-title-row">
                       <h2>{entry.name}</h2>
@@ -121,7 +114,6 @@ function IgClassRadarPage() {
                     </p>
                   </div>
 
-                  {/* Row 2: links bar */}
                   <div className="radar-card-links">
                     {entry.instagram && (
                       <a

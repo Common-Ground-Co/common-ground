@@ -1,0 +1,42 @@
+export default [
+  {
+    key: "visceral",
+    studioId: 1,
+    studioName: "Visceral Dance Chicago",
+    scheduleUrl: "https://www.visceraldance.com/classschedule",
+    loaderType: "mindbodyIframe",
+    allowedStyles: [
+      "hip hop", "hip-hop", "open", "k-pop", "kpop", "heels",
+      "wacking", "waacking", "vogue", "vouge", "jazz",
+      "contemporary", "ballet", "tap", "modern",
+    ],
+    skipKeywords: ["youth", "kids", "kid", "children", "closed", "virtual", "pilates", "bemoved"],
+  },
+  {
+    key: "puzzlebox",
+    studioId: 2,
+    studioName: "The Puzzle Box Dance Studio",
+    scheduleUrl: "https://www.thepuzzleboxdancestudio.com/book-by-calendar",
+    loaderType: "wixAgenda",
+    allowedStyles: null,
+    skipKeywords: ["kids"],
+  },
+  {
+    key: "danceforever",
+    studioId: 3,
+    studioName: "Dance Forever",
+    scheduleUrl: "https://www.dance-forever.com/schedule",
+    loaderType: "ribbon",
+    allowedStyles: null,
+    skipKeywords: ["cardio"],
+  },
+  {
+    key: "indiemedia",
+    studioId: 4,
+    studioName: "Indie Media Studio",
+    scheduleUrl: "https://www.indiemediastudio.com/",
+    loaderType: "wixEvents",
+    allowedStyles: null,
+    skipKeywords: ["day pass", "academy"],
+  },
+];

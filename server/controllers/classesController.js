@@ -1,4 +1,6 @@
 // Classes controller: performs database queries for class schedule resources.
+// Joins with the studios table to include studio name, photo, schedule URL, and price
+// so the frontend can display and sort class cards without a second API call.
 import pool from "../config/database.js";
 
 export const getAllClasses = async (req, res) => {
@@ -14,7 +16,8 @@ export const getAllClasses = async (req, res) => {
          c.start_time,
          s.name AS studio_name,
          s.photo_url AS studio_photo_url,
-         s.schedule_url AS studio_schedule_url
+         s.schedule_url AS studio_schedule_url,
+         s.price_range AS studio_price_range
        FROM classes c
        JOIN studios s ON s.id = c.studio_id
        ORDER BY c.class_date ASC, c.start_time ASC`,

@@ -1,291 +1,149 @@
 import pool from "../config/database.js";
-import {
-  scrapePuzzleBox,
-  parseSkillLevel as parsePuzzleLevel,
-  parseDate as parsePuzzleDate,
-  parseTime as parsePuzzleTime,
-  STUDIO_ID as PUZZLE_ID,
-} from "./puzzlebox.js";
-import {
-  scrapeVisceral,
-  parseSkillLevel as parseVisceralLevel,
-  parseDate as parseVisceralDate,
-  parseTime as parseVisceralTime,
-  shouldIncludeClass,
-  STUDIO_ID as VISCERAL_ID,
-} from "./visceral.js";
-import {
-  scrapeIndieMedia,
-  parseSkillLevel as parseIndieLevel,
-  parseGenre as parseIndieGenre,
-  parseDateFromText as parseIndieDate,
-  parseTimeFromText as parseIndieTime,
-  resolveBookingUrl as resolveIndieBookingUrl,
-  STUDIO_ID as INDIE_ID,
-} from "./indiemedia.js";
-import {
-  scrapeDanceForever,
-  parseSkillLevel as parseDFLevel,
-  parseDateFromSelected as parseDFDate,
-  parseTimeFromText as parseDFTime,
-  shouldIncludeClass as dfShouldInclude,
-} from "./danceforever.js";
+import studios from "./studios.config.js";
+import { loadClasses } from "./pageLoader.js";
+import { parseSkillLevel, parseGenre, shouldInclude } from "./sharedParsers.js";
 
-// Set DRY_RUN=1 to test scraping without writing to the database.
 const DRY_RUN = process.env.DRY_RUN === "1";
+const DEBUG = process.env.DEBUG === "1";
 
-// Keep classes from today through the next 7 days.
 const today = new Date();
 const cutoff = new Date(today);
-cutoff.setDate(today.getDate() + 8);
+cutoff.setDate(today.getDate() + 12);
+const TODAY_DATE = today.toISOString().split("T")[0];
 const CUTOFF_DATE = cutoff.toISOString().split("T")[0];
 
-// Turn "YYYY-MM-DD" into a weekday name like "Monday".
 function getDayOfWeekFromIsoDate(isoDate) {
   const [year, month, day] = String(isoDate).split("-").map(Number);
   const utcDate = new Date(Date.UTC(year, month - 1, day));
-  return utcDate.toLocaleDateString("en-US", {
-    weekday: "long",
-    timeZone: "UTC",
-  });
+  return utcDate.toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
 }
 
-// Scrape, clean, and save Puzzle Box classes.
-const runPuzzleBox = async () => {
-  console.log("🕷️ Scraping Puzzle Box...");
-  const { classes } = await scrapePuzzleBox();
-  console.log(`📦 Scraped ${classes.length} raw classes`);
+function normalizeTime(t) {
+  if (!t) return null;
+  const parts = t.split(":");
+  if (parts.length === 2) return `${parts[0].padStart(2, "0")}:${parts[1]}:00`;
+  if (parts.length === 3) return `${parts[0].padStart(2, "0")}:${parts[1]}:${parts[2]}`;
+  return null;
+}
 
-  if (!DRY_RUN) {
-    // Remove old Puzzle Box classes so we replace with fresh results.
-    await pool.query("DELETE FROM classes WHERE studio_id = $1", [PUZZLE_ID]);
-  }
+async function runStudio(config) {
+  console.log(`🕷️  Scraping ${config.studioName}...`);
 
-  let inserted = 0;
-  let skipped = 0;
-
-  for (const c of classes) {
-    const classDate = parsePuzzleDate(c.dateText);
-    const startTime = parsePuzzleTime(c.timeRaw);
-    const skillLevel = parsePuzzleLevel(c.className);
-
-    if (!classDate || !startTime || !c.className) {
-      // Skip if key values are missing.
-      skipped++;
-      continue;
-    }
-    if (classDate >= CUTOFF_DATE) {
-      // Skip classes outside our date window.
-      skipped++;
-      continue;
-    }
-
-    const dayOfWeek = getDayOfWeekFromIsoDate(classDate);
-
-    if (!DRY_RUN) {
-      // Save one class row.
-      await pool.query(
-        `INSERT INTO classes (studio_id, name, instructor, skill_level, day_of_week, class_date, start_time)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-        [PUZZLE_ID, c.className, c.instructor || null, skillLevel, dayOfWeek, classDate, startTime],
-      );
-    }
-    inserted++;
-  }
-
-  console.log(`✅ Puzzle Box: ${inserted} inserted, ${skipped} skipped`);
-};
-
-// Scrape, clean, and save Visceral classes.
-const runVisceral = async () => {
-  console.log("🕷️ Scraping Visceral...");
-  const { classes } = await scrapeVisceral();
-  console.log(`📦 Scraped ${classes.length} raw classes`);
-
-  if (!DRY_RUN) {
-    // Remove old Visceral classes so we replace with fresh results.
-    await pool.query("DELETE FROM classes WHERE studio_id = $1", [VISCERAL_ID]);
-  }
-
-  let inserted = 0;
-  let skipped = 0;
-
-  for (const c of classes) {
-    if (!shouldIncludeClass(c.className)) {
-      // Skip non-target classes (kids, virtual, etc.).
-      skipped++;
-      continue;
-    }
-
-    const classDate = parseVisceralDate(c.startDatetime);
-    const startTime = parseVisceralTime(c.startDatetime);
-    const skillLevel = parseVisceralLevel(c.className);
-
-    if (!classDate || !startTime || !c.className) {
-      // Skip if key values are missing.
-      skipped++;
-      continue;
-    }
-    if (classDate >= CUTOFF_DATE) {
-      // Skip classes outside our date window.
-      skipped++;
-      continue;
-    }
-
-    const dayOfWeek = getDayOfWeekFromIsoDate(classDate);
-
-    if (!DRY_RUN) {
-      // Save one class row.
-      await pool.query(
-        `INSERT INTO classes (studio_id, name, instructor, skill_level, day_of_week, class_date, start_time, booking_url)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [VISCERAL_ID, c.className, c.instructor || null, skillLevel, dayOfWeek, classDate, startTime, c.bookingUrl || null],
-      );
-    }
-    inserted++;
-  }
-
-  console.log(`✅ Visceral: ${inserted} inserted, ${skipped} skipped`);
-};
-
-// Scrape, clean, and save Indie Media classes.
-const runIndieMedia = async () => {
-  console.log("🕷️ Scraping Indie Media...");
-  const { classes } = await scrapeIndieMedia();
-  console.log(`📦 Scraped ${classes.length} raw classes`);
-
-  if (!DRY_RUN) {
-    // Remove old Indie Media classes so we replace with fresh results.
-    await pool.query("DELETE FROM classes WHERE studio_id = $1", [INDIE_ID]);
-  }
-
-  let inserted = 0;
-  let skipped = 0;
-
-  for (const c of classes) {
-    const classDate = parseIndieDate(c.dateTimeText);
-    const startTime = parseIndieTime(c.dateTimeText);
-    const skillLevel = parseIndieLevel(c.className);
-    const genre = parseIndieGenre(c.className);
-    const bookingUrl = resolveIndieBookingUrl(c.bookingHref);
-
-    if (!classDate || !startTime) {
-      // Skip if date or time could not be parsed.
-      skipped++;
-      continue;
-    }
-    if (classDate >= CUTOFF_DATE) {
-      // Skip classes outside our date window.
-      skipped++;
-      continue;
-    }
-
-    const dayOfWeek = getDayOfWeekFromIsoDate(classDate);
-
-    if (!DRY_RUN) {
-      // Save one class row.
-      await pool.query(
-        `INSERT INTO classes (studio_id, name, instructor, style, skill_level, day_of_week, class_date, start_time, booking_url)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-        [INDIE_ID, c.className, c.instructor || null, genre, skillLevel, dayOfWeek, classDate, startTime, bookingUrl],
-      );
-    }
-    inserted++;
-  }
-
-  console.log(`✅ Indie Media: ${inserted} inserted, ${skipped} skipped`);
-};
-
-// Scrape, clean, and save Dance Forever classes.
-const runDanceForever = async () => {
-  console.log("🕷️ Scraping Dance Forever...");
-
-  // Look up studio id at runtime so we don't hardcode it.
-  const { rows } = await pool.query(
-    "SELECT id FROM studios WHERE name = 'Dance Forever' LIMIT 1",
-  );
-  if (!rows.length) {
-    console.log("⚠️  Dance Forever studio not found in DB — skipping");
+  let classes;
+  try {
+    classes = await loadClasses(config);
+  } catch (err) {
+    console.warn(`⚠️  Page load failed for ${config.studioName}: ${err.message}`);
     return;
   }
-  const DF_ID = rows[0].id;
 
-  const { classes } = await scrapeDanceForever();
-  console.log(`📦 Scraped ${classes.length} raw classes`);
+  console.log(`📦 ${config.studioName}: ${classes.length} raw classes`);
 
-  if (!DRY_RUN) {
-    await pool.query("DELETE FROM classes WHERE studio_id = $1", [DF_ID]);
+  if (DEBUG) {
+    console.log("  [DEBUG] Raw classes:");
+    classes.forEach((c, i) =>
+      console.log(`    [${i}] date="${c.date}" time="${c.time}" class="${c.className}" instructor="${c.instructor}"`),
+    );
   }
+
+  const filtered = classes.filter((c) =>
+    c.className && shouldInclude(c.className, config.allowedStyles, config.skipKeywords),
+  );
+
+  if (DEBUG) {
+    console.log(`  [DEBUG] After keyword/allowlist filter: ${filtered.length} classes`);
+  }
+
+  if (filtered.length === 0) {
+    console.warn(`⚠️  Zero classes after filtering for ${config.studioName} — skipping DB write`);
+    return;
+  }
+  if (filtered.length > 300) {
+    console.warn(`⚠️  ${filtered.length} classes seems too many for ${config.studioName} — skipping DB write`);
+    return;
+  }
+
+  const valid = filtered.filter((c) => {
+    if (!c.date) {
+      if (DEBUG) console.log(`  [DEBUG] Dropping "${c.className}" — no date`);
+      return false;
+    }
+    const inWindow = c.date >= TODAY_DATE && c.date < CUTOFF_DATE;
+    if (!inWindow && DEBUG) {
+      console.log(`  [DEBUG] Dropping "${c.className}" — date "${c.date}" outside window [${TODAY_DATE}, ${CUTOFF_DATE})`);
+    }
+    return inWindow;
+  });
+
+  if (valid.length === 0) {
+    console.warn(`⚠️  No valid-dated classes for ${config.studioName} — skipping DB write`);
+    return;
+  }
+
+  if (DRY_RUN) {
+    console.log(`🔍 DRY RUN — ${config.studioName}: ${valid.length} classes`);
+    valid.forEach((c) => {
+      console.log(`  ${c.date} ${c.time || "??"} — ${c.className}${c.instructor ? ` (${c.instructor})` : ""}`);
+    });
+    return;
+  }
+
+  await pool.query("DELETE FROM classes WHERE studio_id = $1", [config.studioId]);
 
   let inserted = 0;
   let skipped = 0;
 
-  for (const c of classes) {
-    if (!c.className || !dfShouldInclude(c.className)) {
-      skipped++;
-      continue;
-    }
+  for (const c of valid) {
+    const startTime = normalizeTime(c.time);
+    if (!startTime) { skipped++; continue; }
 
-    const classDate = parseDFDate(c.selectedDateText);
-    const startTime = parseDFTime(c.timeText);
-    const skillLevel = parseDFLevel(c.className);
+    const style = parseGenre(c.className);
+    const skillLevel = parseSkillLevel(c.className);
+    const dayOfWeek = getDayOfWeekFromIsoDate(c.date);
 
-    if (!classDate || !startTime) {
-      skipped++;
-      continue;
-    }
-    if (classDate >= CUTOFF_DATE) {
-      skipped++;
-      continue;
-    }
-
-    const dayOfWeek = getDayOfWeekFromIsoDate(classDate);
-
-    if (!DRY_RUN) {
-      await pool.query(
-        `INSERT INTO classes (studio_id, name, instructor, skill_level, day_of_week, class_date, start_time, booking_url)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [DF_ID, c.className, c.instructor || null, skillLevel, dayOfWeek, classDate, startTime, c.bookingUrl || null],
-      );
-    }
+    await pool.query(
+      `INSERT INTO classes (studio_id, name, instructor, style, skill_level, day_of_week, class_date, start_time, booking_url)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      [
+        config.studioId,
+        c.className,
+        c.instructor || null,
+        style,
+        skillLevel,
+        dayOfWeek,
+        c.date,
+        startTime,
+        c.bookingUrl || null,
+      ],
+    );
     inserted++;
   }
 
-  console.log(`✅ Dance Forever: ${inserted} inserted, ${skipped} skipped`);
-};
+  console.log(`✅ ${config.studioName}: ${inserted} inserted, ${skipped} skipped`);
+}
 
-const SCRAPERS = {
-  puzzlebox: runPuzzleBox,
-  visceral: runVisceral,
-  indiemedia: runIndieMedia,
-  danceforever: runDanceForever,
-};
-
-// Main runner: executes both scrapers and closes DB connection.
 const run = async () => {
   const target = process.argv[2]?.toLowerCase();
 
-  if (target && !SCRAPERS[target]) {
-    console.error(`⚠️ Unknown scraper "${target}". Valid options: ${Object.keys(SCRAPERS).join(", ")}`);
+  const toRun = target
+    ? studios.filter((s) => s.key === target)
+    : studios;
+
+  if (target && toRun.length === 0) {
+    const keys = studios.map((s) => s.key).join(", ");
+    console.error(`⚠️  Unknown scraper "${target}". Available: ${keys}`);
     process.exit(1);
   }
 
-  const toRun = target ? [SCRAPERS[target]] : Object.values(SCRAPERS);
+  console.log(`🗓️  Scraping window: ${TODAY_DATE} → ${CUTOFF_DATE}${DRY_RUN ? " (dry run)" : ""}`);
 
-  console.log(
-    `🗓️ Scraping window: today through ${CUTOFF_DATE}${DRY_RUN ? " (dry run)" : ""}`,
-  );
   try {
-    for (const scraper of toRun) {
-      await scraper();
+    for (const studio of toRun) {
+      await runStudio(studio);
     }
-  } catch (err) {
-    console.error("⚠️ Scrape failed:", err);
-    process.exit(1);
   } finally {
-    // Always close database connection at the end.
     await pool.end();
-    console.log("🌱 Scrape complete");
+    console.log("🌱 Done");
   }
 };
 

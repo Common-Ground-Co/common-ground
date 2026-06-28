@@ -1,5 +1,5 @@
-// Studios listing page with sidebar filters and horizontal card layout.
-import { useEffect, useMemo, useState } from "react";
+// Studios listing page with sidebar filters and horizontal studio cards.
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import Navigation from "../components/Navigation.jsx";
 import { fetchStudios } from "../services/studiosService.js";
@@ -16,16 +16,87 @@ const DANCE_STYLES = [
   "Contemporary",
   "Ballet",
 ];
-const SKILL_LEVELS = [
-  "Beginner Friendly",
-  "Intermediate",
-  "Advanced",
-];
+const SKILL_LEVELS = ["Beginner Friendly", "Intermediate", "Advanced"];
 
 function getStartingPrice(priceRange) {
   const [min] = String(priceRange || "").split("-");
   const parsedMin = Number(min.replace("$", "").trim());
   return Number.isFinite(parsedMin) ? parsedMin : Number.POSITIVE_INFINITY;
+}
+
+// Individual studio card with per-card pill overflow detection and toggle.
+function StudioCard({ studio }) {
+  const pillsRef = useRef(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  const stylePills = studio.style
+    ? studio.style
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : [];
+
+  useEffect(() => {
+    const el = pillsRef.current;
+    if (el) {
+      // Check if the pill container is taller than 2 rows (the clamped height).
+      setIsOverflowing(el.scrollHeight > el.clientHeight + 2);
+    }
+  }, []);
+
+  return (
+    <article className="studio-card-horizontal">
+      <div className="card-image">
+        <img src={studio.photo_url} alt={studio.name} loading="lazy" />
+      </div>
+      <div className="card-content">
+        <div className="card-header">
+          <h3>{studio.name}</h3>
+          {studio.work_study && (
+            <span className="badge work-study-badge">Work Study</span>
+          )}
+        </div>
+        <div className="card-meta">
+          <div className="meta-item">
+            <i className="fa-solid fa-location-dot" aria-hidden="true" />
+            <span>{studio.neighborhood || "Chicago"}</span>
+          </div>
+          <div className="meta-item">
+            <i className="fa-solid fa-tag" aria-hidden="true" />
+            <span>{studio.price_range || "Price on request"}</span>
+          </div>
+        </div>
+        {stylePills.length > 0 && (
+          <div className="card-styles-wrap">
+            <div
+              ref={pillsRef}
+              className={`card-styles${expanded ? "" : " card-styles--clamped"}`}
+            >
+              {stylePills.map((pill, idx) => (
+                <span key={idx} className="style-pill">
+                  {pill}
+                </span>
+              ))}
+            </div>
+            {isOverflowing && (
+              <button
+                type="button"
+                className="card-styles-toggle"
+                onClick={() => setExpanded((e) => !e)}
+              >
+                {expanded ? "Show less" : "Show more"}
+              </button>
+            )}
+          </div>
+        )}
+        <Link to={`/studios/${studio.id}`} className="view-studio-btn">
+          View Studio
+          <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+        </Link>
+      </div>
+    </article>
+  );
 }
 
 function StudiosPage() {
@@ -105,154 +176,94 @@ function StudiosPage() {
 
   return (
     <div className="studios-page">
-      <Navigation />
+      <div className="page-nav-wrap">
+        <Navigation variant="category-strip--page" />
+      </div>
 
-      {/* studios-container: invisible layout box only — no background */}
       <main className="studios-container">
-        {/* studios-inner: holds the cream background + fade mask */}
-        <div className="studios-inner">
-          <section className="studios-header">
-            <h1>Dance Studios</h1>
-            {searchQuery && (
-              <p className="search-hint">Results for "{searchQuery}"</p>
-            )}
-          </section>
+        <section className="studios-header">
+          <h1>Dance Studios</h1>
+          {searchQuery && (
+            <p className="search-hint">Results for "{searchQuery}"</p>
+          )}
+        </section>
 
-          <div className="studios-layout">
-            {/* Sidebar Filters */}
-            <aside className="studios-sidebar">
-              <div className="filter-group">
-                <h3>Dance Style</h3>
-                <div className="filter-pills">
-                  {DANCE_STYLES.map((style) => (
-                    <button
-                      key={style}
-                      className={`filter-pill ${
-                        selectedStyles.includes(style) ? "active" : ""
-                      }`}
-                      onClick={() => toggleStyleFilter(style)}
-                    >
-                      {style}
-                    </button>
-                  ))}
-                </div>
+        <div className="studios-layout">
+          {/* Sidebar Filters */}
+          <aside className="studios-sidebar">
+            <div className="filter-group">
+              <h3>Dance Style</h3>
+              <div className="filter-pills">
+                {DANCE_STYLES.map((style) => (
+                  <button
+                    key={style}
+                    className={`filter-pill ${
+                      selectedStyles.includes(style) ? "active" : ""
+                    }`}
+                    onClick={() => toggleStyleFilter(style)}
+                  >
+                    {style}
+                  </button>
+                ))}
               </div>
-
-              <div className="filter-group">
-                <h3>Skill Level</h3>
-                <div className="filter-pills">
-                  {SKILL_LEVELS.map((level) => (
-                    <button
-                      key={level}
-                      className={`filter-pill ${
-                        selectedLevels.includes(level) ? "active" : ""
-                      }`}
-                      onClick={() => toggleLevelFilter(level)}
-                    >
-                      {level}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {(selectedStyles.length > 0 || selectedLevels.length > 0) && (
-                <button className="clear-filters-btn" onClick={clearFilters}>
-                  Clear All Filters
-                </button>
-              )}
-            </aside>
-
-            {/* Main Content */}
-            <div className="studios-content">
-              {loading ? (
-                <div className="status-block">
-                  <p>Loading studios...</p>
-                </div>
-              ) : error ? (
-                <div className="status-block error">
-                  <p>{error}</p>
-                </div>
-              ) : filteredStudios.length === 0 ? (
-                <div className="status-block">
-                  <p>No studios matched your filters.</p>
-                </div>
-              ) : (
-                <>
-                  <div className="results-header">
-                    <h2>
-                      Studios{" "}
-                      <span className="result-count">
-                        ({filteredStudios.length})
-                      </span>
-                    </h2>
-                  </div>
-
-                  <div className="studios-grid">
-                    {filteredStudios.map((studio) => (
-                      <article
-                        key={studio.id}
-                        className="studio-card-horizontal"
-                      >
-                        <div className="card-image">
-                          <img
-                            src={studio.photo_url}
-                            alt={studio.name}
-                            loading="lazy"
-                          />
-                        </div>
-                        <div className="card-content">
-                          <div className="card-header">
-                            <h3>{studio.name}</h3>
-                            {studio.work_study && (
-                              <span className="badge work-study-badge">
-                                Work Study Available
-                              </span>
-                            )}
-                          </div>
-                          <div className="card-meta">
-                            <div className="meta-item">
-                              <i
-                                className="fa-solid fa-location-dot"
-                                aria-hidden="true"
-                              />
-                              <span>{studio.neighborhood || "Chicago"}</span>
-                            </div>
-                            <div className="meta-item">
-                              <i
-                                className="fa-solid fa-tag"
-                                aria-hidden="true"
-                              />
-                              <span>
-                                {studio.price_range || "Price on request"}
-                              </span>
-                            </div>
-                          </div>
-                          {studio.style && (
-                            <div className="card-styles">
-                              {studio.style.split(",").map((s, idx) => (
-                                <span key={idx} className="style-pill">
-                                  {s.trim()}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                          <Link
-                            to={`/studios/${studio.id}`}
-                            className="view-studio-btn"
-                          >
-                            View Studio
-                            <i
-                              className="fa-solid fa-arrow-right"
-                              aria-hidden="true"
-                            />
-                          </Link>
-                        </div>
-                      </article>
-                    ))}
-                  </div>
-                </>
-              )}
             </div>
+
+            <div className="filter-group">
+              <h3>Skill Level</h3>
+              <div className="filter-pills">
+                {SKILL_LEVELS.map((level) => (
+                  <button
+                    key={level}
+                    className={`filter-pill ${
+                      selectedLevels.includes(level) ? "active" : ""
+                    }`}
+                    onClick={() => toggleLevelFilter(level)}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {(selectedStyles.length > 0 || selectedLevels.length > 0) && (
+              <button className="clear-filters-btn" onClick={clearFilters}>
+                Clear All Filters
+              </button>
+            )}
+          </aside>
+
+          {/* Main Content */}
+          <div className="studios-content">
+            {loading ? (
+              <div className="status-block">
+                <p>Loading studios...</p>
+              </div>
+            ) : error ? (
+              <div className="status-block error">
+                <p>{error}</p>
+              </div>
+            ) : filteredStudios.length === 0 ? (
+              <div className="status-block">
+                <p>No studios matched your filters.</p>
+              </div>
+            ) : (
+              <>
+                <div className="results-header">
+                  <h2>
+                    Studios{" "}
+                    <span className="result-count">
+                      ({filteredStudios.length})
+                    </span>
+                  </h2>
+                </div>
+
+                <div className="studios-grid">
+                  {filteredStudios.map((studio) => (
+                    <StudioCard key={studio.id} studio={studio} />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </main>

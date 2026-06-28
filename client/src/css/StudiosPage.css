@@ -1,59 +1,82 @@
-/* ─── Page Container ─────────────────────────────────────────── */
+/* ─── Page ────────────────────────────────────────────────────── */
 
-/* Outermost wrapper for the studios listing page. */
+/* Full-page background matching the homepage. */
 .studios-page {
-  background: transparent;
+  align-items: center;
+  background-image: url("https://images.stockcake.com/public/5/9/d/59d8fa0a-12fe-49a6-a7be-0bca48292ebf/dynamic-urban-dance-stockcake.jpg");
+  background-position: center;
+  background-size: cover;
   color: var(--color-text);
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-body);
+  gap: 1rem;
   min-height: 100vh;
+  padding: 2rem 1.5rem 3rem;
+  position: relative;
 }
 
-/* Invisible layout box — just controls spacing around the studios panel. */
+/* Dark overlay behind the floating elements. */
+.studios-page::before {
+  background: rgba(8, 13, 22, 0.68);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 0;
+}
+
+/* ─── Floating Container ──────────────────────────────────────── */
+
+/* The main card holding the header, sidebar, and studio cards. */
 .studios-container {
-  max-width: none;
-  margin: 1.8rem 0;
-  padding: 0;
+  background: rgba(15, 22, 33, 0.75);
+  border-radius: 1rem;
+  box-shadow: 0 8px 36px rgba(0, 0, 0, 0.55);
+  max-height: calc(100vh - 14rem);
+  max-width: 900px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 2.5rem 2.5rem;
+  position: relative;
+  scrollbar-color: rgba(177, 189, 204, 0.28) rgba(8, 13, 22, 0.5);
+  scrollbar-width: thin;
   width: 100%;
+  z-index: 1;
 }
 
-/* The dark panel that holds the sidebar and studio cards.
-   Top and bottom edges fade out so it blends into the page background. */
-.studios-inner {
-  background-color: rgba(15, 22, 33, 0.873);
-  padding: 4rem 3.5rem;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 4%,
-    black 96%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 4%,
-    black 96%,
-    transparent 100%
-  );
+.studios-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.studios-container::-webkit-scrollbar-track {
+  background: rgba(8, 13, 22, 0.5);
+  border-radius: 999px;
+}
+
+.studios-container::-webkit-scrollbar-thumb {
+  background: rgba(177, 189, 204, 0.28);
+  border-radius: 999px;
+}
+
+.studios-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(177, 189, 204, 0.5);
 }
 
 /* ─── Studios Header ─────────────────────────────────────────── */
 
-/* The heading and hint text at the top of the studios panel. */
 .studios-header {
   margin-bottom: 2rem;
 }
 
-/* The main "Studios" page title. */
 .studios-header h1 {
   color: rgba(233, 236, 242, 0.95);
-  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
   letter-spacing: -0.02em;
   line-height: 1.1;
   margin: 0 0 0.5rem;
 }
 
-/* The small hint text below the page title (e.g. "use the filters to narrow down"). */
 .search-hint {
   color: rgba(177, 189, 204, 0.88);
   font-size: 0.95rem;
@@ -62,16 +85,14 @@
 
 /* ─── Two-Column Layout ──────────────────────────────────────── */
 
-/* Side-by-side layout: filter sidebar on the left, studio cards on the right. */
 .studios-layout {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: 200px 1fr;
   gap: 2rem;
 }
 
 /* ─── Sidebar Filters ────────────────────────────────────────── */
 
-/* The sticky left-side filter panel — stays in view as you scroll through studios. */
 .studios-sidebar {
   display: flex;
   flex-direction: column;
@@ -81,14 +102,12 @@
   height: fit-content;
 }
 
-/* A single filter group (e.g. "Neighborhood" or "Style"). */
 .filter-group {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 }
 
-/* The label at the top of each filter group (e.g. "NEIGHBORHOOD"). */
 .filter-group h3 {
   color: rgba(225, 233, 244, 0.92);
   font-size: 1rem;
@@ -98,14 +117,12 @@
   text-transform: uppercase;
 }
 
-/* The vertical stack of filter option buttons inside a group. */
 .filter-pills {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-/* Each individual filter option button. */
 .filter-pill {
   background: transparent;
   border: 1px solid rgba(177, 189, 204, 0.35);
@@ -123,21 +140,18 @@
     color 0.2s ease;
 }
 
-/* Hover state — red border and slightly lighter text. */
 .filter-pill:hover {
   background: rgba(196, 69, 69, 0.14);
   border-color: var(--color-accent);
   color: rgba(245, 247, 250, 0.95);
 }
 
-/* Active/selected filter — filled red. */
 .filter-pill.active {
   background: var(--color-accent);
   border-color: var(--color-accent);
   color: var(--color-background);
 }
 
-/* Button that clears all active filters at once. */
 .clear-filters-btn {
   background: transparent;
   border: 1px solid rgba(196, 69, 69, 0.4);
@@ -154,7 +168,6 @@
     color 0.2s ease;
 }
 
-/* Hover state for the clear filters button. */
 .clear-filters-btn:hover {
   background: rgba(196, 69, 69, 0.1);
   border-color: var(--color-accent);
@@ -162,35 +175,30 @@
 
 /* ─── Main Content Area ──────────────────────────────────────── */
 
-/* The right column that holds the results count and the list of studio cards. */
 .studios-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-/* The "X studios" count row above the studio card list. */
 .results-header {
   display: flex;
   align-items: baseline;
   gap: 0.5rem;
 }
 
-/* "Studios" heading in the results row. */
 .results-header h2 {
   color: rgba(233, 236, 242, 0.95);
   font-size: 1.6rem;
   margin: 0;
 }
 
-/* The number of results shown next to the heading (e.g. "4 studios"). */
 .result-count {
   color: rgba(177, 189, 204, 0.88);
   font-size: 0.95rem;
   font-weight: 400;
 }
 
-/* A centered message block shown when loading or when no results are found. */
 .status-block {
   background: rgba(26, 37, 54, 0.8);
   border: 1px solid rgba(177, 189, 204, 0.2);
@@ -200,7 +208,6 @@
   text-align: center;
 }
 
-/* Error variant of the status block — red tint. */
 .status-block.error {
   background: rgba(196, 69, 69, 0.08);
   border-color: rgba(196, 69, 69, 0.2);
@@ -209,7 +216,6 @@
 
 /* ─── Studios Grid ───────────────────────────────────────────── */
 
-/* The vertical list of studio cards. */
 .studios-grid {
   display: flex;
   flex-direction: column;
@@ -218,10 +224,8 @@
 
 /* ─── Horizontal Studio Card ─────────────────────────────────── */
 
-/* Each studio listed as a horizontal card — photo on the left, info on the right.
-   All four edges fade out to blend with the dark panel background. */
 .studio-card-horizontal {
-  background: rgba(23, 32, 46, 0.613);
+  background: rgba(23, 32, 46, 0.7);
   border: 1px solid rgba(177, 189, 204, 0.2);
   border-radius: 0.6rem;
   box-shadow: 0 2px 8px rgba(31, 44, 70, 0.06);
@@ -232,47 +236,13 @@
   transition:
     box-shadow 0.3s ease,
     transform 0.3s ease;
-  -webkit-mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 3%,
-      black 97%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 2%,
-      black 98%,
-      transparent 100%
-    );
-  -webkit-mask-composite: destination-in;
-  mask-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 3%,
-      black 97%,
-      transparent 100%
-    ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      black 2%,
-      black 98%,
-      transparent 100%
-    );
-  mask-composite: intersect;
 }
 
-/* Lifts the card slightly and deepens its shadow when hovered. */
 .studio-card-horizontal:hover {
-  box-shadow: 0 8px 24px rgba(31, 44, 70, 0.12);
+  box-shadow: 0 8px 24px rgba(31, 44, 70, 0.14);
   transform: translateY(-2px);
 }
 
-/* The photo column on the left side of the card. */
 .card-image {
   height: 100%;
   min-height: 140px;
@@ -280,7 +250,6 @@
   position: relative;
 }
 
-/* The studio photo inside the card image column. */
 .card-image img {
   display: block;
   height: 100%;
@@ -288,7 +257,6 @@
   width: 100%;
 }
 
-/* The right column that holds the studio name, meta info, and buttons. */
 .card-content {
   display: flex;
   flex-direction: column;
@@ -297,7 +265,6 @@
   position: relative;
 }
 
-/* The top row of the card content: studio name and optional badge. */
 .card-header {
   display: flex;
   align-items: start;
@@ -305,38 +272,38 @@
   justify-content: space-between;
 }
 
-/* The studio name inside the card. */
 .card-header h3 {
   color: rgba(233, 236, 242, 0.95);
   font-family: var(--font-body);
-  font-size: 1.2rem;
-  font-weight:700;
+  font-size: 1rem;
+  font-weight: 700;
   line-height: 1.2;
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* A small label badge on the card (e.g. "ClassPass"). */
 .badge {
   background: rgba(196, 69, 69, 0.1);
   border: 1px solid rgba(196, 69, 69, 0.3);
   border-radius: 0.25rem;
   color: var(--color-accent);
-  font-size: 0.7rem;
+  flex-shrink: 0;
+  font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.5px;
-  padding: 0.3rem 0.6rem;
+  padding: 0.2rem 0.5rem;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
-/* Work study badge variant — solid red fill instead of outline. */
 .work-study-badge {
   background: var(--color-accent);
   border-color: var(--color-accent);
   color: white;
 }
 
-/* The row of icon + text details (address, price, etc.). */
 .card-meta {
   display: flex;
   flex-wrap: wrap;
@@ -344,7 +311,6 @@
   font-size: 0.9rem;
 }
 
-/* A single detail item inside the meta row (icon + text). */
 .meta-item {
   align-items: center;
   color: rgba(177, 189, 204, 0.88);
@@ -352,24 +318,52 @@
   gap: 0.4rem;
 }
 
-/* The red icon inside each meta item. */
 .meta-item i {
   color: var(--color-accent);
   font-size: 0.9rem;
 }
 
-/* The row of dance style tags on the card. */
-.card-styles {
-  color: rgba(210, 218, 228, 0.92);
+/* Wrapper for the pills row + the show-more toggle button. */
+.card-styles-wrap {
   display: flex;
-  flex-wrap: wrap;
-  font-size: 0.9rem;
-  font-weight: 500;
-  gap: 0.6rem;
-  margin-top: 0.6rem;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.35rem;
 }
 
-/* Each individual dance style tag. */
+.card-styles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+/* Default: clamp to 2 rows of pills. */
+.card-styles--clamped {
+  max-height: 3.6rem;
+  overflow: hidden;
+}
+
+/* Small text button shown when pills overflow 2 rows. */
+.card-styles-toggle {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: rgba(196, 69, 69, 0.82);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-top: 0.35rem;
+  padding: 0;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.card-styles-toggle:hover {
+  color: var(--color-accent);
+}
+
 .style-pill {
   background: rgba(177, 189, 204, 0.1);
   border: 1px solid rgba(177, 189, 204, 0.22);
@@ -380,7 +374,6 @@
   padding: 0.3rem 0.7rem;
 }
 
-/* The red "View Studio" button at the bottom of the card. */
 .view-studio-btn {
   align-items: center;
   align-self: start;
@@ -404,20 +397,17 @@
     transform 0.2s ease;
 }
 
-/* Darkens the button and nudges it right on hover. */
 .view-studio-btn:hover {
   background: #ad3d3d;
   transform: translateX(2px);
 }
 
-/* The arrow icon inside the "View Studio" button. */
 .view-studio-btn i {
   font-size: 0.75rem;
 }
 
 /* ─── Responsive ─────────────────────────────────────────────── */
 
-/* Tablet: sidebar moves above the cards and becomes a 2-column grid of filter groups. */
 @media (max-width: 980px) {
   .studios-layout {
     display: flex;
@@ -433,7 +423,6 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Each filter group gets a subtle dark box on tablet. */
   .filter-group {
     padding: 1rem;
     background: rgba(26, 37, 54, 0.8);
@@ -441,7 +430,6 @@
     border-radius: 0.4rem;
   }
 
-  /* Filter buttons wrap horizontally on tablet. */
   .filter-pills {
     flex-direction: row;
     flex-wrap: wrap;
@@ -461,8 +449,15 @@
   }
 }
 
-/* Phone: single-column layout for everything. */
 @media (max-width: 640px) {
+  .studios-page {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .studios-container {
+    padding: 1.5rem 1rem;
+  }
+
   .studios-header h1 {
     font-size: 1.6rem;
   }
@@ -503,7 +498,6 @@
     white-space: nowrap;
   }
 
-  /* Studio card stacks photo on top of info on phones. */
   .studio-card-horizontal {
     grid-template-columns: 1fr;
     gap: 0;
@@ -518,7 +512,6 @@
     gap: 0.6rem;
   }
 
-  /* Studio name and badge stack vertically on phones. */
   .card-header {
     flex-direction: column;
     gap: 0.5rem;
@@ -537,7 +530,6 @@
     font-size: 0.85rem;
   }
 
-  /* Book button takes full width on phones. */
   .view-studio-btn {
     width: 100%;
     justify-content: center;

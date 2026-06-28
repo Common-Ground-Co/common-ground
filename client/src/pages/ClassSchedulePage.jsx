@@ -1,3 +1,6 @@
+// Class schedule page: shows upcoming classes grouped by date with filters for
+// day of week, skill level, and studio name. Classes within each date group are
+// ordered cheapest studio first so budget-friendly options always appear at the top.
 import { useEffect, useMemo, useState } from "react";
 import Navigation from "../components/Navigation.jsx";
 import { fetchClasses } from "../services/classesService.js";
@@ -72,6 +75,14 @@ function getSkillLevelClass(level) {
   return "skill-pill";
 }
 
+// Parses the lower bound from a price range string like "$10-$16 per class" → 10.
+// Returns Infinity for any studio with no parseable price so it sorts to the bottom.
+function getStartingPrice(priceRange) {
+  const [min] = String(priceRange || "").split("-");
+  const parsed = Number(min.replace("$", "").trim());
+  return Number.isFinite(parsed) ? parsed : Number.POSITIVE_INFINITY;
+}
+
 function matchesDay(item, selectedDay) {
   if (selectedDay === "All") return true;
   const dayOfWeek = getDayLabelFromDate(item.class_date, item.day_of_week);
@@ -89,12 +100,18 @@ function matchesLevel(skillLevel, selectedLevel) {
   return false;
 }
 
+function matchesStudio(item, selectedStudio) {
+  if (selectedStudio === "All") return true;
+  return item.studio_name === selectedStudio;
+}
+
 function ClassSchedulePage() {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedDay, setSelectedDay] = useState("All");
   const [selectedLevel, setSelectedLevel] = useState("All");
+  const [selectedStudio, setSelectedStudio] = useState("All");
 
   useEffect(() => {
     // Load all classes once when the page opens.
@@ -112,14 +129,21 @@ function ClassSchedulePage() {
     loadClasses();
   }, []);
 
+  // Derive studio names from real data so this filter auto-updates when a new studio is added.
+  const studioNames = useMemo(() => {
+    const names = [...new Set(classes.map((c) => c.studio_name).filter(Boolean))].sort();
+    return ["All", ...names];
+  }, [classes]);
+
   const visibleClasses = useMemo(() => {
-    // Show classes matching both the selected day AND skill level.
+    // Show classes matching the selected day, skill level, and studio.
     return classes.filter(
       (item) =>
         matchesDay(item, selectedDay) &&
-        matchesLevel(item.skill_level, selectedLevel),
+        matchesLevel(item.skill_level, selectedLevel) &&
+        matchesStudio(item, selectedStudio),
     );
-  }, [classes, selectedDay, selectedLevel]);
+  }, [classes, selectedDay, selectedLevel, selectedStudio]);
 
   const groupedByDate = useMemo(() => {
     // Group classes by date so each date renders as its own section.
@@ -142,16 +166,28 @@ function ClassSchedulePage() {
   }, [visibleClasses]);
 
   const groupedEntries = useMemo(() => {
-    return Object.values(groupedByDate).sort((a, b) =>
-      String(a.classDate).localeCompare(String(b.classDate)),
-    );
+    // Sort date groups chronologically, then sort classes within each group
+    // by studio price ascending so the cheapest options always appear first.
+    return Object.values(groupedByDate)
+      .sort((a, b) => String(a.classDate).localeCompare(String(b.classDate)))
+      .map((group) => ({
+        ...group,
+        items: [...group.items].sort(
+          (a, b) =>
+            getStartingPrice(a.studio_price_range) -
+            getStartingPrice(b.studio_price_range),
+        ),
+      }));
   }, [groupedByDate]);
 
   return (
     <div className="class-schedule-page">
-      <Navigation />
+      <div className="page-nav-wrap">
+        <Navigation variant="category-strip--page" />
+      </div>
       <main className="class-schedule-container">
-        {/* Filter section with separate day and level groups. */}
+        {/* Single unified panel — filters and schedule sections share one dark container */}
+        <div className="schedule-panel">
         <section className="filter-section" aria-label="Filter classes">
           {/* Day filter group */}
           <div className="filter-group">
@@ -180,6 +216,22 @@ function ClassSchedulePage() {
                   onClick={() => setSelectedLevel(level)}
                 >
                   {level}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Studio filter group — buttons are derived from live data, not hardcoded */}
+          <div className="filter-group">
+            <div className="filter-row">
+              {studioNames.map((name) => (
+                <button
+                  key={name}
+                  type="button"
+                  className={`filter-btn ${selectedStudio === name ? "active" : ""}`}
+                  onClick={() => setSelectedStudio(name)}
+                >
+                  {name}
                 </button>
               ))}
             </div>
@@ -255,6 +307,7 @@ function ClassSchedulePage() {
             ))}
           </div>
         ) : null}
+        </div>{/* end .schedule-panel */}
       </main>
     </div>
   );

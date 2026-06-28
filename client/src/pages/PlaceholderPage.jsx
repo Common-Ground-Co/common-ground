@@ -1,10 +1,21 @@
+import Navigation from "../components/Navigation.jsx";
+import "../css/PlaceholderPage.css";
+
 function PlaceholderPage({ title, description }) {
   return (
-    // Temporary page content for sections that are not built yet.
-    <main className="placeholder-page">
-      <h1>{title}</h1>
-      <p>{description}</p>
-    </main>
+    <div className="placeholder-page">
+      <div className="page-nav-wrap">
+        <Navigation variant="category-strip--page" />
+      </div>
+      <main className="placeholder-container">
+        <div className="wip-banner">
+          <i className="fa-solid fa-triangle-exclamation" aria-hidden="true" />
+          <span>This section is still being built — check back soon.</span>
+        </div>
+        <h1 className="placeholder-title">{title}</h1>
+        <p className="placeholder-description">{description}</p>
+      </main>
+    </div>
   );
 }
 

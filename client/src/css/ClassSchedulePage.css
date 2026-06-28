@@ -1,44 +1,60 @@
-/* The outermost wrapper for the class schedule page. */
+/* Full-page background matching the site theme. */
 .class-schedule-page {
-  background: transparent;
+  align-items: center;
+  background-image: url("https://images.stockcake.com/public/5/9/d/59d8fa0a-12fe-49a6-a7be-0bca48292ebf/dynamic-urban-dance-stockcake.jpg");
+  background-position: center;
+  background-size: cover;
   color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-body);
+  gap: 1rem;
   min-height: 100vh;
+  padding: 2rem 1.5rem 3rem;
+  position: relative;
 }
 
-/* The main content area inside the schedule page. */
+.class-schedule-page::before {
+  background: rgba(8, 13, 22, 0.68);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 0;
+}
+
+/* Centering wrapper — positions the schedule panel within the page. */
 .class-schedule-container {
+  display: flex;
+  justify-content: center;
   margin: 0;
-  max-width: none;
-  padding: 1.25rem 0 2.25rem;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+/* The floating card: filter section pinned, day sections scroll below. */
+.schedule-panel {
+  background: rgba(15, 22, 33, 0.75);
+  border-radius: 1rem;
+  box-shadow: 0 8px 36px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 14rem);
+  max-width: 900px;
+  overflow: hidden;
   width: 100%;
 }
 
-/* The dark panel that holds the day and skill level filter buttons.
-   Edges fade out so it blends into the background. */
+/* Filter rows at the top of the panel — layout only, no background. */
 .filter-section {
-  background: rgba(15, 22, 33, 0.873);
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  margin-top: 1rem;
   padding: 3.5rem 2.5rem 2.5rem 2.5rem;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 2%,
-    black 90%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 25%,
-    black 80%,
-    transparent 100%
-  );
 }
 
-/* A single row of filter buttons (one group for days, one for levels). */
+/* A single row of filter buttons (one group for days, one for levels, one for studios). */
 .filter-group {
   display: flex;
   flex-direction: column;
@@ -52,11 +68,11 @@
   gap: 0.6rem;
 }
 
-/* Each individual day or skill level filter button. */
+/* Each individual filter button. */
 .filter-btn {
   background: transparent;
   border: 1px solid rgba(177, 189, 204, 0.35);
-  border-radius: 999px;
+  border-radius: 0.35rem;
   color: rgba(210, 218, 228, 0.92);
   cursor: pointer;
   font-family: var(--font-body);
@@ -87,6 +103,7 @@
 .schedule-message {
   color: rgba(177, 189, 204, 0.88);
   margin: 1rem 0;
+  padding: 0 2.5rem;
 }
 
 /* Error variant — turns the message red. */
@@ -94,34 +111,45 @@
   color: var(--color-accent);
 }
 
-/* Vertical stack of date sections (one per day). */
+/* All day sections scroll here — filter rows above stay pinned. */
 .schedule-sections {
+  border-top: 1px solid rgba(177, 189, 204, 0.22);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-color: rgba(177, 189, 204, 0.28) rgba(8, 13, 22, 0.5);
+  scrollbar-width: thin;
 }
 
-/* The dark panel for a single day's classes.
-   Top and bottom edges fade out to blend into the background. */
+.schedule-sections::-webkit-scrollbar {
+  width: 5px;
+}
+
+.schedule-sections::-webkit-scrollbar-track {
+  background: rgba(8, 13, 22, 0.5);
+  border-radius: 999px;
+}
+
+.schedule-sections::-webkit-scrollbar-thumb {
+  background: rgba(177, 189, 204, 0.28);
+  border-radius: 999px;
+}
+
+.schedule-sections::-webkit-scrollbar-thumb:hover {
+  background: rgba(177, 189, 204, 0.5);
+}
+
+/* A single day's content — layout and padding only. */
 .day-section {
-  background: rgba(15, 22, 33, 0.873);
-  overflow: hidden;
   padding: 1.5rem 2rem;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 4%,
-    black 96%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 5%,
-    black 95%,
-    transparent 100%
-  );
+}
+
+/* Thin divider line between consecutive day sections. */
+.day-section + .day-section {
+  border-top: 1px solid rgba(177, 189, 204, 0.22);
 }
 
 /* The date header row at the top of each day section (day name + date). */
@@ -298,8 +326,19 @@
   }
 }
 
-/* Phone — filter buttons each take up roughly half the row. */
-@media (max-width: 650px) {
+/* 768px and below — panel grows with content (native page scroll), filters and headers adapt. */
+@media (max-width: 768px) {
+  .schedule-panel {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .schedule-sections {
+    max-height: none;
+    min-height: unset;
+    overflow: visible;
+  }
+
   .filter-section {
     gap: 1.5rem;
   }
@@ -309,7 +348,6 @@
     text-align: center;
   }
 
-  /* Smaller day/date text in the section headers on phones. */
   .day-section-header h2 {
     font-size: 2rem;
   }
@@ -318,7 +356,6 @@
     font-size: 1.25rem;
   }
 
-  /* Stacks the day name and date on phones instead of side by side. */
   .day-section-header {
     align-items: start;
     flex-direction: column;

@@ -1,296 +1,232 @@
-/* ─── Page Container ─────────────────────────────────────────── */
+/* ─── Page ────────────────────────────────────────────────────── */
 
-/* The outermost wrapper for the entire home page. */
+/* Full-page background: the hero photo fills the viewport, centered elements float on top. */
 .home-page {
-  background: transparent;
+  align-items: center;
+  background-image: url("https://images.stockcake.com/public/5/9/d/59d8fa0a-12fe-49a6-a7be-0bca48292ebf/dynamic-urban-dance-stockcake.jpg");
+  background-position: center;
+  background-size: cover;
   color: var(--color-text);
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-body);
+  gap: 1rem;
   min-height: 100vh;
-  padding-bottom: 3rem;
-}
-
-/* ─── Hero Banner ────────────────────────────────────────────── */
-
-/* The big photo section that fills the top of the home page. */
-.hero-banner {
-  min-height: 65vh;
-  overflow: visible;
+  padding: 2rem 1.5rem 3rem;
   position: relative;
-  /* Fades the bottom of the hero so it blends smoothly into the section below. */
-  -webkit-mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
 }
 
-/* The full-bleed background photo behind the hero text. */
-.hero-image {
-  height: 100%;
+/* Dark overlay so the content stays readable over the photo. */
+.home-page::before {
+  background: rgba(8, 13, 22, 0.68);
+  content: "";
   inset: 0;
-  object-fit: cover;
-  position: absolute;
+  pointer-events: none;
+  position: fixed;
+  z-index: 0;
+}
+
+/* Both floating elements stack above the overlay. */
+.home-nav-wrap,
+.home-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Floating Nav ────────────────────────────────────────────── */
+
+/* Centers and constrains the nav to match the container width. */
+.home-nav-wrap {
+  display: flex;
+  justify-content: center;
   width: 100%;
 }
 
-/* Dark tinted layer on top of the hero photo so the white text is readable. */
-.hero-overlay {
-  background: linear-gradient(
-    105deg,
-    rgba(21, 34, 56, 0.82) 22%,
-    rgba(56, 75, 112, 0.48) 58%,
-    rgba(184, 0, 31, 0.27) 100%
-  );
-  inset: 0;
-  position: absolute;
+/* Rounds and shadows the nav strip on the home page. */
+.category-strip.category-strip--home {
+  background-color: rgba(15, 22, 33, 0.72);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  margin: 0 auto;
+  max-width: 900px;
+  width: 100%;
 }
 
-/* ─── Hero Polaroid ──────────────────────────────────────────── */
+/* ─── Floating Container ──────────────────────────────────────── */
 
-/* The tilted polaroid-style photo floating on the right side of the hero. */
-.hero-polaroid {
-  pointer-events: none;
-  position: absolute;
-  right: 6%;
-  top: 14%;
-  transform: rotate(7deg);
-  width: clamp(180px, 24vw, 320px);
-  z-index: 2;
+/* The main card that holds the header section and studio grid. */
+.home-container {
+  background: rgba(15, 22, 33, 0.75);
+  border-radius: 1rem;
+  box-shadow: 0 8px 36px rgba(0, 0, 0, 0.55);
+  max-width: 900px;
+  padding: 2rem 2rem 2.5rem;
+  width: 100%;
 }
 
-/* The white polaroid frame with a drop shadow. */
-.hero-polaroid-frame {
+/* ─── Header Row ──────────────────────────────────────────────── */
+
+/* Title and search on the left, polaroid on the right. */
+.home-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.home-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Small cursive label above the app name. */
+.home-kicker {
+  color: var(--color-accent);
+  font-family: var(--font-accent);
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+/* The app name. */
+.home-title {
+  color: rgba(235, 237, 243, 0.95);
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 0.15rem 0 0.6rem;
+}
+
+/* Short description below the app name. */
+.home-subtitle {
+  color: rgba(177, 189, 204, 0.88);
+  font-size: 0.93rem;
+  line-height: 1.6;
+  margin: 0 0 1.1rem;
+  max-width: 400px;
+}
+
+/* Search bar: text input + icon button. */
+.home-search-form {
+  align-items: stretch;
+  display: flex;
+  gap: 0.45rem;
+  max-width: 400px;
+}
+
+.home-search-input {
+  background: rgba(9, 14, 22, 0.72);
+  border: 1px solid rgba(177, 189, 204, 0.28);
+  border-radius: 0.4rem;
+  box-sizing: border-box;
+  color: rgba(235, 237, 243, 0.95);
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  padding: 0.5rem 0.8rem;
+}
+
+.home-search-input::placeholder {
+  color: rgba(177, 189, 204, 0.5);
+}
+
+.home-search-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(196, 69, 69, 0.18);
+}
+
+.home-search-button {
+  align-items: center;
+  background: var(--color-accent);
+  border: 0;
+  border-radius: 0.4rem;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.85rem;
+  transition: background 0.2s ease;
+}
+
+.home-search-button:hover {
+  background: #ad3d3d;
+}
+
+/* ─── Polaroid ────────────────────────────────────────────────── */
+
+.home-polaroid {
+  flex-shrink: 0;
+  transform: rotate(5deg);
+  width: 155px;
+}
+
+.home-polaroid-frame {
   background: #fff;
   border-radius: 0.2rem;
   box-shadow:
-    0 16px 35px rgba(14, 20, 32, 0.36),
-    0 4px 10px rgba(14, 20, 32, 0.24);
-  padding: 0.65rem 0.65rem 2.65rem;
+    0 10px 28px rgba(14, 20, 32, 0.48),
+    0 3px 8px rgba(14, 20, 32, 0.3);
+  padding: 0.55rem 0.55rem 2.1rem;
 }
 
-/* The photo inside the polaroid frame. */
-.hero-polaroid-photo {
+.home-polaroid-photo {
   aspect-ratio: 4 / 5;
   display: block;
-  filter: contrast(1.08) saturate(1.08) brightness(1.08);
+  filter: contrast(1.06) saturate(1.06);
   object-fit: cover;
   object-position: center;
   width: 100%;
 }
 
-/* ─── Hero Content ───────────────────────────────────────────── */
+/* ─── Divider ─────────────────────────────────────────────────── */
 
-/* The left-side text column in the hero: title, subtitle, search bar, and pills. */
-.hero-content {
-  box-sizing: border-box;
-  margin-left: 5rem;
-  max-width: 550px;
-  padding: 5.5rem 2rem 4.2rem;
-  position: relative;
-  width: min(100%, 550px);
-  z-index: 3;
+.home-divider {
+  background: rgba(177, 189, 204, 0.18);
+  height: 1px;
+  margin: 1.8rem 0 1.4rem;
 }
 
-/* The small cursive text above the main hero heading. */
-.hero-kicker {
-  color: var(--color-background);
-  font-family: var(--font-accent);
-  font-size: 1.4rem;
-  margin: 0;
-}
+/* ─── Studios Section ─────────────────────────────────────────── */
 
-/* The main hero heading. */
-.hero-content h1 {
-  color: rgba(235, 237, 243, 0.95);
-  font-size: clamp(2rem, 3vw, 3.6rem);
-  letter-spacing: -0.03em;
-  line-height: 1.03;
-  margin: 0.2rem 0 0.9rem;
-  max-width: 650px;
-  text-shadow: 10px 0 20px rgba(2, 2, 2, 0.8);
-}
-
-/* The short description text below the hero heading. */
-.hero-subtitle {
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 1rem;
-  line-height: 1.6;
-  margin: 0;
-  max-width: 700px;
-}
-
-/* ─── Hero Search ────────────────────────────────────────────── */
-
-/* The search bar + button row inside the hero. */
-.hero-search-form {
-  align-items: stretch;
-  display: grid;
-  gap: 0.8rem;
-  grid-template-columns: 3.5fr 0.5fr;
-  margin-top: 1.2rem;
-  max-width: 550px;
-}
-
-/* The text input field inside the hero search bar. */
-.hero-search-input {
-  background: var(--color-background);
-  border: 1px solid rgba(56, 75, 112, 0.15);
-  border-radius: 0.35rem;
-  box-sizing: border-box;
-  color: var(--color-primary);
-  font-family: var(--font-body);
-  font-size: 1.03rem;
-  font-weight: 500;
-  outline: none;
-  padding: 0.5rem 1rem;
-  width: 100%;
-}
-
-/* Placeholder text inside the search input. */
-.hero-search-input::placeholder {
-  color: rgba(56, 75, 112, 0.72);
-  font-size: 0.9rem;
-}
-
-/* Red ring that appears around the search input when you click into it. */
-.hero-search-input:focus {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(196, 69, 69, 0.18);
-}
-
-/* The red search submit button. */
-.hero-search-button {
-  align-items: center;
-  background: var(--color-accent);
-  border: 0;
-  border-radius: 0.35rem;
-  box-sizing: border-box;
-  color: var(--color-background);
-  cursor: pointer;
-  display: inline-flex;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 500;
-  gap: 0.58rem;
-  letter-spacing: 0.04em;
-  padding: 0.6rem 0.7rem;
+/* Small uppercase label above the studio grid. */
+.home-studios-label {
+  color: rgba(177, 189, 204, 0.75);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  margin: 0 0 0.9rem;
   text-transform: uppercase;
 }
 
-/* Darkens the search button when you hover over it. */
-.hero-search-button:hover {
-  background: #ad3d3d;
-}
-
-/* Accessibility focus ring for keyboard users. */
-.hero-search-button:focus-visible {
-  box-shadow: 0 0 0 3px rgba(252, 250, 238, 0.55);
-  outline: none;
-}
-
-/* ─── Hero Pills ─────────────────────────────────────────────── */
-
-/* The row of quick-filter tags below the hero search bar. */
-.hero-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1.8rem;
-  max-width: 760px;
-}
-
-/* Each individual quick-filter tag in the hero. */
-.hero-pill {
-  background: transparent;
-  border: 1px solid rgba(252, 250, 238, 0.55);
-  border-radius: 999px;
-  color: var(--color-background);
-  font-size: 0.84rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  padding: 0.35rem 0.7rem;
-}
-
-/* ─── Featured Studios Section ───────────────────────────────── */
-
-/* Invisible layout wrapper — just controls spacing for the featured section. */
-.featured-section {
-  margin: 3rem 0 0;
-  max-width: none;
-  padding: 0;
-  width: 100%;
-}
-
-/* The dark panel behind the featured studio cards.
-   Edges fade out so it blends into the background photo. */
-.featured-inner {
-  /* background-color: rgba(252, 250, 238, 0.93); */
-  background-color: rgba(15, 22, 33, 0.873);
-  padding: 4rem 2.5rem 5rem;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 8%,
-    black 92%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 8%,
-    black 92%,
-    transparent 100%
-  );
-}
-
-/* ─── Section Heading ────────────────────────────────────────── */
-
-/* Centers the heading and subtitle above the featured studio grid. */
-.section-heading {
-  text-align: center;
-}
-
-/* The small red cursive label above the section heading. */
-.section-kicker {
-  color: var(--color-accent);
-  font-family: var(--font-accent);
-  font-size: 1.2rem;
-  margin: 0;
-}
-
-/* The main section heading text. */
-.section-heading h2 {
-  color: rgba(235, 237, 243, 0.95);
-  font-size: clamp(1.8rem, 3vw, 2.3rem);
-  margin: 0.2rem 0 0.45rem;
-}
-
-/* The descriptive subtext below the section heading. */
-.section-heading p {
+.home-status {
   color: rgba(177, 189, 204, 0.88);
+  font-size: 0.9rem;
   margin: 0;
 }
 
-/* ─── Featured Grid ──────────────────────────────────────────── */
-
-/* The 3-column grid that holds the featured studio photo cards. */
-.featured-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 1.4rem;
-  align-items: stretch;
+.home-status--error {
+  color: var(--color-accent);
 }
 
-/* ─── Featured Studio Cards ──────────────────────────────────── */
+/* 3-column grid of studio photo cards. */
+.home-studios-grid {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(3, 1fr);
+}
 
-/* Each studio photo card in the featured grid — clicking it goes to the studio page. */
+/* ─── Featured Studio Cards ───────────────────────────────────── */
+
+/* Each studio photo card — smaller aspect ratio to fit in the container. */
 .featured-card {
-  border-radius: 0.4rem;
+  aspect-ratio: 5 / 4;
+  border-radius: 0.45rem;
   color: white;
   display: block;
-  aspect-ratio: 8 / 7;
   overflow: hidden;
   position: relative;
   text-decoration: none;
-  /* Fades all four edges of the card so it feels embedded rather than bordered. */
+  /* Edge fading retained on these cards per design intent. */
   -webkit-mask-image:
     linear-gradient(
       to bottom,
@@ -325,129 +261,80 @@
   mask-composite: intersect;
 }
 
-/* The studio photo inside the card — fills the full card area. */
 .featured-card img {
   display: block;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.35s ease;
   width: 100%;
 }
 
-/* Dark gradient that fades in over the bottom of the card photo so the studio name is readable. */
+.featured-card:hover img {
+  transform: scale(1.04);
+}
+
+/* Gradient overlay so the studio name is readable over the photo. */
 .featured-card-overlay {
   background: linear-gradient(
     180deg,
-    rgba(20, 27, 41, 0.08) 38%,
-    rgba(20, 27, 41, 0.86) 100%
+    rgba(20, 27, 41, 0.04) 40%,
+    rgba(20, 27, 41, 0.84) 100%
   );
   inset: 0;
   position: absolute;
 }
 
-/* The studio name and neighborhood label at the bottom of each card. */
 .featured-card-content {
   bottom: 0;
   left: 0;
-  padding: 1rem;
+  padding: 0.7rem 0.8rem;
   position: absolute;
 }
 
-/* Studio name text on the card. */
 .featured-card-content h3 {
   font-family: var(--font-body);
-  font-size: 1.75rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  line-height: 1.08;
+  line-height: 1.1;
   margin: 0;
 }
 
-/* Neighborhood or style text below the studio name on the card. */
 .featured-card-content p {
-  color: rgba(252, 250, 238, 0.92);
-  margin-top: 0.4rem;
+  color: rgba(252, 250, 238, 0.88);
+  font-size: 0.75rem;
+  margin-top: 0.15rem;
 }
 
-/* ─── Status Messages ────────────────────────────────────────── */
+/* ─── Responsive ──────────────────────────────────────────────── */
 
-/* Generic loading or info message shown when studios are loading. */
-.status-message {
-  color: rgba(177, 189, 204, 0.88);
-  margin-top: 1rem;
-  text-align: center;
-}
-
-/* Error state — turns the message red. */
-.status-message.error {
-  color: var(--color-accent);
-}
-
-/* ─── Placeholder Pages ──────────────────────────────────────── */
-
-/* Cream panel used on pages that aren't fully built out yet. */
-.placeholder-page {
-  background: rgba(252, 250, 238, 0.93);
-  border-radius: 0.8rem;
-  box-shadow: 0 8px 32px rgba(14, 20, 32, 0.28);
-  color: var(--color-primary);
-  font-family: var(--font-body);
-  margin: 2rem auto;
-  max-width: 1100px;
-  padding: 2.5rem 1rem;
-}
-
-/* ─── Responsive ─────────────────────────────────────────────── */
-
-/* Tablet: shrinks the polaroid and switches the grid to 2 columns. */
-@media (max-width: 980px) {
-  .hero-polaroid {
-    right: 1rem;
-    top: 20%;
-    width: clamp(150px, 26vw, 220px);
+/* Tablet: stack the header vertically and shrink the polaroid. */
+@media (max-width: 700px) {
+  .home-header {
+    flex-direction: column-reverse;
+    gap: 1rem;
   }
-  .featured-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  .home-polaroid {
+    align-self: flex-end;
+    width: 120px;
+  }
+
+  .home-studios-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Tablet mid-range: slightly smaller card titles. */
-@media (min-width: 651px) and (max-width: 980px) {
-  .featured-card-content h3 {
-    font-size: 1.45rem;
-  }
-}
-
-/* Phone: hides the polaroid, collapses the hero text, single-column grid. */
-@media (max-width: 640px) {
-  .hero-banner {
-    min-height: 59vh;
-  }
-  .hero-polaroid {
-    display: none;
-  }
-  .hero-content {
-    margin: 0 1rem;
-    max-width: none;
-    padding: 3.5rem 1rem 2.8rem;
-    width: calc(100% - 2rem);
-  }
-  .hero-pills {
-    max-width: 100%;
-  }
-  .hero-search-form {
-    grid-template-columns: 1fr;
-    max-width: 100%;
-  }
-  .hero-search-button {
-    justify-content: center;
-  }
-  .featured-grid {
-    grid-template-columns: 1fr;
-  }
-  .featured-section {
-    margin: 1.5rem 0 0;
-    width: 100%;
-  }
-  .featured-inner {
+/* Phone: single column for everything. */
+@media (max-width: 460px) {
+  .home-page {
     padding: 1.5rem 1rem 2rem;
+  }
+
+  .home-container {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .home-studios-grid {
+    grid-template-columns: 1fr;
   }
 }

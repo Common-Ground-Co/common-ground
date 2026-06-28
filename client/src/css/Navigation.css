@@ -10,21 +10,6 @@
   position: relative;
   width: 100%;
   z-index: 3;
-  /* Fades the top and bottom edges so it blends into the page background. */
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 25%,
-    black 85%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 22%,
-    black 78%,
-    transparent 100%
-  );
 }
 
 /* Home page only — pulls the nav strip up so it overlaps the bottom of the hero photo. */
@@ -88,4 +73,25 @@
   .category-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* ─── Interior Page Variants ──────────────────────────────────── */
+
+/* Floating centered nav used on all non-home pages — matches the 900px container width. */
+.category-strip.category-strip--page {
+  background-color: rgba(15, 22, 33, 0.72);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+  margin: 0 auto;
+  max-width: 900px;
+  width: 100%;
+}
+
+/* Wrapper used by every interior page to center and position the nav. */
+.page-nav-wrap {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  z-index: 1;
 }
