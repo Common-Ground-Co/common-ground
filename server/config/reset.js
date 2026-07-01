@@ -1,8 +1,9 @@
 // Reset script: rebuilds tables from schema and seeds initial dataset.
 import pool from "./database.js";
 import { schema } from "./schema.js";
-import studios from "../data/studios.js";
-import igAccounts from "../data/igAccounts.js";
+import { readFileSync } from "fs";
+const studios = JSON.parse(readFileSync(new URL("../data/studios.json", import.meta.url)));
+const igAccounts = JSON.parse(readFileSync(new URL("../data/igAccounts.json", import.meta.url)));
 
 const seedStudios = async () => {
   for (const studio of studios) {

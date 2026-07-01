@@ -67,10 +67,6 @@ common-ground/
 - [ ] Add more dance studios
 - [ ] Studio detail page — payment method pop-up
 - [ ] Better display of studio payment alternatives (drop-in, class packs, memberships)
-- [ ] Review protection — rate limiting or lightweight auth to prevent spam without requiring full accounts
-- [ ] Refactor data seeding to use JSON instead of JS objects
-- [ ] Refactor backend to separate responsibilities across layers
-- [ ] Explore IFTTT for automated API calls
 - [ ] Wrap app with Capacitor for mobile (modern Cordova alternative)
 
 ### Future
