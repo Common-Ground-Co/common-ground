@@ -4,6 +4,8 @@ A curated directory of adult dance studios in Chicago. Find classes by style, le
 
 Currently in beta with 5 dancers.
 
+> **Note:** This project is still under active development. Some features described here may be partially implemented, in progress, or being reworked.
+
 **[Live App](https://common-ground-1-0gsv.onrender.com/)**
 
 ---
@@ -37,6 +39,22 @@ Currently in beta with 5 dancers.
 - Centralized scraper config — adding a new studio requires one file entry, no new scraper file
 
 **Studios currently scraped:** Puzzle Box, Visceral Dance Center, Indie Media, Dance Forever
+
+---
+
+## Scraping
+
+One centralized scraper handles every studio — there is no per-studio scraping code. Each studio in `server/scrapers/studios.config.js` provides only facts (id, name, schedule URL, style filters); *how* its page is scraped lives in a **scrape schema** (`server/scrapers/scrapeSchemas/<key>.json`) describing selectors and pagination behavior.
+
+1. When a studio is first scraped, Puppeteer loads the page (including embedded booking-widget iframes), captures the DOM, and sends it to an LLM (Claude Haiku via OpenRouter), whose only job is to write the scrape schema — it never extracts class data itself.
+2. Every scrape after that executes the cached schema with Puppeteer alone — no LLM call, no cost.
+3. A validation pass checks every scrape: if the schema returns no usable rows (site redesigned, selectors dead), it's regenerated automatically on that run.
+
+All semantic work (date/time normalization, genre/skill-level parsing) happens in `server/scrapers/normalize.js`, after extraction — schemas stay purely structural.
+
+Requires `OPENROUTER_API_KEY` in `server/.env` (only used when a scrape schema must be generated).
+
+Run scrapers manually with `cd server && node scrapers/runScrapers.js [studioKey]`; add `DRY_RUN=1` to skip DB writes and `DEBUG=1` for verbose output.
 
 ---
 

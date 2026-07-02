@@ -1,10 +1,20 @@
+// Orchestrator: launches Puppeteer, hands each configured studio's page to
+// its own scraper function (hardcoded selectors, no LLM/schema step), then
+// normalizes, filters, and writes results to the DB. Usage:
+//   node scrapers/runScrapers.js [studioKey]   (DRY_RUN=1 / DEBUG=1 env flags)
+import puppeteer from "puppeteer";
 import pool from "../config/database.js";
 import studios from "./studios.config.js";
-import { loadClasses } from "./pageLoader.js";
-import { parseSkillLevel, parseGenre, shouldInclude } from "./sharedParsers.js";
+import { scrapeVisceral } from "./visceralScraper.js";
+import { normalizeRows, shouldInclude } from "./normalize.js";
 
 const DRY_RUN = process.env.DRY_RUN === "1";
 const DEBUG = process.env.DEBUG === "1";
+
+// Add an entry here the same day a studio gets its own scraper file.
+const SCRAPERS = {
+  visceral: scrapeVisceral,
+};
 
 const today = new Date();
 const cutoff = new Date(today);
@@ -12,136 +22,140 @@ cutoff.setDate(today.getDate() + 12);
 const TODAY_DATE = today.toISOString().split("T")[0];
 const CUTOFF_DATE = cutoff.toISOString().split("T")[0];
 
-function getDayOfWeekFromIsoDate(isoDate) {
-  const [year, month, day] = String(isoDate).split("-").map(Number);
-  const utcDate = new Date(Date.UTC(year, month - 1, day));
-  return utcDate.toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
-}
+async function runStudio(browser, config) {
+  const scrape = SCRAPERS[config.key];
+  if (!scrape) {
+    console.warn(`⚠️  ${config.studioName}: no scraper implemented yet — skipping`);
+    return;
+  }
 
-function normalizeTime(t) {
-  if (!t) return null;
-  const parts = t.split(":");
-  if (parts.length === 2) return `${parts[0].padStart(2, "0")}:${parts[1]}:00`;
-  if (parts.length === 3) return `${parts[0].padStart(2, "0")}:${parts[1]}:${parts[2]}`;
-  return null;
-}
-
-async function runStudio(config) {
   console.log(`🕷️  Scraping ${config.studioName}...`);
+  const page = await browser.newPage();
 
-  let classes;
   try {
-    classes = await loadClasses(config);
-  } catch (err) {
-    console.warn(`⚠️  Page load failed for ${config.studioName}: ${err.message}`);
-    return;
-  }
+    const rawRows = await scrape(page, config);
 
-  console.log(`📦 ${config.studioName}: ${classes.length} raw classes`);
-
-  if (DEBUG) {
-    console.log("  [DEBUG] Raw classes:");
-    classes.forEach((c, i) =>
-      console.log(`    [${i}] date="${c.date}" time="${c.time}" class="${c.className}" instructor="${c.instructor}"`),
-    );
-  }
-
-  const filtered = classes.filter((c) =>
-    c.className && shouldInclude(c.className, config.allowedStyles, config.skipKeywords),
-  );
-
-  if (DEBUG) {
-    console.log(`  [DEBUG] After keyword/allowlist filter: ${filtered.length} classes`);
-  }
-
-  if (filtered.length === 0) {
-    console.warn(`⚠️  Zero classes after filtering for ${config.studioName} — skipping DB write`);
-    return;
-  }
-  if (filtered.length > 300) {
-    console.warn(`⚠️  ${filtered.length} classes seems too many for ${config.studioName} — skipping DB write`);
-    return;
-  }
-
-  const valid = filtered.filter((c) => {
-    if (!c.date) {
-      if (DEBUG) console.log(`  [DEBUG] Dropping "${c.className}" — no date`);
-      return false;
+    if (DEBUG) {
+      console.log("  [DEBUG] Raw extracted rows:");
+      rawRows.forEach((r, i) =>
+        console.log(
+          `    [${i}] date="${r.date}" day="${r.day}" startTime="${r.startTime}" class="${r.className}" instructor="${r.instructor}"`,
+        ),
+      );
     }
-    const inWindow = c.date >= TODAY_DATE && c.date < CUTOFF_DATE;
-    if (!inWindow && DEBUG) {
-      console.log(`  [DEBUG] Dropping "${c.className}" — date "${c.date}" outside window [${TODAY_DATE}, ${CUTOFF_DATE})`);
-    }
-    return inWindow;
-  });
 
-  if (valid.length === 0) {
-    console.warn(`⚠️  No valid-dated classes for ${config.studioName} — skipping DB write`);
-    return;
-  }
+    const normalized = normalizeRows(rawRows, config);
+    const usable = normalized.filter((r) => r.className && r.date);
 
-  if (DRY_RUN) {
-    console.log(`🔍 DRY RUN — ${config.studioName}: ${valid.length} classes`);
-    valid.forEach((c) => {
-      console.log(`  ${c.date} ${c.time || "??"} — ${c.className}${c.instructor ? ` (${c.instructor})` : ""}`);
+    // Some studios re-list the same class across overlapping views; dedupe on
+    // the identity the DB cares about.
+    const seen = new Set();
+    const deduped = usable.filter((r) => {
+      const k = `${r.className}|${r.date}|${r.time}`;
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
     });
-    return;
-  }
 
-  await pool.query("DELETE FROM classes WHERE studio_id = $1", [config.studioId]);
-
-  let inserted = 0;
-  let skipped = 0;
-
-  for (const c of valid) {
-    const startTime = normalizeTime(c.time);
-    if (!startTime) { skipped++; continue; }
-
-    const style = parseGenre(c.className);
-    const skillLevel = parseSkillLevel(c.className);
-    const dayOfWeek = getDayOfWeekFromIsoDate(c.date);
-
-    await pool.query(
-      `INSERT INTO classes (studio_id, name, instructor, style, skill_level, day_of_week, class_date, start_time, booking_url)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-      [
-        config.studioId,
-        c.className,
-        c.instructor || null,
-        style,
-        skillLevel,
-        dayOfWeek,
-        c.date,
-        startTime,
-        c.bookingUrl || null,
-      ],
+    const filtered = deduped.filter(
+      (r) =>
+        shouldInclude(r.className, config.allowedStyles, config.skipKeywords) &&
+        r.date >= TODAY_DATE &&
+        r.date < CUTOFF_DATE,
     );
-    inserted++;
-  }
 
-  console.log(`✅ ${config.studioName}: ${inserted} inserted, ${skipped} skipped`);
+    if (DEBUG) {
+      console.log(
+        `  [DEBUG] ${normalized.length} normalized → ${usable.length} usable → ${deduped.length} deduped → ${filtered.length} after keyword/window filter`,
+      );
+    }
+
+    if (filtered.length === 0) {
+      console.warn(
+        `⚠️  Zero classes after filtering for ${config.studioName} — skipping DB write`,
+      );
+      return;
+    }
+    if (filtered.length > 300) {
+      console.warn(
+        `⚠️  ${filtered.length} classes seems too many for ${config.studioName} — skipping DB write`,
+      );
+      return;
+    }
+
+    if (DRY_RUN) {
+      console.log(`🔍 DRY RUN — ${config.studioName}: ${filtered.length} classes`);
+      filtered.forEach((r) => {
+        console.log(
+          `  ${r.date} ${r.time || "??"} — ${r.className}${r.instructor ? ` (${r.instructor})` : ""}`,
+        );
+      });
+      return;
+    }
+
+    await pool.query("DELETE FROM classes WHERE studio_id = $1", [
+      config.studioId,
+    ]);
+
+    let inserted = 0;
+    let skipped = 0;
+    for (const r of filtered) {
+      if (!r.time) {
+        skipped++;
+        continue;
+      }
+      await pool.query(
+        `INSERT INTO classes (studio_id, name, instructor, style, skill_level, day_of_week, class_date, start_time, booking_url)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [
+          config.studioId,
+          r.className,
+          r.instructor,
+          r.style,
+          r.skillLevel,
+          r.dayOfWeek,
+          r.date,
+          r.time,
+          r.bookingUrl,
+        ],
+      );
+      inserted++;
+    }
+
+    console.log(
+      `✅ ${config.studioName}: ${inserted} inserted, ${skipped} skipped`,
+    );
+  } catch (err) {
+    console.warn(`⚠️  Scrape failed for ${config.studioName}: ${err.message}`);
+  } finally {
+    await page.close();
+  }
 }
 
 const run = async () => {
-  const target = process.argv[2]?.toLowerCase();
+  const targetKey = process.argv[2]?.toLowerCase();
 
-  const toRun = target
-    ? studios.filter((s) => s.key === target)
+  const toRun = targetKey
+    ? studios.filter((s) => s.key === targetKey)
     : studios;
 
-  if (target && toRun.length === 0) {
+  if (targetKey && toRun.length === 0) {
     const keys = studios.map((s) => s.key).join(", ");
-    console.error(`⚠️  Unknown scraper "${target}". Available: ${keys}`);
+    console.error(`⚠️  Unknown scraper "${targetKey}". Available: ${keys}`);
     process.exit(1);
   }
 
-  console.log(`🗓️  Scraping window: ${TODAY_DATE} → ${CUTOFF_DATE}${DRY_RUN ? " (dry run)" : ""}`);
+  console.log(
+    `🗓️  Scraping window: ${TODAY_DATE} → ${CUTOFF_DATE}${DRY_RUN ? " (dry run)" : ""}`,
+  );
 
+  const browser = await puppeteer.launch({ headless: true });
   try {
     for (const studio of toRun) {
-      await runStudio(studio);
+      await runStudio(browser, studio);
     }
   } finally {
+    await browser.close();
     await pool.end();
     console.log("🌱 Done");
   }
