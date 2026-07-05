@@ -67,7 +67,11 @@ export default [
     studioId: 4,
     studioName: "Indie Media Studio",
     scheduleUrl: "https://www.indiemediastudio.com/",
-    allowedStyles: null,
+    // The "Upcoming Classes" feed also carries one-off non-class events
+    // (showcases, watch parties, etc). Every real class title ends in
+    // "...Class (Weekday)", so requiring "class" is more durable than
+    // maintaining a skip-keyword per event type as they come and go.
+    allowedStyles: ["class"],
     skipKeywords: ["day pass", "academy"],
   },
 ];

@@ -6,6 +6,8 @@ import puppeteer from "puppeteer";
 import pool from "../config/database.js";
 import studios from "./studios.config.js";
 import { scrapeVisceral } from "./visceralScraper.js";
+import { scrapePuzzlebox } from "./puzzleboxScraper.js";
+import { scrapeIndieMedia } from "./indieMediaScraper.js";
 import { normalizeRows, shouldInclude } from "./normalize.js";
 
 const DRY_RUN = process.env.DRY_RUN === "1";
@@ -14,6 +16,8 @@ const DEBUG = process.env.DEBUG === "1";
 // Add an entry here the same day a studio gets its own scraper file.
 const SCRAPERS = {
   visceral: scrapeVisceral,
+  puzzlebox: scrapePuzzlebox,
+  indiemedia: scrapeIndieMedia,
 };
 
 const today = new Date();
