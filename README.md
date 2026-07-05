@@ -36,7 +36,7 @@ Currently in beta with 5 dancers.
 - Anonymous studio reviews with author-controlled edit and delete
 - IG Class Radar page for finding classes through studio Instagram accounts
 - Admin page for managing studio content (add, edit, delete)
-- Centralized scraper config — adding a new studio requires one file entry, no new scraper file
+- Separate scraper files per studio using hardcoded selectors, sharing one normalization layer
 
 **Studios currently scraped:** Puzzle Box, Visceral Dance Center, Indie Media, Dance Forever
 
@@ -44,17 +44,16 @@ Currently in beta with 5 dancers.
 
 ## Scraping
 
-One centralized scraper handles every studio — there is no per-studio scraping code. Each studio in `server/scrapers/studios.config.js` provides only facts (id, name, schedule URL, style filters); *how* its page is scraped lives in a **scrape schema** (`server/scrapers/scrapeSchemas/<key>.json`) describing selectors and pagination behavior.
+Each studio gets its own scraper file (`server/scrapers/<key>Scraper.js`) with hardcoded selectors for that studio's site. There is no shared parsing logic that tries to work generically across every studio, since every studio's website is built differently.
 
-1. When a studio is first scraped, Puppeteer loads the page (including embedded booking-widget iframes), captures the DOM, and sends it to an LLM (Claude Haiku via OpenRouter), whose only job is to write the scrape schema — it never extracts class data itself.
-2. Every scrape after that executes the cached schema with Puppeteer alone — no LLM call, no cost.
-3. A validation pass checks every scrape: if the schema returns no usable rows (site redesigned, selectors dead), it's regenerated automatically on that run.
+Adding a new studio is a manual process:
 
-All semantic work (date/time normalization, genre/skill-level parsing) happens in `server/scrapers/normalize.js`, after extraction — schemas stay purely structural.
+1. Open the studio's schedule page and inspect it in the browser to grab the real selectors and attributes needed for the class name, instructor, date and time, and booking link.
+2. Hand those selectors to AI to write a new Puppeteer scraper script for that studio, following the pattern of an existing scraper file.
+3. Decide the fastest way for Puppeteer to actually get at the data on that page. Some studios need iframe detection, some need clicking a Load More button repeatedly, some need scrolling, whatever that specific site requires.
+4. Add the studio's facts (id, name, schedule URL, style filters, skip keywords) to `server/scrapers/studios.config.js`, and register the new scraper function in `server/scrapers/runScrapers.js`.
 
-Requires `OPENROUTER_API_KEY` in `server/.env` (only used when a scrape schema must be generated).
-
-Run scrapers manually with `cd server && node scrapers/runScrapers.js [studioKey]`; add `DRY_RUN=1` to skip DB writes and `DEBUG=1` for verbose output.
+All semantic work (date and time normalization, genre and skill level parsing, filtering) happens afterward in `server/scrapers/normalize.js`, shared across every studio. Scraper files only get raw text and links off the page.
 
 ---
 
