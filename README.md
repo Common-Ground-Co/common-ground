@@ -38,7 +38,9 @@ Currently in beta with 5 dancers.
 - Admin page for managing studio content (add, edit, delete)
 - Separate scraper files per studio using hardcoded selectors, sharing one normalization layer
 
-**Studios currently scraped:** Puzzle Box, Visceral Dance Center, Indie Media, Dance Forever
+**Studios currently scraped:** Puzzle Box, Visceral Dance Center, Indie Media
+
+**Configured but pending a scraper rewrite:** Dance Forever (has a config entry in `studios.config.js` but no scraper file yet, so it's skipped on every run)
 
 ---
 
@@ -53,7 +55,7 @@ Adding a new studio is a manual process:
 3. Decide the fastest way for Puppeteer to actually get at the data on that page. Some studios need iframe detection, some need clicking a Load More button repeatedly, some need scrolling, whatever that specific site requires.
 4. Add the studio's facts (id, name, schedule URL, style filters, skip keywords) to `server/scrapers/studios.config.js`, and register the new scraper function in `server/scrapers/runScrapers.js`.
 
-All semantic work (date and time normalization, genre and skill level parsing, filtering) happens afterward in `server/scrapers/normalize.js`, shared across every studio. Scraper files only get raw text and links off the page.
+All semantic work (date and time normalization, genre and skill level parsing, filtering) happens afterward in `server/scrapers/normalize.js`, shared across every studio. Scraper files only get raw text and links off the page. Date and time parsing runs on `chrono-node`, since scraped date text shows up in inconsistent formats across studios.
 
 ---
 
