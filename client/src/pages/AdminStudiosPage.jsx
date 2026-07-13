@@ -133,7 +133,9 @@ function AdminStudiosPage() {
     try {
       if (editingStudio) {
         const updated = await adminUpdateStudio(editingStudio.id, payload);
-        setStudios((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+        setStudios((prev) =>
+          prev.map((s) => (s.id === updated.id ? updated : s)),
+        );
         setNotice(`"${updated.name}" updated.`);
       } else {
         const created = await adminCreateStudio(payload);
@@ -199,14 +201,25 @@ function AdminStudiosPage() {
                 <div className="admin-studio-meta">
                   <p className="admin-studio-name">{studio.name}</p>
                   <p className="admin-studio-sub">
-                    {studio.neighborhood || "—"} &middot; {studio.price_range || "—"}
+                    {studio.neighborhood || "—"} &middot;{" "}
+                    {studio.price_range || "—"}
                   </p>
                   <div className="admin-studio-badges">
-                    <span className={`admin-badge ${studio.approved ? "admin-badge--green" : "admin-badge--muted"}`}>
+                    <span
+                      className={`admin-badge ${studio.approved ? "admin-badge--green" : "admin-badge--muted"}`}
+                    >
                       {studio.approved ? "Approved" : "Not approved"}
                     </span>
-                    {studio.classpass && <span className="admin-badge admin-badge--muted">ClassPass</span>}
-                    {studio.work_study && <span className="admin-badge admin-badge--muted">Work Study</span>}
+                    {studio.classpass && (
+                      <span className="admin-badge admin-badge--muted">
+                        ClassPass
+                      </span>
+                    )}
+                    {studio.work_study && (
+                      <span className="admin-badge admin-badge--muted">
+                        Work Study
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="admin-studio-actions">
@@ -234,117 +247,298 @@ function AdminStudiosPage() {
         <div className="admin-modal-overlay" onClick={closeModal}>
           <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
             <div className="admin-modal-head">
-              <h2>{editingStudio ? `Edit — ${editingStudio.name}` : "Add Studio"}</h2>
-              <button className="admin-modal-close" onClick={closeModal} aria-label="Close">
+              <h2>
+                {editingStudio ? `Edit — ${editingStudio.name}` : "Add Studio"}
+              </h2>
+              <button
+                className="admin-modal-close"
+                onClick={closeModal}
+                aria-label="Close"
+              >
                 <i className="fa-solid fa-xmark" />
               </button>
             </div>
-
+            {/** Form */}
             <form className="admin-form" onSubmit={handleSubmit}>
               <div className="admin-form-section-label">Basic Info</div>
 
               <div className="admin-form-row">
-                <label className="admin-label" htmlFor="name">Studio Name</label>
-                <input id="name" name="name" className="admin-input" value={form.name} onChange={handleChange} required />
+                <label className="admin-label" htmlFor="name">
+                  Studio Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  className="admin-input"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                />
               </div>
 
               <div className="admin-form-grid">
                 <div className="admin-form-row">
-                  <label className="admin-label" htmlFor="neighborhood">Neighborhood</label>
-                  <input id="neighborhood" name="neighborhood" className="admin-input" value={form.neighborhood} onChange={handleChange} required />
+                  <label className="admin-label" htmlFor="neighborhood">
+                    Neighborhood
+                  </label>
+                  <input
+                    id="neighborhood"
+                    name="neighborhood"
+                    className="admin-input"
+                    value={form.neighborhood}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
                 <div className="admin-form-row">
-                  <label className="admin-label" htmlFor="address">Address</label>
-                  <input id="address" name="address" className="admin-input" value={form.address} onChange={handleChange} required />
+                  <label className="admin-label" htmlFor="address">
+                    Address
+                  </label>
+                  <input
+                    id="address"
+                    name="address"
+                    className="admin-input"
+                    value={form.address}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
               </div>
 
               <div className="admin-form-grid">
                 <div className="admin-form-row">
-                  <label className="admin-label" htmlFor="website">Website URL</label>
-                  <input id="website" name="website" className="admin-input" value={form.website} onChange={handleChange} required />
+                  <label className="admin-label" htmlFor="website">
+                    Website URL
+                  </label>
+                  <input
+                    id="website"
+                    name="website"
+                    className="admin-input"
+                    value={form.website}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
                 <div className="admin-form-row">
-                  <label className="admin-label" htmlFor="schedule_url">Schedule URL</label>
-                  <input id="schedule_url" name="schedule_url" className="admin-input" value={form.schedule_url} onChange={handleChange} required />
+                  <label className="admin-label" htmlFor="schedule_url">
+                    Schedule URL
+                  </label>
+                  <input
+                    id="schedule_url"
+                    name="schedule_url"
+                    className="admin-input"
+                    value={form.schedule_url}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
               </div>
 
               <div className="admin-form-grid">
                 <div className="admin-form-row">
-                  <label className="admin-label" htmlFor="instagram">Instagram Handle</label>
-                  <input id="instagram" name="instagram" className="admin-input" placeholder="@handle" value={form.instagram} onChange={handleChange} required />
+                  <label className="admin-label" htmlFor="instagram">
+                    Instagram Handle
+                  </label>
+                  <input
+                    id="instagram"
+                    name="instagram"
+                    className="admin-input"
+                    placeholder="@handle"
+                    value={form.instagram}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
                 <div className="admin-form-row">
-                  <label className="admin-label" htmlFor="price_range">Price Range</label>
-                  <input id="price_range" name="price_range" className="admin-input" placeholder="$15–$20 per class" value={form.price_range} onChange={handleChange} required />
+                  <label className="admin-label" htmlFor="price_range">
+                    Price Range
+                  </label>
+                  <input
+                    id="price_range"
+                    name="price_range"
+                    className="admin-input"
+                    placeholder="$15–$20 per class"
+                    value={form.price_range}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
               </div>
 
               <div className="admin-form-row">
-                <label className="admin-label" htmlFor="style">Dance Styles (comma-separated)</label>
-                <input id="style" name="style" className="admin-input" placeholder="Hip-Hop, Jazz, Contemporary" value={form.style} onChange={handleChange} required />
+                <label className="admin-label" htmlFor="style">
+                  Dance Styles (comma-separated)
+                </label>
+                <input
+                  id="style"
+                  name="style"
+                  className="admin-input"
+                  placeholder="Hip-Hop, Jazz, Contemporary"
+                  value={form.style}
+                  onChange={handleChange}
+                  required
+                />
               </div>
 
               <div className="admin-form-row">
-                <label className="admin-label" htmlFor="levels_offered">Levels Offered</label>
-                <input id="levels_offered" name="levels_offered" className="admin-input" placeholder="Beginner Friendly, Intermediate, Advanced" value={form.levels_offered} onChange={handleChange} required />
+                <label className="admin-label" htmlFor="levels_offered">
+                  Levels Offered
+                </label>
+                <input
+                  id="levels_offered"
+                  name="levels_offered"
+                  className="admin-input"
+                  placeholder="Beginner Friendly, Intermediate, Advanced"
+                  value={form.levels_offered}
+                  onChange={handleChange}
+                  required
+                />
               </div>
 
               <div className="admin-form-section-label">Photos</div>
 
               <div className="admin-form-row">
-                <label className="admin-label" htmlFor="photo_url">Main Photo URL</label>
-                <input id="photo_url" name="photo_url" className="admin-input" value={form.photo_url} onChange={handleChange} required />
+                <label className="admin-label" htmlFor="photo_url">
+                  Main Photo URL
+                </label>
+                <input
+                  id="photo_url"
+                  name="photo_url"
+                  className="admin-input"
+                  value={form.photo_url}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="admin-form-row">
-                <label className="admin-label" htmlFor="photo_url_studio_space">Studio Space Photo URL</label>
-                <input id="photo_url_studio_space" name="photo_url_studio_space" className="admin-input" value={form.photo_url_studio_space} onChange={handleChange} required />
+                <label className="admin-label" htmlFor="photo_url_studio_space">
+                  Studio Space Photo URL
+                </label>
+                <input
+                  id="photo_url_studio_space"
+                  name="photo_url_studio_space"
+                  className="admin-input"
+                  value={form.photo_url_studio_space}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="admin-form-row">
-                <label className="admin-label" htmlFor="polaroid_photo_url">Polaroid Photo URL</label>
-                <input id="polaroid_photo_url" name="polaroid_photo_url" className="admin-input" value={form.polaroid_photo_url} onChange={handleChange} required />
+                <label className="admin-label" htmlFor="polaroid_photo_url">
+                  Polaroid Photo URL
+                </label>
+                <input
+                  id="polaroid_photo_url"
+                  name="polaroid_photo_url"
+                  className="admin-input"
+                  value={form.polaroid_photo_url}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="admin-form-row">
-                <label className="admin-label" htmlFor="banner_photo_url">Banner Photo URL</label>
-                <input id="banner_photo_url" name="banner_photo_url" className="admin-input" value={form.banner_photo_url} onChange={handleChange} required />
+                <label className="admin-label" htmlFor="banner_photo_url">
+                  Banner Photo URL
+                </label>
+                <input
+                  id="banner_photo_url"
+                  name="banner_photo_url"
+                  className="admin-input"
+                  value={form.banner_photo_url}
+                  onChange={handleChange}
+                  required
+                />
               </div>
 
               <div className="admin-form-section-label">Content</div>
 
               <div className="admin-form-row">
-                <label className="admin-label" htmlFor="about_studio">About the Studio</label>
-                <textarea id="about_studio" name="about_studio" className="admin-textarea" rows={4} value={form.about_studio} onChange={handleChange} required />
+                <label className="admin-label" htmlFor="about_studio">
+                  About the Studio
+                </label>
+                <textarea
+                  id="about_studio"
+                  name="about_studio"
+                  className="admin-textarea"
+                  rows={4}
+                  value={form.about_studio}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="admin-form-row">
-                <label className="admin-label" htmlFor="curator_review">Curator Review</label>
-                <textarea id="curator_review" name="curator_review" className="admin-textarea" rows={4} value={form.curator_review} onChange={handleChange} required />
+                <label className="admin-label" htmlFor="curator_review">
+                  Curator Review
+                </label>
+                <textarea
+                  id="curator_review"
+                  name="curator_review"
+                  className="admin-textarea"
+                  rows={4}
+                  value={form.curator_review}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="admin-form-row">
-                <label className="admin-label" htmlFor="best_for">Best For</label>
-                <textarea id="best_for" name="best_for" className="admin-textarea" rows={3} value={form.best_for} onChange={handleChange} required />
+                <label className="admin-label" htmlFor="best_for">
+                  Best For
+                </label>
+                <textarea
+                  id="best_for"
+                  name="best_for"
+                  className="admin-textarea"
+                  rows={3}
+                  value={form.best_for}
+                  onChange={handleChange}
+                  required
+                />
               </div>
 
               <div className="admin-form-section-label">Options</div>
 
               <div className="admin-form-grid">
                 <div className="admin-form-row">
-                  <label className="admin-label" htmlFor="work_study_url">Work Study URL / Email</label>
-                  <input id="work_study_url" name="work_study_url" className="admin-input" value={form.work_study_url} onChange={handleChange} required />
+                  <label className="admin-label" htmlFor="work_study_url">
+                    Work Study URL / Email
+                  </label>
+                  <input
+                    id="work_study_url"
+                    name="work_study_url"
+                    className="admin-input"
+                    value={form.work_study_url}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
               </div>
 
               <div className="admin-checkboxes">
                 <label className="admin-checkbox-label">
-                  <input type="checkbox" name="classpass" checked={form.classpass} onChange={handleChange} />
+                  <input
+                    type="checkbox"
+                    name="classpass"
+                    checked={form.classpass}
+                    onChange={handleChange}
+                  />
                   ClassPass accepted
                 </label>
                 <label className="admin-checkbox-label">
-                  <input type="checkbox" name="work_study" checked={form.work_study} onChange={handleChange} />
+                  <input
+                    type="checkbox"
+                    name="work_study"
+                    checked={form.work_study}
+                    onChange={handleChange}
+                  />
                   Work Study available
                 </label>
                 <label className="admin-checkbox-label">
-                  <input type="checkbox" name="approved" checked={form.approved} onChange={handleChange} />
+                  <input
+                    type="checkbox"
+                    name="approved"
+                    checked={form.approved}
+                    onChange={handleChange}
+                  />
                   Approved (visible on site)
                 </label>
               </div>
@@ -352,10 +546,22 @@ function AdminStudiosPage() {
               {formError && <p className="admin-form-error">{formError}</p>}
 
               <div className="admin-form-footer">
-                <button type="submit" className="admin-submit-btn" disabled={submitting}>
-                  {submitting ? "Saving..." : editingStudio ? "Save Changes" : "Add Studio"}
+                <button
+                  type="submit"
+                  className="admin-submit-btn"
+                  disabled={submitting}
+                >
+                  {submitting
+                    ? "Saving..."
+                    : editingStudio
+                      ? "Save Changes"
+                      : "Add Studio"}
                 </button>
-                <button type="button" className="admin-cancel-btn" onClick={closeModal}>
+                <button
+                  type="button"
+                  className="admin-cancel-btn"
+                  onClick={closeModal}
+                >
                   Cancel
                 </button>
               </div>
@@ -366,10 +572,17 @@ function AdminStudiosPage() {
 
       {/* ── Delete Confirmation ── */}
       {confirmDeleteId !== null && (
-        <div className="admin-modal-overlay" onClick={() => setConfirmDeleteId(null)}>
+        <div
+          className="admin-modal-overlay"
+          onClick={() => setConfirmDeleteId(null)}
+        >
           <div className="admin-confirm" onClick={(e) => e.stopPropagation()}>
             <p className="admin-confirm-text">
-              Delete <strong>{studios.find((s) => s.id === confirmDeleteId)?.name}</strong>? This cannot be undone.
+              Delete{" "}
+              <strong>
+                {studios.find((s) => s.id === confirmDeleteId)?.name}
+              </strong>
+              ? This cannot be undone.
             </p>
             <div className="admin-confirm-actions">
               <button
