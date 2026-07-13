@@ -29,7 +29,9 @@ const CUTOFF_DATE = cutoff.toISOString().split("T")[0];
 async function runStudio(browser, config) {
   const scrape = SCRAPERS[config.key];
   if (!scrape) {
-    console.warn(`⚠️  ${config.studioName}: no scraper implemented yet — skipping`);
+    console.warn(
+      `⚠️  ${config.studioName}: no scraper implemented yet — skipping`,
+    );
     return;
   }
 
@@ -86,9 +88,11 @@ async function runStudio(browser, config) {
       );
       return;
     }
-
+    // test block
     if (DRY_RUN) {
-      console.log(`🔍 DRY RUN — ${config.studioName}: ${filtered.length} classes`);
+      console.log(
+        `🔍 DRY RUN — ${config.studioName}: ${filtered.length} classes`,
+      );
       filtered.forEach((r) => {
         console.log(
           `  ${r.date} ${r.time || "??"} — ${r.className}${r.instructor ? ` (${r.instructor})` : ""}`,

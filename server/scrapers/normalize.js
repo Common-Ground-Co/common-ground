@@ -1,104 +1,43 @@
-// Normalization layer: raw strings extracted by a studio's own scraper in,
-// DB-ready values out. Each scraper hardcodes its selectors and owns getting
-// the raw text off the page; this file owns turning that raw text into
-// consistent dates/times/styles — no knowledge of any studio's markup.
+// This file takes the raw text each studio's scraper collects and turns it
+// into one standardized format that the database can store.
 
-const DAY_NAMES = [
-  "sunday",
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
-];
+import * as chrono from "chrono-node";
 
-function fmtDate(d) {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-}
-
-// Any raw string → "YYYY-MM-DD" or null. Cascade of the date shapes studio
-// sites actually use; add cases here (not to schemas) when a new one shows up.
+// Any raw string → "YYYY-MM-DD" or null
+// chrono handles unpredictable dates from raw data
 export function normalizeDate(raw) {
   if (!raw) return null;
 
-  // Embedded ISO date — also catches attribute values like "date-2026-06-28"
-  // and full ISO datetimes.
-  const iso = raw.match(/\d{4}-\d{2}-\d{2}/);
-  if (iso) return iso[0];
+  // Use midnight instead of current timestamp so forwardDate compares by day
+  // and doesn't push today's date forward a year after noon.
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
 
-  // "June 25, 2026" / "Thursday, June 25, 2026" / "May 14, 2026, 8:15 PM"
-  let m = raw.match(/([A-Z][a-z]{2,8})\.?\s+(\d{1,2})(?:st|nd|rd|th)?,\s+(\d{4})/);
-  if (m) {
-    const d = new Date(`${m[1]} ${m[2]}, ${m[3]}`);
-    if (!isNaN(d)) return fmtDate(d);
-  }
+  const results = chrono.parse(raw, startOfToday, { forwardDate: true });
+  if (!results.length) return null;
 
-  // Month + day with no year ("June 29", "Jun 29", "Tue, Jun 30") — assume the
-  // current year, roll to next year if that lands more than 60 days in the past.
-  m = raw.match(/([A-Z][a-z]{2,8})\.?\s+(\d{1,2})(?:st|nd|rd|th)?\b/);
-  if (m) {
-    const currentYear = new Date().getFullYear();
-    let d = new Date(`${m[1]} ${m[2]}, ${currentYear}`);
-    if (isNaN(d) || d < new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)) {
-      d = new Date(`${m[1]} ${m[2]}, ${currentYear + 1}`);
-    }
-    if (!isNaN(d)) return fmtDate(d);
-  }
+  const { start } = results[0];
+  if (!start.isCertain("month") || !start.isCertain("day")) return null;
 
-  return null;
+  const year = start.get("year");
+  const month = start.get("month");
+  const day = start.get("day");
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
 // Any raw string → "HH:MM:00" (24-hour) or null.
 export function normalizeTime(raw) {
   if (!raw) return null;
 
-  // ISO datetime ("2026-06-28T19:45:00")
-  let m = raw.match(/T(\d{2}):(\d{2})/);
-  if (m) return `${m[1]}:${m[2]}:00`;
+  const results = chrono.parse(raw);
+  if (!results.length) return null;
 
-  // "7:15 pm" / "8:15 PM" — must run before the bare HH:MM case
-  m = raw.match(/(\d{1,2}):(\d{2})\s*(am|pm)/i);
-  if (m) {
-    let hours = parseInt(m[1]);
-    const period = m[3].toLowerCase();
-    if (period === "pm" && hours !== 12) hours += 12;
-    if (period === "am" && hours === 12) hours = 0;
-    return `${String(hours).padStart(2, "0")}:${m[2]}:00`;
-  }
+  const { start } = results[0];
+  if (!start.isCertain("hour")) return null;
 
-  // "7 pm" with no minutes
-  m = raw.match(/\b(\d{1,2})\s*(am|pm)\b/i);
-  if (m) {
-    let hours = parseInt(m[1]);
-    const period = m[2].toLowerCase();
-    if (period === "pm" && hours !== 12) hours += 12;
-    if (period === "am" && hours === 12) hours = 0;
-    return `${String(hours).padStart(2, "0")}:00:00`;
-  }
-
-  // Already 24-hour "19:15"
-  m = raw.match(/\b(\d{1,2}):(\d{2})\b/);
-  if (m && parseInt(m[1]) < 24 && parseInt(m[2]) < 60) {
-    return `${m[1].padStart(2, "0")}:${m[2]}:00`;
-  }
-
-  return null;
-}
-
-// "Monday" / "MON" / "every Tuesday" → the next occurrence of that weekday
-// (today counts), as "YYYY-MM-DD". For weekly-recurring schedules that list a
-// day but no date.
-export function resolveDayToDate(raw, from = new Date()) {
-  if (!raw) return null;
-  const lower = raw.toLowerCase();
-  const idx = DAY_NAMES.findIndex(
-    (name) => lower.includes(name) || lower.includes(name.slice(0, 3)),
-  );
-  if (idx === -1) return null;
-  const d = new Date(from);
-  d.setDate(d.getDate() + ((idx - d.getDay() + 7) % 7));
-  return fmtDate(d);
+  const hour = start.get("hour");
+  const minute = start.get("minute");
+  return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`;
 }
 
 export function getDayOfWeekFromIsoDate(isoDate) {
@@ -176,13 +115,12 @@ function resolveBookingUrl(href, baseUrl) {
   }
 }
 
-// Raw scraper rows → DB-shaped rows. Date resolution order: the row's own date
-// field, then a weekly day name resolved to its next occurrence. Time comes
-// from whichever of `time` / `startTime` the studio's scraper populated.
+// Raw scraper rows → DB-shaped rows. Time comes from whichever of `time` /
+// `startTime` the studio's scraper populated.
 export function normalizeRows(rawRows, config) {
   return rawRows.map((r) => {
     const className = r.className || null;
-    const date = normalizeDate(r.date) ?? resolveDayToDate(r.day) ?? null;
+    const date = normalizeDate(r.date);
     return {
       className,
       instructor: r.instructor || null,
