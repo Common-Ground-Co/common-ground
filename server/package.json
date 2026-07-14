@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server.js",
     "reset": "node config/reset.js",
-    "scrape": "node scrapers/runScrapers.js"
+    "scrape": "node scrapers/runScrapers.js",
+    "test:scrapers": "node scrapers/tests/testScrapers.js"
   },
   "keywords": [],
   "author": "",

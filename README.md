@@ -46,14 +46,14 @@ Currently in beta with 5 dancers.
 
 ## Scraping
 
-Each studio gets its own scraper file (`server/scrapers/<key>Scraper.js`) with hardcoded selectors for that studio's site. There is no shared parsing logic that tries to work generically across every studio, since every studio's website is built differently.
+Each studio gets its own scraper file (`server/scrapers/implementations/<key>Scraper.js`) with hardcoded selectors for that studio's site. There is no shared parsing logic that tries to work generically across every studio, since every studio's website is built differently.
 
 Adding a new studio is a manual process:
 
 1. Open the studio's schedule page and inspect it in the browser to grab the real selectors and attributes needed for the class name, instructor, date and time, and booking link.
 2. Hand those selectors to AI to write a new Puppeteer scraper script for that studio, following the pattern of an existing scraper file.
 3. Decide the fastest way for Puppeteer to actually get at the data on that page. Some studios need iframe detection, some need clicking a Load More button repeatedly, some need scrolling, whatever that specific site requires.
-4. Add the studio's facts (id, name, schedule URL, style filters, skip keywords) to `server/scrapers/studios.config.js`, and register the new scraper function in `server/scrapers/runScrapers.js`.
+4. Add the studio's facts (id, name, schedule URL, style filters, skip keywords) to `server/scrapers/studios.config.js`, and register the new scraper function in `server/scrapers/scrapePipeline.js`.
 
 All semantic work (date and time normalization, genre and skill level parsing, filtering) happens afterward in `server/scrapers/normalize.js`, shared across every studio. Scraper files only get raw text and links off the page. Date and time parsing runs on [`chrono-node`](https://github.com/wanasit/chrono), since scraped date text shows up in inconsistent formats across studios (e.g. "Mon 7pm", "7/13 7:00 PM", "Tuesdays at 6:30").
 
@@ -74,6 +74,8 @@ common-ground/
     ├── controllers/         # Route handlers
     ├── routes/              # API route definitions
     ├── scrapers/            # Puppeteer scraping scripts + shared config
+    │   ├── implementations/ # Per-studio scraper files
+    │   └── tests/           # Dry-run/debug harness (no DB writes)
     └── data/                # Seed data + studios.json snapshot
 ```
 

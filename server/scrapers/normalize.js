@@ -1,15 +1,13 @@
-// This file takes the raw text each studio's scraper collects and turns it
-// into one standardized format that the database can store.
+// Converts raw scraper text into DB-ready rows.
 
 import * as chrono from "chrono-node";
 
-// Any raw string → "YYYY-MM-DD" or null
-// chrono handles unpredictable dates from raw data
+// Parse dates into YYYY-MM-DD or null.
+// Chrono handles fuzzy date strings.
 export function normalizeDate(raw) {
   if (!raw) return null;
 
-  // Use midnight instead of current timestamp so forwardDate compares by day
-  // and doesn't push today's date forward a year after noon.
+  // Use midnight so forwardDate compares by day.
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
 
@@ -25,7 +23,7 @@ export function normalizeDate(raw) {
   return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
-// Any raw string → "HH:MM:00" (24-hour) or null.
+// Parse times into HH:MM:00 or null.
 export function normalizeTime(raw) {
   if (!raw) return null;
 
@@ -80,10 +78,8 @@ export function parseGenre(className) {
   return null;
 }
 
-// Returns true if the class name targets kids based on its age specification.
-// Catches two patterns:
-//   "Ages X-Y" where both X and Y are under 20 (e.g. "Ages 4-7", "Ages 8-12")
-//   "Ages X+" where X is under 15 (e.g. "Ages 8+") — 15+ is borderline adult so we keep those
+// Return true when a title looks kid-oriented.
+
 function hasKidsAgeRange(className) {
   const rangeMatch = className.match(/ages\s+(\d+)\s*[-–]\s*(\d+)/i);
   if (rangeMatch) {
@@ -96,8 +92,7 @@ function hasKidsAgeRange(className) {
   return false;
 }
 
-// Decides whether a class should be included in the scrape results.
-// Runs three checks in order: kids age range, skip keywords, then allowed styles.
+// Filter by age, skip words, then allowed styles.
 export function shouldInclude(className, allowedStyles, skipKeywords) {
   if (hasKidsAgeRange(className)) return false;
   const lower = className.toLowerCase();
@@ -115,8 +110,7 @@ function resolveBookingUrl(href, baseUrl) {
   }
 }
 
-// Raw scraper rows → DB-shaped rows. Time comes from whichever of `time` /
-// `startTime` the studio's scraper populated.
+// Map raw rows to DB-shaped rows.
 export function normalizeRows(rawRows, config) {
   return rawRows.map((r) => {
     const className = r.className || null;

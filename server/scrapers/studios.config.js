@@ -1,7 +1,4 @@
-// Studio facts. Each studio owns its own scraper file (e.g. visceralScraper.js)
-// with selectors hardcoded for that site's markup — this config just supplies
-// the identity/location/filtering info that scraper needs, plus the DB target.
-// runScrapers.js maps `key` to the matching scraper function.
+// Studio config holds metadata and filters for each scraper.
 export default [
   {
     key: "visceral",
@@ -36,8 +33,7 @@ export default [
       "bemoved",
     ],
   },
-  // Remaining studios are queued for their own scraper files — runScrapers.js
-  // skips any key with no registered scraper, so these are safe to leave here.
+  // Other studios can stay listed until their scrapers exist.
   {
     key: "puzzlebox",
     studioId: 2,
@@ -54,23 +50,12 @@ export default [
     allowedStyles: null,
     skipKeywords: ["cardio"],
   },
-  // {
-  //   key: "hive",
-  //   studioId: 3,
-  //   studioName: "The Hive",
-  //   scheduleUrl: "https://www.thehive.dance/adult-classes",
-  //   allowedStyles: null,
-  //   skipKeywords: [],
-  // },
   {
     key: "indiemedia",
     studioId: 4,
     studioName: "Indie Media Studio",
     scheduleUrl: "https://www.indiemediastudio.com/",
-    // The "Upcoming Classes" feed also carries one-off non-class events
-    // (showcases, watch parties, etc). Every real class title ends in
-    // "...Class (Weekday)", so requiring "class" is more durable than
-    // maintaining a skip-keyword per event type as they come and go.
+    // Require "class" to skip non-class events.
     allowedStyles: ["class"],
     skipKeywords: ["day pass", "academy"],
   },

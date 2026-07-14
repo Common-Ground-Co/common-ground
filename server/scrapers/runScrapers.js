@@ -1,34 +1,18 @@
-// Orchestrator: launches Puppeteer, hands each configured studio's page to
-// its own scraper function (hardcoded selectors, no LLM/schema step), then
-// normalizes, filters, and writes results to the DB. Usage:
-//   node scrapers/runScrapers.js [studioKey]   (DRY_RUN=1 / DEBUG=1 env flags)
+// Main scraper runner for production DB syncs.
+
 import puppeteer from "puppeteer";
 import pool from "../config/database.js";
 import studios from "./studios.config.js";
-import { scrapeVisceral } from "./visceralScraper.js";
-import { scrapePuzzlebox } from "./puzzleboxScraper.js";
-import { scrapeIndieMedia } from "./indieMediaScraper.js";
-import { normalizeRows, shouldInclude } from "./normalize.js";
+import {
+  SCRAPERS,
+  scrapeAndProcess,
+  getScrapeWindow,
+} from "./scrapePipeline.js";
 
-const DRY_RUN = process.env.DRY_RUN === "1";
-const DEBUG = process.env.DEBUG === "1";
-
-// Add an entry here the same day a studio gets its own scraper file.
-const SCRAPERS = {
-  visceral: scrapeVisceral,
-  puzzlebox: scrapePuzzlebox,
-  indiemedia: scrapeIndieMedia,
-};
-
-const today = new Date();
-const cutoff = new Date(today);
-cutoff.setDate(today.getDate() + 12);
-const TODAY_DATE = today.toISOString().split("T")[0];
-const CUTOFF_DATE = cutoff.toISOString().split("T")[0];
+const { TODAY_DATE, CUTOFF_DATE } = getScrapeWindow();
 
 async function runStudio(browser, config) {
-  const scrape = SCRAPERS[config.key];
-  if (!scrape) {
+  if (!SCRAPERS[config.key]) {
     console.warn(
       `⚠️  ${config.studioName}: no scraper implemented yet — skipping`,
     );
@@ -39,42 +23,7 @@ async function runStudio(browser, config) {
   const page = await browser.newPage();
 
   try {
-    const rawRows = await scrape(page, config);
-
-    if (DEBUG) {
-      console.log("  [DEBUG] Raw extracted rows:");
-      rawRows.forEach((r, i) =>
-        console.log(
-          `    [${i}] date="${r.date}" day="${r.day}" startTime="${r.startTime}" class="${r.className}" instructor="${r.instructor}"`,
-        ),
-      );
-    }
-
-    const normalized = normalizeRows(rawRows, config);
-    const usable = normalized.filter((r) => r.className && r.date);
-
-    // Some studios re-list the same class across overlapping views; dedupe on
-    // the identity the DB cares about.
-    const seen = new Set();
-    const deduped = usable.filter((r) => {
-      const k = `${r.className}|${r.date}|${r.time}`;
-      if (seen.has(k)) return false;
-      seen.add(k);
-      return true;
-    });
-
-    const filtered = deduped.filter(
-      (r) =>
-        shouldInclude(r.className, config.allowedStyles, config.skipKeywords) &&
-        r.date >= TODAY_DATE &&
-        r.date < CUTOFF_DATE,
-    );
-
-    if (DEBUG) {
-      console.log(
-        `  [DEBUG] ${normalized.length} normalized → ${usable.length} usable → ${deduped.length} deduped → ${filtered.length} after keyword/window filter`,
-      );
-    }
+    const { filtered } = await scrapeAndProcess(page, config);
 
     if (filtered.length === 0) {
       console.warn(
@@ -88,22 +37,12 @@ async function runStudio(browser, config) {
       );
       return;
     }
-    // test block
-    if (DRY_RUN) {
-      console.log(
-        `🔍 DRY RUN — ${config.studioName}: ${filtered.length} classes`,
-      );
-      filtered.forEach((r) => {
-        console.log(
-          `  ${r.date} ${r.time || "??"} — ${r.className}${r.instructor ? ` (${r.instructor})` : ""}`,
-        );
-      });
-      return;
-    }
+    // Skip DB writes when the scrape looks broken or oversized.
 
     await pool.query("DELETE FROM classes WHERE studio_id = $1", [
       config.studioId,
     ]);
+    // Clear old rows before inserting the refreshed schedule.
 
     let inserted = 0;
     let skipped = 0;
@@ -146,6 +85,7 @@ const run = async () => {
   const toRun = targetKey
     ? studios.filter((s) => s.key === targetKey)
     : studios;
+  // Pass a key to run one scraper; otherwise run them all.
 
   if (targetKey && toRun.length === 0) {
     const keys = studios.map((s) => s.key).join(", ");
@@ -153,9 +93,7 @@ const run = async () => {
     process.exit(1);
   }
 
-  console.log(
-    `🗓️  Scraping window: ${TODAY_DATE} → ${CUTOFF_DATE}${DRY_RUN ? " (dry run)" : ""}`,
-  );
+  console.log(`🗓️  Scraping window: ${TODAY_DATE} → ${CUTOFF_DATE}`);
 
   const browser = await puppeteer.launch({ headless: true });
   try {
