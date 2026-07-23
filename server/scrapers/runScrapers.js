@@ -79,6 +79,16 @@ async function runStudio(browser, config) {
   }
 }
 
+// Deletes any class with a date before today
+async function deleteExpiredClasses() {
+  const { rowCount } = await pool.query(
+    "DELETE FROM classes WHERE class_date < CURRENT_DATE",
+  );
+  if (rowCount > 0) {
+    console.log(`🧹 Removed ${rowCount} expired class(es) from before today`);
+  }
+}
+
 const run = async () => {
   const targetKey = process.argv[2]?.toLowerCase();
 
@@ -94,6 +104,8 @@ const run = async () => {
   }
 
   console.log(`🗓️  Scraping window: ${TODAY_DATE} → ${CUTOFF_DATE}`);
+
+  await deleteExpiredClasses();
 
   const browser = await puppeteer.launch({ headless: true });
   try {

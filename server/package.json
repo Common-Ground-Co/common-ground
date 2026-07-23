@@ -7,7 +7,10 @@
     "start": "nodemon server.js",
     "reset": "node config/reset.js",
     "scrape": "node scrapers/runScrapers.js",
-    "test:scrapers": "node scrapers/tests/testScrapers.js"
+    "scrape:debug": "node --inspect-brk scrapers/runScrapers.js",
+    "test:scrapers": "node scrapers/tests/testScrapers.js",
+    "test:scrapers:ui": "SHOW_BROWSER=1 node scrapers/tests/testScrapers.js",
+    "test:scrapers:inspect": "SHOW_BROWSER=1 PAUSE_ON_START=1 KEEP_BROWSER_OPEN=1 SLOW_MO=150 node scrapers/tests/testScrapers.js"
   },
   "keywords": [],
   "author": "",

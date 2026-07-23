@@ -29,6 +29,7 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+.claude/
 
 # Project documentation with account details
 project-services-and-accounts.md
@@ -36,3 +37,6 @@ project-services-and-accounts.md
 # Puppeteer
 .local-chromium/
 .cache/puppeteer/
+
+# HTML skeletons
+studioHTMLSkeletons.txt

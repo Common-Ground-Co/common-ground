@@ -1,6 +1,8 @@
 // Dry-run harness for the scraper pipeline.
-// Usage: node scrapers/tests/testScrapers.js [studioKey] (DEBUG=1 for raw-row dump)
+// Usage: npm run test:scrapers:inspect -- puzzlebox
 import puppeteer from "puppeteer";
+import readline from "node:readline/promises";
+import { stdin as input, stdout as output } from "node:process";
 import studios from "../studios.config.js";
 import {
   SCRAPERS,
@@ -9,7 +11,26 @@ import {
 } from "../scrapePipeline.js";
 
 const DEBUG = process.env.DEBUG === "1";
+const SHOW_BROWSER = process.env.SHOW_BROWSER === "1";
+const PAUSE_ON_START = process.env.PAUSE_ON_START === "1";
+const KEEP_BROWSER_OPEN = process.env.KEEP_BROWSER_OPEN === "1";
+const PAUSE_BEFORE_SCRAPE = process.env.PAUSE_BEFORE_SCRAPE === "1";
+const PAUSE_AFTER_SCRAPE = process.env.PAUSE_AFTER_SCRAPE === "1";
+
+function getEnvNumber(value, fallback) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+// In visible browser mode, default to slower actions unless explicitly overridden.
+const SLOW_MO = getEnvNumber(process.env.SLOW_MO, SHOW_BROWSER ? 400 : 0);
 const { TODAY_DATE, CUTOFF_DATE } = getScrapeWindow();
+
+async function waitForEnter(message) {
+  const prompt = readline.createInterface({ input, output });
+  await prompt.question(`${message}\nPress Enter to continue...`);
+  prompt.close();
+}
 
 async function testStudio(browser, config) {
   if (!SCRAPERS[config.key]) {
@@ -21,6 +42,19 @@ async function testStudio(browser, config) {
 
   console.log(`🕷️  Test-scraping ${config.studioName}...`);
   const page = await browser.newPage();
+  page.on("console", (message) => {
+    const text = message.text();
+    console.log(`[${config.key}] [page:${message.type()}] ${text}`);
+  });
+  page.on("pageerror", (error) => {
+    console.warn(`[${config.key}] [pageerror] ${error.message}`);
+  });
+
+  if (PAUSE_BEFORE_SCRAPE) {
+    await waitForEnter(
+      `⏸️  ${config.studioName}: page is open. Inspect now before scraping starts.`,
+    );
+  }
 
   try {
     const { rawRows, normalized, usable, deduped, filtered } =
@@ -59,7 +93,17 @@ async function testStudio(browser, config) {
   } catch (err) {
     console.warn(`⚠️  Scrape failed for ${config.studioName}: ${err.message}`);
   } finally {
-    await page.close();
+    if (PAUSE_AFTER_SCRAPE) {
+      await waitForEnter(
+        `⏸️  ${config.studioName}: scrape finished. Inspect DevTools/console now before tab closes.`,
+      );
+    }
+
+    if (!KEEP_BROWSER_OPEN) {
+      await page.close();
+    } else {
+      console.log(`🧷 Keeping tab open for ${config.studioName}`);
+    }
   }
 }
 
@@ -77,14 +121,32 @@ const run = async () => {
   }
 
   console.log(`🗓️  Scraping window: ${TODAY_DATE} → ${CUTOFF_DATE} (dry run)`);
+  if (SHOW_BROWSER) {
+    console.log(
+      "👀 Browser mode enabled: Puppeteer will open a visible window with DevTools.",
+    );
+  }
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: !SHOW_BROWSER,
+    devtools: SHOW_BROWSER,
+    defaultViewport: SHOW_BROWSER ? null : undefined,
+    slowMo: SLOW_MO || undefined,
+    dumpio: SHOW_BROWSER,
+  });
+  if (PAUSE_ON_START) {
+    await waitForEnter(
+      "🧪 Pause mode enabled. The browser is open so you can inspect it before scraping starts.",
+    );
+  }
   try {
     for (const studio of toRun) {
       await testStudio(browser, studio);
     }
   } finally {
-    await browser.close();
+    if (!KEEP_BROWSER_OPEN) {
+      await browser.close();
+    }
     console.log("🌱 Done");
   }
 };

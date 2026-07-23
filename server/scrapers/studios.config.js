@@ -39,6 +39,7 @@ export default [
     studioId: 2,
     studioName: "The Puzzle Box Dance Studio",
     scheduleUrl: "https://www.thepuzzleboxdancestudio.com/book-by-calendar",
+    //allow all dance styles for puzzlebox
     allowedStyles: null,
     skipKeywords: ["kids"],
   },
@@ -47,6 +48,7 @@ export default [
     studioId: 5,
     studioName: "Dance Forever",
     scheduleUrl: "https://www.dance-forever.com/schedule",
+    //allow all dance st yles for dance forever
     allowedStyles: null,
     skipKeywords: ["cardio"],
   },
