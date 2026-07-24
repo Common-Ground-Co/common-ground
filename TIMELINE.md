@@ -191,4 +191,4 @@
 
 ### Changes
 
-- Added rewrite settings to Render to redirect all routes to `index.html`.
+- Added rewrite settings to Render to redirect all routes to `index.html`
