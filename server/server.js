@@ -22,7 +22,7 @@ app.use(
     origin: process.env.CLIENT_ORIGIN,
   }),
 );
-// All API endpoints are namespaced under /api.
+// All API endpoints are namespaced under /api..
 app.use("/api/studios", studiosRouter);
 app.use("/api/classes", classesRouter);
 app.use("/api/ig-accounts", igAccountsRouter);
