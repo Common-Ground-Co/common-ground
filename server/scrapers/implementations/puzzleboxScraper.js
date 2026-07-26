@@ -53,12 +53,12 @@ async function loadMoreUntilWindow(page) {
 
 export async function scrapePuzzlebox(page, config) {
   await page.goto(config.scheduleUrl, {
-    waitUntil: "networkidle0",
-    timeout: 60000,
+    waitUntil: "domcontentloaded",
+    timeout: 90000,
   });
 
   await page
-    .waitForSelector(SELECTORS.session, { timeout: 15000 })
+    .waitForSelector(SELECTORS.session, { timeout: 30000 })
     .catch(() => {});
   await loadMoreUntilWindow(page);
 

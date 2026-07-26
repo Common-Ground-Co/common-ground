@@ -52,13 +52,15 @@ async function loadMoreUntilWindow(page) {
 
 export async function scrapeIndieMedia(page, config) {
   await page.goto(config.scheduleUrl, {
-    waitUntil: "networkidle0",
-    timeout: 60000,
+    waitUntil: "domcontentloaded",
+    timeout: 90000,
   });
 
-  await page
-    .waitForSelector(SELECTORS.card, { timeout: 15000 })
-    .catch(() => {});
+  try {
+    await page.waitForSelector(SELECTORS.card, { timeout: 30000 });
+  } catch {
+    // If no cards appear within 30s, continue so the pipeline can report zero results.
+  }
   await loadMoreUntilWindow(page);
 
   const rawClasses = await page.evaluate((selectors) => {

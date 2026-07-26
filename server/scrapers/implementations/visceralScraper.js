@@ -13,18 +13,25 @@ const SELECTORS = {
 
 export async function scrapeVisceral(page, config) {
   await page.goto(config.scheduleUrl, {
-    waitUntil: "networkidle0",
-    timeout: 60000,
+    waitUntil: "domcontentloaded",
+    timeout: 90000,
   });
 
-  const frame =
-    page.frames().find((f) => f.url().includes(EMBED_FRAME_MARKER)) ?? page;
+  const iframeHandle = await page
+    .waitForSelector("wix-iframe iframe", { timeout: 30000 })
+    .catch(() => null);
 
-  await frame
-    .waitForSelector(SELECTORS.session, { timeout: 15000 })
+  const frame = iframeHandle
+    ? await iframeHandle.contentFrame()
+    : page.frames().find((f) => f.url().includes(EMBED_FRAME_MARKER));
+
+  const scrapeFrame = frame ?? page;
+
+  await scrapeFrame
+    .waitForSelector(SELECTORS.session, { timeout: 30000 })
     .catch(() => {});
 
-  const rawClasses = await frame.evaluate((selectors) => {
+  const rawClasses = await scrapeFrame.evaluate((selectors) => {
     const results = [];
 
     const dayGroups = document.querySelectorAll(selectors.dayGroup);
