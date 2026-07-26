@@ -159,8 +159,8 @@ function ClassSchedulePage() {
 
   return (
     <div className="class-schedule-page">
-      <div className="page-nav-wrap">
-        <Navigation variant="category-strip--page" />
+      <div className="nav">
+        <Navigation />
       </div>
       <main className="class-schedule-container">
         {/* Filters and schedule sections share one dark panel. */}

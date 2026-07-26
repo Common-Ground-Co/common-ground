@@ -15,9 +15,12 @@ const BG_IMAGE =
 
 function PageShell({ children }) {
   return (
-    <div className="studio-detail-page" style={{ backgroundImage: `url(${BG_IMAGE})` }}>
-      <div className="page-nav-wrap">
-        <Navigation variant="category-strip--page" />
+    <div
+      className="studio-detail-page"
+      style={{ backgroundImage: `url(${BG_IMAGE})` }}
+    >
+      <div className="nav">
+        <Navigation />
       </div>
       {children}
     </div>
@@ -122,7 +125,9 @@ function StudioDetailPage() {
     try {
       setReviewsError("");
       await deleteStudioReview(reviewId);
-      setReviews((previous) => previous.filter((review) => review.id !== reviewId));
+      setReviews((previous) =>
+        previous.filter((review) => review.id !== reviewId),
+      );
       setReviewsNotice("Review deleted.");
     } catch (err) {
       setReviewsError(err.message || "Unable to delete your review");
@@ -158,9 +163,14 @@ function StudioDetailPage() {
     try {
       setReviewsError("");
       const updated = await updateStudioReview(reviewId, editingReviewForm);
-      const updatedWithMeta = { ...updated, updated_at: new Date().toISOString() };
+      const updatedWithMeta = {
+        ...updated,
+        updated_at: new Date().toISOString(),
+      };
       setReviews((previous) =>
-        previous.map((review) => (review.id === reviewId ? updatedWithMeta : review)),
+        previous.map((review) =>
+          review.id === reviewId ? updatedWithMeta : review,
+        ),
       );
       setReviewsNotice("Review updated.");
       cancelEditingReview();
@@ -206,13 +216,18 @@ function StudioDetailPage() {
   ].filter(Boolean);
 
   const styleTags = studio.style
-    ? studio.style.split(",").map((s) => s.trim()).filter(Boolean)
+    ? studio.style
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
     : [];
 
   const hasWorkStudyLink =
     typeof studio.work_study_url === "string" &&
     /^https?:\/\//i.test(studio.work_study_url.trim());
-  const workStudyEmail = hasWorkStudyLink ? "" : (studio.work_study_url || "").trim();
+  const workStudyEmail = hasWorkStudyLink
+    ? ""
+    : (studio.work_study_url || "").trim();
 
   const heroObjectPosition =
     studio.name === "Visceral Dance Center" ? "center center" : "center 30%";
@@ -257,400 +272,426 @@ function StudioDetailPage() {
 
         {/* Scrollable region — hero stays pinned above this */}
         <div className="detail-scroll-body">
-        {/* Body: two-column sidebar + main */}
-        <div className="detail-body">
-          <aside className="detail-sidebar">
-            <div className="detail-info-card">
-              <h2 className="info-card-title">Class Details</h2>
-              <div className="info-card-divider" />
+          {/* Body: two-column sidebar + main */}
+          <div className="detail-body">
+            <aside className="detail-sidebar">
+              <div className="detail-info-card">
+                <h2 className="info-card-title">Class Details</h2>
+                <div className="info-card-divider" />
 
-              {studio.address && (
-                <div className="info-row">
-                  <span className="info-label">
-                    <i className="fa-solid fa-location-dot" /> Location
-                  </span>
-                  <span className="info-value">{studio.address}</span>
-                </div>
+                {studio.address && (
+                  <div className="info-row">
+                    <span className="info-label">
+                      <i className="fa-solid fa-location-dot" /> Location
+                    </span>
+                    <span className="info-value">{studio.address}</span>
+                  </div>
+                )}
+
+                {studio.price_range && (
+                  <div className="info-row">
+                    <span className="info-label">
+                      <i className="fa-solid fa-tag" /> Pricing
+                    </span>
+                    <span className="info-value">{studio.price_range}</span>
+                  </div>
+                )}
+
+                {studio.website && (
+                  <div className="info-row">
+                    <span className="info-label">
+                      <i className="fa-solid fa-globe" /> Website
+                    </span>
+                    <a
+                      className="info-link"
+                      href={studio.website}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Visit site
+                    </a>
+                  </div>
+                )}
+
+                {studio.instagram && (
+                  <div className="info-row">
+                    <span className="info-label">
+                      <i className="fa-brands fa-instagram" /> IG Handle
+                    </span>
+                    <a
+                      className="info-link"
+                      href={`https://instagram.com/${studio.instagram.replace("@", "")}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {studio.instagram.startsWith("@")
+                        ? studio.instagram
+                        : `@${studio.instagram}`}
+                    </a>
+                  </div>
+                )}
+
+                {studio.schedule_url && (
+                  <div className="info-row">
+                    <span className="info-label">
+                      <i className="fa-regular fa-calendar-days" /> Schedule
+                    </span>
+                    <a
+                      className="info-link"
+                      href={studio.schedule_url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View schedule
+                    </a>
+                  </div>
+                )}
+
+                {studio.classpass && (
+                  <div className="info-row">
+                    <span className="info-label">
+                      <i className="fa-solid fa-credit-card" /> ClassPass
+                    </span>
+                    <span className="info-value info-badge">Accepted</span>
+                  </div>
+                )}
+
+                {studio.work_study && (
+                  <div className="info-row">
+                    <span className="info-label">
+                      <i className="fa-solid fa-hands-helping" /> Work Study
+                    </span>
+                    {studio.work_study_url ? (
+                      <button
+                        type="button"
+                        className="info-link info-link-button"
+                        onClick={() => setShowWorkStudyPopup(true)}
+                      >
+                        Available
+                      </button>
+                    ) : (
+                      <span className="info-value info-badge">Available</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </aside>
+
+            <main className="detail-main">
+              {photos.length > 1 && (
+                <section className="detail-gallery">
+                  <div className="gallery-main">
+                    <img
+                      src={photos[activePhoto]}
+                      alt={`${studio.name} photo ${activePhoto + 1}`}
+                    />
+                  </div>
+                  <div className="gallery-thumbs">
+                    {photos.map((photo, i) => (
+                      <button
+                        key={i}
+                        className={`gallery-thumb ${activePhoto === i ? "active" : ""}`}
+                        onClick={() => setActivePhoto(i)}
+                        aria-label={`View photo ${i + 1}`}
+                      >
+                        <img src={photo} alt="" />
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {studio.about_studio && (
+                <section className="detail-section">
+                  <div className="section-label">
+                    <span className="section-accent-line" />
+                    <h3>About the Studio</h3>
+                  </div>
+                  <p className="detail-description">{studio.about_studio}</p>
+                </section>
+              )}
+
+              {studio.best_for && (
+                <section className="detail-section">
+                  <div className="section-label">
+                    <span className="section-accent-line" />
+                    <h3>Best For</h3>
+                  </div>
+                  <p className="detail-description">{studio.best_for}</p>
+                </section>
               )}
 
               {studio.price_range && (
-                <div className="info-row">
-                  <span className="info-label">
-                    <i className="fa-solid fa-tag" /> Pricing
-                  </span>
-                  <span className="info-value">{studio.price_range}</span>
-                </div>
+                <section className="detail-section">
+                  <div className="section-label">
+                    <span className="section-accent-line" />
+                    <h3>Pricing</h3>
+                  </div>
+                  <div className="pricing-grid">
+                    <div className="pricing-card">
+                      <i className="fa-solid fa-ticket" />
+                      <span className="pricing-label">Drop-in</span>
+                      <span className="pricing-value">
+                        {studio.price_range}
+                      </span>
+                    </div>
+                    {studio.classpass && (
+                      <div className="pricing-card">
+                        <i className="fa-solid fa-credit-card" />
+                        <span className="pricing-label">ClassPass</span>
+                        <span className="pricing-value">Accepted</span>
+                      </div>
+                    )}
+                    {studio.work_study && (
+                      <div className="pricing-card pricing-card--accent">
+                        <i className="fa-solid fa-star" />
+                        <span className="pricing-label">Work Study</span>
+                        <span className="pricing-value">Available</span>
+                      </div>
+                    )}
+                  </div>
+                </section>
               )}
 
-              {studio.website && (
-                <div className="info-row">
-                  <span className="info-label">
-                    <i className="fa-solid fa-globe" /> Website
-                  </span>
+              <div className="detail-ctas">
+                {studio.schedule_url && (
                   <a
-                    className="info-link"
-                    href={studio.website}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Visit site
-                  </a>
-                </div>
-              )}
-
-              {studio.instagram && (
-                <div className="info-row">
-                  <span className="info-label">
-                    <i className="fa-brands fa-instagram" /> IG Handle
-                  </span>
-                  <a
-                    className="info-link"
-                    href={`https://instagram.com/${studio.instagram.replace("@", "")}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {studio.instagram.startsWith("@")
-                      ? studio.instagram
-                      : `@${studio.instagram}`}
-                  </a>
-                </div>
-              )}
-
-              {studio.schedule_url && (
-                <div className="info-row">
-                  <span className="info-label">
-                    <i className="fa-regular fa-calendar-days" /> Schedule
-                  </span>
-                  <a
-                    className="info-link"
                     href={studio.schedule_url}
                     target="_blank"
                     rel="noreferrer"
+                    className="cta-btn cta-btn--primary"
                   >
-                    View schedule
+                    <i className="fa-regular fa-calendar-days" />
+                    View Full Schedule
                   </a>
-                </div>
-              )}
+                )}
+                {studio.website && (
+                  <a
+                    href={studio.website}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="cta-btn cta-btn--secondary"
+                  >
+                    <i className="fa-solid fa-arrow-up-right-from-square" />
+                    Studio Website
+                  </a>
+                )}
+              </div>
+            </main>
+          </div>
 
-              {studio.classpass && (
-                <div className="info-row">
-                  <span className="info-label">
-                    <i className="fa-solid fa-credit-card" /> ClassPass
-                  </span>
-                  <span className="info-value info-badge">Accepted</span>
-                </div>
-              )}
-
-              {studio.work_study && (
-                <div className="info-row">
-                  <span className="info-label">
-                    <i className="fa-solid fa-hands-helping" /> Work Study
-                  </span>
-                  {studio.work_study_url ? (
-                    <button
-                      type="button"
-                      className="info-link info-link-button"
-                      onClick={() => setShowWorkStudyPopup(true)}
-                    >
-                      Available
-                    </button>
-                  ) : (
-                    <span className="info-value info-badge">Available</span>
-                  )}
-                </div>
-              )}
-            </div>
-          </aside>
-
-          <main className="detail-main">
-            {photos.length > 1 && (
-              <section className="detail-gallery">
-                <div className="gallery-main">
-                  <img
-                    src={photos[activePhoto]}
-                    alt={`${studio.name} photo ${activePhoto + 1}`}
+          {/* Reviews — bleeds to container edges at the bottom */}
+          <section className="detail-reviews">
+            <div className="reviews-inner">
+              <h2 className="reviews-title">
+                Reviews <i className="fa-solid fa-star" aria-hidden="true" />
+              </h2>
+              <div className="reviews-divider" />
+              <form className="review-form" onSubmit={handleReviewSubmit}>
+                <div className="review-form-row">
+                  <label className="review-label" htmlFor="review-name">
+                    Name (optional)
+                  </label>
+                  <input
+                    id="review-name"
+                    name="name"
+                    value={reviewForm.name}
+                    onChange={handleReviewChange}
+                    className="review-input"
+                    placeholder="Anonymous"
+                    maxLength={40}
                   />
                 </div>
-                <div className="gallery-thumbs">
-                  {photos.map((photo, i) => (
-                    <button
-                      key={i}
-                      className={`gallery-thumb ${activePhoto === i ? "active" : ""}`}
-                      onClick={() => setActivePhoto(i)}
-                      aria-label={`View photo ${i + 1}`}
-                    >
-                      <img src={photo} alt="" />
-                    </button>
-                  ))}
+                <div className="review-form-row">
+                  <label className="review-label" htmlFor="review-rating">
+                    Rating
+                  </label>
+                  <select
+                    id="review-rating"
+                    name="rating"
+                    value={reviewForm.rating}
+                    onChange={handleReviewChange}
+                    className="review-input"
+                  >
+                    <option value={5}>5 - Loved it</option>
+                    <option value={4}>4 - Great</option>
+                    <option value={3}>3 - Good</option>
+                    <option value={2}>2 - Okay</option>
+                    <option value={1}>1 - Not for me</option>
+                  </select>
                 </div>
-              </section>
-            )}
-
-            {studio.about_studio && (
-              <section className="detail-section">
-                <div className="section-label">
-                  <span className="section-accent-line" />
-                  <h3>About the Studio</h3>
+                <div className="review-form-row">
+                  <label className="review-label" htmlFor="review-description">
+                    Your review
+                  </label>
+                  <textarea
+                    id="review-description"
+                    name="description"
+                    value={reviewForm.description}
+                    onChange={handleReviewChange}
+                    className="review-textarea"
+                    rows={4}
+                    placeholder="Share your experience..."
+                    required
+                  />
                 </div>
-                <p className="detail-description">{studio.about_studio}</p>
-              </section>
-            )}
-
-            {studio.best_for && (
-              <section className="detail-section">
-                <div className="section-label">
-                  <span className="section-accent-line" />
-                  <h3>Best For</h3>
-                </div>
-                <p className="detail-description">{studio.best_for}</p>
-              </section>
-            )}
-
-            {studio.price_range && (
-              <section className="detail-section">
-                <div className="section-label">
-                  <span className="section-accent-line" />
-                  <h3>Pricing</h3>
-                </div>
-                <div className="pricing-grid">
-                  <div className="pricing-card">
-                    <i className="fa-solid fa-ticket" />
-                    <span className="pricing-label">Drop-in</span>
-                    <span className="pricing-value">{studio.price_range}</span>
-                  </div>
-                  {studio.classpass && (
-                    <div className="pricing-card">
-                      <i className="fa-solid fa-credit-card" />
-                      <span className="pricing-label">ClassPass</span>
-                      <span className="pricing-value">Accepted</span>
-                    </div>
-                  )}
-                  {studio.work_study && (
-                    <div className="pricing-card pricing-card--accent">
-                      <i className="fa-solid fa-star" />
-                      <span className="pricing-label">Work Study</span>
-                      <span className="pricing-value">Available</span>
-                    </div>
-                  )}
-                </div>
-              </section>
-            )}
-
-            <div className="detail-ctas">
-              {studio.schedule_url && (
-                <a
-                  href={studio.schedule_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="cta-btn cta-btn--primary"
+                <button
+                  type="submit"
+                  className="review-submit-btn"
+                  disabled={submittingReview}
                 >
-                  <i className="fa-regular fa-calendar-days" />
-                  View Full Schedule
-                </a>
+                  {submittingReview ? "Posting..." : "Post review"}
+                </button>
+              </form>
+
+              {reviewsError && <p className="reviews-error">{reviewsError}</p>}
+              {reviewsNotice && (
+                <p className="reviews-notice">{reviewsNotice}</p>
               )}
-              {studio.website && (
-                <a
-                  href={studio.website}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="cta-btn cta-btn--secondary"
-                >
-                  <i className="fa-solid fa-arrow-up-right-from-square" />
-                  Studio Website
-                </a>
-              )}
-            </div>
-          </main>
-        </div>
 
-        {/* Reviews — bleeds to container edges at the bottom */}
-        <section className="detail-reviews">
-          <div className="reviews-inner">
-            <h2 className="reviews-title">
-              Reviews <i className="fa-solid fa-star" aria-hidden="true" />
-            </h2>
-            <div className="reviews-divider" />
-            <form className="review-form" onSubmit={handleReviewSubmit}>
-              <div className="review-form-row">
-                <label className="review-label" htmlFor="review-name">
-                  Name (optional)
-                </label>
-                <input
-                  id="review-name"
-                  name="name"
-                  value={reviewForm.name}
-                  onChange={handleReviewChange}
-                  className="review-input"
-                  placeholder="Anonymous"
-                  maxLength={40}
-                />
-              </div>
-              <div className="review-form-row">
-                <label className="review-label" htmlFor="review-rating">
-                  Rating
-                </label>
-                <select
-                  id="review-rating"
-                  name="rating"
-                  value={reviewForm.rating}
-                  onChange={handleReviewChange}
-                  className="review-input"
-                >
-                  <option value={5}>5 - Loved it</option>
-                  <option value={4}>4 - Great</option>
-                  <option value={3}>3 - Good</option>
-                  <option value={2}>2 - Okay</option>
-                  <option value={1}>1 - Not for me</option>
-                </select>
-              </div>
-              <div className="review-form-row">
-                <label className="review-label" htmlFor="review-description">
-                  Your review
-                </label>
-                <textarea
-                  id="review-description"
-                  name="description"
-                  value={reviewForm.description}
-                  onChange={handleReviewChange}
-                  className="review-textarea"
-                  rows={4}
-                  placeholder="Share your experience..."
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="review-submit-btn"
-                disabled={submittingReview}
-              >
-                {submittingReview ? "Posting..." : "Post review"}
-              </button>
-            </form>
-
-            {reviewsError && <p className="reviews-error">{reviewsError}</p>}
-            {reviewsNotice && <p className="reviews-notice">{reviewsNotice}</p>}
-
-            {reviewsLoading ? (
-              <p className="reviews-empty">Loading reviews...</p>
-            ) : reviews.length === 0 ? (
-              <p className="reviews-empty">
-                No reviews yet — be the first to share your experience.
-              </p>
-            ) : (
-              <div className="review-list">
-                {reviews.map((review) => (
-                  <article key={review.id} className="review-card">
-                    {editingReviewId === review.id ? (
-                      <form
-                        className="review-edit-form"
-                        onSubmit={(event) => handleEditReviewSubmit(event, review.id)}
-                      >
-                        <div className="review-form-row">
-                          <label className="review-label" htmlFor={`edit-name-${review.id}`}>
-                            Name (optional)
-                          </label>
-                          <input
-                            id={`edit-name-${review.id}`}
-                            name="name"
-                            value={editingReviewForm.name}
-                            onChange={handleEditingReviewChange}
-                            className="review-input"
-                            placeholder="Anonymous"
-                            maxLength={40}
-                          />
-                        </div>
-                        <div className="review-form-row">
-                          <label className="review-label" htmlFor={`edit-rating-${review.id}`}>
-                            Rating
-                          </label>
-                          <select
-                            id={`edit-rating-${review.id}`}
-                            name="rating"
-                            value={editingReviewForm.rating}
-                            onChange={handleEditingReviewChange}
-                            className="review-input"
-                          >
-                            <option value={5}>5 - Loved it</option>
-                            <option value={4}>4 - Great</option>
-                            <option value={3}>3 - Good</option>
-                            <option value={2}>2 - Okay</option>
-                            <option value={1}>1 - Not for me</option>
-                          </select>
-                        </div>
-                        <div className="review-form-row">
-                          <label className="review-label" htmlFor={`edit-description-${review.id}`}>
-                            Your review
-                          </label>
-                          <textarea
-                            id={`edit-description-${review.id}`}
-                            name="description"
-                            value={editingReviewForm.description}
-                            onChange={handleEditingReviewChange}
-                            className="review-textarea"
-                            rows={3}
-                            required
-                          />
-                        </div>
-                        <div className="review-actions">
-                          <button type="submit" className="review-action-btn review-action-btn--save">
-                            Save
-                          </button>
-                          <button
-                            type="button"
-                            className="review-action-btn review-action-btn--cancel"
-                            onClick={cancelEditingReview}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </form>
-                    ) : (
-                      <>
-                        <div className="review-card-head">
-                          <p className="review-author">{review.name || "Anonymous"}</p>
-                          <p className="review-rating" aria-label={`${review.rating} out of 5`}>
-                            {"★".repeat(review.rating)}
-                            {"☆".repeat(5 - review.rating)}
-                          </p>
-                        </div>
-                        <p className="review-description">{review.description}</p>
-                        {review.updated_at && (
-                          <p className="review-edited">Edited</p>
-                        )}
-                        {review.can_edit && (
+              {reviewsLoading ? (
+                <p className="reviews-empty">Loading reviews...</p>
+              ) : reviews.length === 0 ? (
+                <p className="reviews-empty">
+                  No reviews yet — be the first to share your experience.
+                </p>
+              ) : (
+                <div className="review-list">
+                  {reviews.map((review) => (
+                    <article key={review.id} className="review-card">
+                      {editingReviewId === review.id ? (
+                        <form
+                          className="review-edit-form"
+                          onSubmit={(event) =>
+                            handleEditReviewSubmit(event, review.id)
+                          }
+                        >
+                          <div className="review-form-row">
+                            <label
+                              className="review-label"
+                              htmlFor={`edit-name-${review.id}`}
+                            >
+                              Name (optional)
+                            </label>
+                            <input
+                              id={`edit-name-${review.id}`}
+                              name="name"
+                              value={editingReviewForm.name}
+                              onChange={handleEditingReviewChange}
+                              className="review-input"
+                              placeholder="Anonymous"
+                              maxLength={40}
+                            />
+                          </div>
+                          <div className="review-form-row">
+                            <label
+                              className="review-label"
+                              htmlFor={`edit-rating-${review.id}`}
+                            >
+                              Rating
+                            </label>
+                            <select
+                              id={`edit-rating-${review.id}`}
+                              name="rating"
+                              value={editingReviewForm.rating}
+                              onChange={handleEditingReviewChange}
+                              className="review-input"
+                            >
+                              <option value={5}>5 - Loved it</option>
+                              <option value={4}>4 - Great</option>
+                              <option value={3}>3 - Good</option>
+                              <option value={2}>2 - Okay</option>
+                              <option value={1}>1 - Not for me</option>
+                            </select>
+                          </div>
+                          <div className="review-form-row">
+                            <label
+                              className="review-label"
+                              htmlFor={`edit-description-${review.id}`}
+                            >
+                              Your review
+                            </label>
+                            <textarea
+                              id={`edit-description-${review.id}`}
+                              name="description"
+                              value={editingReviewForm.description}
+                              onChange={handleEditingReviewChange}
+                              className="review-textarea"
+                              rows={3}
+                              required
+                            />
+                          </div>
                           <div className="review-actions">
                             <button
-                              type="button"
-                              className="review-action-btn review-action-btn--edit"
-                              onClick={() => startEditingReview(review)}
+                              type="submit"
+                              className="review-action-btn review-action-btn--save"
                             >
-                              Edit my review
+                              Save
                             </button>
                             <button
                               type="button"
-                              className="review-action-btn review-action-btn--delete"
-                              onClick={() => handleDeleteReview(review.id)}
+                              className="review-action-btn review-action-btn--cancel"
+                              onClick={cancelEditingReview}
                             >
-                              Delete my review
+                              Cancel
                             </button>
                           </div>
-                        )}
-                      </>
-                    )}
-                  </article>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
+                        </form>
+                      ) : (
+                        <>
+                          <div className="review-card-head">
+                            <p className="review-author">
+                              {review.name || "Anonymous"}
+                            </p>
+                            <p
+                              className="review-rating"
+                              aria-label={`${review.rating} out of 5`}
+                            >
+                              {"★".repeat(review.rating)}
+                              {"☆".repeat(5 - review.rating)}
+                            </p>
+                          </div>
+                          <p className="review-description">
+                            {review.description}
+                          </p>
+                          {review.updated_at && (
+                            <p className="review-edited">Edited</p>
+                          )}
+                          {review.can_edit && (
+                            <div className="review-actions">
+                              <button
+                                type="button"
+                                className="review-action-btn review-action-btn--edit"
+                                onClick={() => startEditingReview(review)}
+                              >
+                                Edit my review
+                              </button>
+                              <button
+                                type="button"
+                                className="review-action-btn review-action-btn--delete"
+                                onClick={() => handleDeleteReview(review.id)}
+                              >
+                                Delete my review
+                              </button>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
 
-        {/* Back link at the bottom of the card */}
-        <div className="detail-back">
-          <Link to="/studios" className="back-link">
-            <i className="fa-solid fa-arrow-left" /> Back to Studios
-          </Link>
+          {/* Back link at the bottom of the card */}
+          <div className="detail-back">
+            <Link to="/studios" className="back-link">
+              <i className="fa-solid fa-arrow-left" /> Back to Studios
+            </Link>
+          </div>
         </div>
-        </div>{/* end detail-scroll-body */}
+        {/* end detail-scroll-body */}
       </div>
 
       {showWorkStudyPopup && (

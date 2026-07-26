@@ -4,8 +4,8 @@ import "../css/PlaceholderPage.css";
 function PlaceholderPage({ title, description }) {
   return (
     <div className="placeholder-page">
-      <div className="page-nav-wrap">
-        <Navigation variant="category-strip--page" />
+      <div className="nav">
+        <Navigation />
       </div>
       <main className="placeholder-container">
         <div className="wip-banner">

@@ -31,15 +31,17 @@ function IgClassRadarPage() {
 
   return (
     <div className="radar-page">
-      <div className="page-nav-wrap">
-        <Navigation variant="category-strip--page" />
+      <div className="nav">
+        <Navigation />
       </div>
 
       <main className="radar-container">
         {/* Under construction notice */}
         <div className="wip-banner">
           <i className="fa-solid fa-triangle-exclamation" aria-hidden="true" />
-          <span>This section is still being built — more accounts coming soon.</span>
+          <span>
+            This section is still being built — more accounts coming soon.
+          </span>
         </div>
 
         <div className="radar-header">

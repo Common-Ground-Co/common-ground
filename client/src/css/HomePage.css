@@ -27,29 +27,10 @@
 }
 
 /* Both floating elements stack above the overlay. */
-.home-nav-wrap,
+.nav,
 .home-container {
   position: relative;
   z-index: 1;
-}
-
-/* ─── Floating Nav ────────────────────────────────────────────── */
-
-/* Centers and constrains the nav to match the container width. */
-.home-nav-wrap {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-/* Rounds and shadows the nav strip on the home page. */
-.category-strip.category-strip--home {
-  background-color: rgba(15, 22, 33, 0.72);
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
-  margin: 0 auto;
-  max-width: 900px;
-  width: 100%;
 }
 
 /* ─── Floating Container ──────────────────────────────────────── */

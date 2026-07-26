@@ -18,15 +18,10 @@ const navItems = [
   { label: "Add Studio", icon: "fa-solid fa-square-plus", to: "/add-studio" },
 ];
 
-function Navigation({ variant = "", className = "" }) {
-  // Build final CSS class list so pages can pass style variants.
-  const navClassName = ["category-strip", variant, className]
-    .filter(Boolean)
-    .join(" ");
-
+function Navigation() {
   return (
-    // Shared top navigation used across the app.
-    <nav className={navClassName} aria-label="Primary navigation">
+    // Shared top navigation used across the app — same styling everywhere.
+    <nav className="category-strip" aria-label="Primary navigation">
       {navItems.map((item) => (
         <Link key={item.label} className="category-item" to={item.to}>
           <i className={item.icon} aria-hidden="true" />

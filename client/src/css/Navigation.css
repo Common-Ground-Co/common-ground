@@ -1,35 +1,17 @@
 /* The row of icon links used for navigating between sections of the app. */
 .category-strip {
-  background-color: rgba(15, 22, 33, 0.873);
+  background-color: rgba(15, 22, 33, 0.72);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
   display: grid;
   gap: 0.5rem;
   grid-template-columns: repeat(5, minmax(120px, 1fr));
-  margin: 1rem 0 0;
-  max-width: none;
+  margin: 1rem auto 0;
+  max-width: 900px;
   padding: 1.5rem 0rem;
   position: relative;
   width: 100%;
   z-index: 3;
-}
-
-/* Home page only — pulls the nav strip up so it overlaps the bottom of the hero photo. */
-.category-strip--floating {
-  margin-top: -4rem;
-}
-
-/* Text color for nav items when the strip is floating over the hero. */
-.category-strip--floating .category-item {
-  color: rgba(210, 218, 228, 0.92);
-}
-
-/* Icon color in floating mode — uses the red accent. */
-.category-strip--floating .category-item i {
-  color: var(--color-accent);
-}
-
-/* Hover text color in floating mode. */
-.category-strip--floating .category-item:hover {
-  color: rgba(245, 247, 250, 0.95);
 }
 
 /* Each individual navigation button — icon stacked above a short label. */
@@ -75,20 +57,10 @@
   }
 }
 
-/* ─── Interior Page Variants ──────────────────────────────────── */
+/* ─── Nav Wrapper ─────────────────────────────────────────────── */
 
-/* Floating centered nav used on all non-home pages — matches the 900px container width. */
-.category-strip.category-strip--page {
-  background-color: rgba(15, 22, 33, 0.72);
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
-  margin: 0 auto;
-  max-width: 900px;
-  width: 100%;
-}
-
-/* Wrapper used by every interior page to center and position the nav. */
-.page-nav-wrap {
+/* Wrapper used by every page to center and position the nav. */
+.nav {
   display: flex;
   justify-content: center;
   position: relative;

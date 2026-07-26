@@ -176,8 +176,8 @@ function StudiosPage() {
 
   return (
     <div className="studios-page">
-      <div className="page-nav-wrap">
-        <Navigation variant="category-strip--page" />
+      <div className="nav">
+        <Navigation />
       </div>
 
       <main className="studios-container">

@@ -45,8 +45,8 @@ function HomePage() {
   return (
     <main className="home-page">
       {/* floating nav centered at the top */}
-      <div className="home-nav-wrap">
-        <Navigation variant="category-strip--home" />
+      <div className="nav">
+        <Navigation />
       </div>
 
       {/* single floating card: header + studio grid */}
